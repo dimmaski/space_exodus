@@ -1,13 +1,13 @@
 main{
   width: 800px;
   height: 600px;
-  background-image: url("menu.jpg");
+  background-image: url('resources/images_menu/menu.jpg');
   margin: auto;
 }
 
 #slogan{
   background-repeat: no-repeat;
-  background-image: url("titulo.png");
+  background-image: url("resources/images_menu/titulo.png");
   background-color: Transparent;
   border: none;
   position: absolute;
@@ -22,7 +22,7 @@ main{
     position: absolute;
     right:    525px;
     top:   400px;
-    background-image: url("jogar.png");
+    background-image: url("resources/images_menu/jogar.png");
     background-repeat: no-repeat;
     padding: 15px 110px;
     text-align: center;
@@ -35,7 +35,7 @@ main{
   position: absolute;
   right:   505px;
   top:   475px;
-  background-image: url("opcoes.png");
+  background-image: url("resources/images_menu/opcoes.png");
   background-repeat: no-repeat;
   padding: 15px 110px;
   font-size: 12px;
@@ -48,7 +48,7 @@ main{
   position: absolute;
   right:    550px;
   top:   550px;
-  background-image: url("sair.png");
+  background-image: url("resources/images_menu/sair.png");
   text-align: center;
   background-repeat: no-repeat;
   padding: 15px 110px;
