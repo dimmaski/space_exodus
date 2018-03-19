@@ -1,56 +1,73 @@
-main{
+
+#game {
+
+  background: no-repeat;
+  position: relative;
   width: 800px;
   height: 600px;
-  background-image: url('resources/images_menu/menu.jpg');
+  background-image: url('resources/images_menu/fundo.png');
   margin: auto;
+
 }
 
-#slogan{
-  background-repeat: no-repeat;
-  background-image: url("resources/images_menu/titulo.png");
+
+#logo {
+  display: block;
+  margin-left: auto;
+  width: 60%;
+  height: 60%;
+  margin-right: auto;
+}
+
+nav {
+  position: absolute;
+  display: block;
+  align: center;
+  margin-right: auto;
+  margin-left: auto;
+  top: 50%;
+  left: 40%;
+
+}
+
+nav button {
+  display: block;
   background-color: Transparent;
   border: none;
-  position: absolute;
-  right:    105px;
-  top:   100px;
-
-}
-
-.button {
-    background-color: Transparent;
-    border: none;
-    position: absolute;
-    right:    525px;
-    top:   400px;
-    background-image: url("resources/images_menu/jogar.png");
-    background-repeat: no-repeat;
-    padding: 15px 110px;
-    text-align: center;
-    font-size: 12px;
-}
-
-.button2 {
-  background-color: Transparent;
-  border: none;
-  position: absolute;
-  right:   505px;
-  top:   475px;
-  background-image: url("resources/images_menu/opcoes.png");
+  position: relative;
   background-repeat: no-repeat;
-  padding: 15px 110px;
+  text-align: center;
   font-size: 12px;
+  padding: 15px 110px;
+
+}
+
+button:hover {
+  transform: scale(1.1);
+
+}
+
+#playButton {
+     background-image: url("resources/images_menu/jogar.png");
+}
+
+#optionsButton {
+  background-image: url("resources/images_menu/opcoes.png");
   }
 
 
-.button3 {
-  background-color: Transparent;
-  border: none;
-  position: absolute;
-  right:    475px;
-  top:   550px;
-  background-image: url("resources/images_menu/sair.png");
-  text-align: center;
-  background-repeat: no-repeat;
-  padding: 15px 110px;
-  font-size: 12px;
+#exitButton {
+    background-image: url("resources/images_menu/sair.png");
+  }
+
+#creditsButton {
+    background-image: url("resources/images_menu/sair.png");
+  }
+
+#historyButton {
+    background-image: url("resources/images_menu/sair.png");
+  }
+
+#controlsButton {
+    background-image: url("resources/images_menu/sair.png");
   }
