@@ -1,0 +1,56 @@
+main{
+  width: 800px;
+  height: 600px;
+  background-image: url("menu.jpg");
+  margin: auto;
+}
+
+#slogan{
+  background-repeat: no-repeat;
+  background-image: url("titulo.png");
+  background-color: Transparent;
+  border: none;
+  position: absolute;
+  right:    105px;
+  top:   100px;
+
+}
+
+.button {
+    background-color: Transparent;
+    border: none;
+    position: absolute;
+    right:    525px;
+    top:   400px;
+    background-image: url("jogar.png");
+    background-repeat: no-repeat;
+    padding: 15px 110px;
+    text-align: center;
+    font-size: 12px;
+}
+
+.button2 {
+  background-color: Transparent;
+  border: none;
+  position: absolute;
+  right:   505px;
+  top:   475px;
+  background-image: url("opcoes.png");
+  background-repeat: no-repeat;
+  padding: 15px 110px;
+  font-size: 12px;
+  }
+
+
+.button3 {
+  background-color: Transparent;
+  border: none;
+  position: absolute;
+  right:    550px;
+  top:   550px;
+  background-image: url("sair.png");
+  text-align: center;
+  background-repeat: no-repeat;
+  padding: 15px 110px;
+  font-size: 12px;
+  }
