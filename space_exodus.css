@@ -1,15 +1,12 @@
-
 #game {
-
   background: no-repeat;
   position: relative;
   width: 800px;
   height: 600px;
-  background-image: url('resources/images_menu/fundo.png');
+  background-image: url('resources/background-azul.jpg');
   margin: auto;
 
 }
-
 
 #logo {
   display: block;
@@ -20,17 +17,19 @@
 }
 
 nav {
-  position: absolute;
-  display: block;
-  align: center;
-  margin-right: auto;
-  margin-left: auto;
-  top: 50%;
-  left: 40%;
+	visibility: visible;
+	position: absolute;
+	display: block;
+	align: center;
+	margin-right: auto;
+	margin-left: auto;
+	top: 50%;
+ 	left: 40%;
 
 }
 
 nav button {
+	visibility: visible;
   display: block;
   background-color: Transparent;
   border: none;
