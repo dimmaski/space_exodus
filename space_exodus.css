@@ -3,7 +3,7 @@
   position: relative;
   width: 800px;
   height: 600px;
-  background-image: url('resources/background-azul.jpg');
+  background-image: url('resources/menu_inicial/background.jpg');
   margin: auto;
 
 }
@@ -24,20 +24,20 @@ nav {
 	margin-right: auto;
 	margin-left: auto;
 	top: 50%;
- 	left: 40%;
+ 	left: 34%;
 
 }
 
 nav button {
 	visibility: visible;
+  border: none;
   display: block;
   background-color: Transparent;
-  border: none;
   position: relative;
   background-repeat: no-repeat;
   text-align: center;
   font-size: 12px;
-  padding: 15px 110px;
+  padding: 25px 140px;
 
 }
 
@@ -47,26 +47,28 @@ button:hover {
 }
 
 #playButton {
-     background-image: url("resources/images_menu/jogar.png");
+     background-image: url("resources/menu_inicial/jogar2.png");
+     background-position: left 60px top 8px;
 }
 
-#optionsButton {
-  background-image: url("resources/images_menu/opcoes.png");
+#historyButton {
+    background-image: url("resources/menu_inicial/historia2.png");
+    background-position: left 22px top 8px;
   }
 
-
-#exitButton {
-    background-image: url("resources/images_menu/sair.png");
-  }
 
 #creditsButton {
-    background-image: url("resources/images_menu/sair.png");
-  }
-
-#historyButton {
-    background-image: url("resources/images_menu/sair.png");
+    background-image: url("resources/menu_inicial/creditos2.png");
+    background-position: left 22px top 8px;
   }
 
 #controlsButton {
-    background-image: url("resources/images_menu/sair.png");
-  }
+      background-image: url("resources/menu_inicial/ajuda2.png");
+      background-position: left 75px top 8px;
+}
+
+
+#exitButton {
+    background-image: url("resources/menu_inicial/sair2.png");
+    background-position: left 83px top 8px;
+}
