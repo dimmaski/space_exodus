@@ -1,0 +1,9 @@
+#ajuda {
+  background: no-repeat;
+  position: relative;
+  width: 800px;
+  height: 600px;
+  background-image: url('resources/ajuda/ajuda_final.jpg');
+  margin: auto;
+
+}

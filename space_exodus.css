@@ -76,5 +76,14 @@ button:hover {
 
 #soundbutton{
     padding: 25px 25px;
-    background-image: url("resources/menu_inicial/sair2.png");
+    background-image: url("resources/menu_inicial/sound2.png");
+    background-color: Transparent;
+    position: relative;
+    background-repeat: no-repeat;
+    border: none;
+    display: block;
+    left: 93%;
+    top: 92%;
+
+
 }
