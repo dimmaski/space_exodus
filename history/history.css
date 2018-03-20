@@ -1,0 +1,9 @@
+#historyCanvas {
+
+  background: no-repeat;
+  position: relative;
+  background-image: url('../resources/background_clean.jpg');
+  margin: auto;
+  display: block;
+
+}
