@@ -3,4 +3,8 @@
   margin: auto;
   display: block;
   position: relative;
+  background-repeat: no-repeat;
+  background-size:contain;
+  background-position: center;
+  background-image: url("../resources/background_clean.jpg");
 }
