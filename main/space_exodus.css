@@ -1,3 +1,12 @@
+@font-face {
+    font-family: retro;
+    src: url(PressStart2P.ttf) format("truetype");
+}
+
+p {
+    font-family: retro;
+}
+
 #game {
   background: no-repeat;
   position: relative;
@@ -5,7 +14,6 @@
   height: 600px;
   background-image: url('../resources/menu_inicial/background.jpg');
   margin: auto;
-
 }
 
 #logo {
@@ -16,63 +24,35 @@
   margin-right: auto;
 }
 
+a {
+    text-decoration: none; 
+     background-color: none;
+    color:white;
+
+}
+
 nav {
 	visibility: visible;
 	position: absolute;
 	display: block;
-	align: center;
 	margin-right: auto;
 	margin-left: auto;
-	top: 50%;
- 	left: 34%;
+	top: 43%;
+ 	left: 31%;
+  font-size: 40px;
+  color: white;
+  line-height: 0.6;
 
-}
-
-nav button {
-	visibility: visible;
-  border: none;
-  display: block;
-  background-color: Transparent;
-  position: relative;
-  background-repeat: no-repeat;
+ 
   text-align: center;
-  font-size: 12px;
-  padding: 25px 140px;
 
 }
 
 button:hover {
+  font-size: 30%;
   transform: scale(1.1);
 
 }
-
-#playButton {
-     background-image: url("../resources/menu_inicial/jogar2.png");
-     background-position: left 60px top 8px;
-}
-
-#historyButton {
-    background-image: url("../resources/menu_inicial/historia2.png");
-    background-position: left 22px top 8px;
-  }
-
-
-#creditsButton {
-    background-image: url("../resources/menu_inicial/creditos2.png");
-    background-position: left 22px top 8px;
-  }
-
-#controlsButton {
-      background-image: url("../resources/menu_inicial/ajuda2.png");
-      background-position: left 75px top 8px;
-}
-
-
-#exitButton {
-    background-image: url("../resources/menu_inicial/sair2.png");
-    background-position: left 83px top 8px;
-}
-
 
 #soundbutton{
     padding: 25px 25px;

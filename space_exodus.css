@@ -1,3 +1,12 @@
+@font-face {
+    font-family: retro;
+    src: url(PressStart2P.ttf) format("truetype");
+}
+
+p {
+    font-family: retro;
+}
+
 #game {
   background: no-repeat;
   position: relative;
@@ -20,7 +29,6 @@ nav {
 	visibility: visible;
 	position: absolute;
 	display: block;
-	align: center;
 	margin-right: auto;
 	margin-left: auto;
 	top: 50%;
