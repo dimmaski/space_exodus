@@ -23,6 +23,10 @@ class SpriteImage
 		this.clickable = clickable;			
 	}
 
+	drawBackground(ctx) 
+	{
+		ctx.drawImage(this.img, this.x, this.y - this.height + 2, this.width, this.height);
+	}
 
 	draw(ctx)
 	{
