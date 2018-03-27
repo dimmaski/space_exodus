@@ -39,9 +39,11 @@ nav {
 	margin-left: auto;
 	top: 43%;
  	left: 31%;
-  font-size: 40px;
+  font-size: 38px;
   color: white;
   line-height: 0.6;
+  font-weight: 400;
+  opacity: 0.91;
 
  
   text-align: center;
