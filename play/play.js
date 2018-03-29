@@ -14,6 +14,10 @@ var SPACE = false;
 // qt de balas
 var SIZE_POOL = 10;
 var countBullets = 0;
+var conta=0;
+var temp=[];
+var flag_space=true;
+
 
 // repositorios para desenhar imagens com sprites
 var imageRepository = new function() {
@@ -68,8 +72,8 @@ function main()
 	var canvas = document.getElementById("canvas");
 	var ctx = canvas.getContext("2d");
 	init(ctx);  //carregar todos os componentes
-}
 
+}
 
 function init(ctx) {
 	var nLoad = 0;
@@ -95,7 +99,7 @@ function init(ctx) {
 
 	var nw = imageRepository.shipEnemy.naturalWidth;
 	var nh = imageRepository.shipEnemy.naturalHeight;
-	var sp = new SpriteImage(cw/2, 200, nw, nh, 3, true, imageRepository.shipEnemy);
+	var sp = new Ship(cw/2, 200, nw, nh, 3, true, imageRepository.shipEnemy);
 	spArray[nLoad] = sp;
 	nLoad++;
 
@@ -111,8 +115,15 @@ function init(ctx) {
 			UP = true;
 		else if (ev.keyCode == 40 || ev.keyCode == 83) 
 			DOWN = true;
-		else if (ev.keyCode == 32)
-			shoot(ctx, spArray, bulletsArray);
+		else if (ev.keyCode == 32) {
+			// espaço de tempo entre tiros
+			if (flag_space == true) {
+				flag_space = false;
+				shoot(ctx, spArray, bulletsArray);
+				setTimeout(function(){ flag_space = true; }, 500);
+			}
+		}
+
 	}
 
 	function keyupHandler(ev) {
@@ -126,6 +137,7 @@ function init(ctx) {
 			DOWN = false;
 	}
 	startAnim(ctx, spArray, bulletsArray);	
+
 }
 
 //iniciar animação
@@ -144,7 +156,37 @@ function draw(ctx, spArray)
 	for (let i = 0; i < dim; i++)
 	{
 		spArray[i].draw(ctx);
-	}
+
+		// ver se é nave para ter este metodo especifico
+		if (spArray[i].getType() == "ship") {
+			// desenhar dano
+			for (let j=0; j<spArray[i].hitBullets.length; j++) {
+				drawDamageInfo(ctx, spArray[i].hitBullets[j], spArray[i].hitBullets, j);
+			}
+		}
+	}		
+}
+
+function drawDamageInfo(ctx, bullet, arrayBullet, j) {
+				
+	ctx.font = "15px Comic Sans MS";
+	ctx.fillStyle = "red";
+	ctx.textAlign = "center";
+
+	ctx.fillText(-bullet.damage, bullet.damageX, bullet.damageY);
+
+	//subir dano
+	bullet.damageY -= 1;
+
+	// eliminar info dano
+	setTimeout(deleteDamageInfo, 500, arrayBullet, j);
+	console.log("Ok1");
+	
+}
+
+function deleteDamageInfo(bullets, j) {
+	bullets.splice(j, 1);
+	console.log("ok2");
 }
 
 
@@ -158,21 +200,6 @@ function clear(ctx, spArray)
 		spArray[i].clear(ctx);
 	}
 }
-
-// iniciar pool
-function poolBullets(bullet) {
-	var size = SIZE_POOL;
-	var pool = [];
-
-	for (let i=0; i < size; i++) {
-		pool[i] = bullet;
-	}
-
-	for (let i=0; i < size; i++) {
-		console.log(pool[i]);
-	}
-}
-
 
 //-------------------------------------------------------------
 //--- controlo da animação: coração da aplicação!!!
@@ -191,6 +218,7 @@ function animLoop(ctx, spArray, bulletsArray)
 
 // colisoes
 function VerifyCollision(ctx, spArray, bulletsArray) {
+
 	// percorrer figura e ve bounding box
 	for (let i=0; i<spArray.length; i++) {
 		if (i != 0) {
@@ -205,13 +233,24 @@ function VerifyCollision(ctx, spArray, bulletsArray) {
 			if (bulletsArray.length != 0 && i!=1) {
 				for (let k=0; k<bulletsArray.length; k++) {
 					if (bulletsArray[k].verifyIntersect(spArray[i]) == true) {
+						// "matar" bullet
 						bulletsArray[k].alive = false;
 						console.log("puummm e pshhhhhhh");
-						// funcoes a fazer para quando ocorre colisao
+
+						// >> funcoes a fazer para quando ocorre colisao
+						
 						changeColorDamage(ctx, spArray, i);
 						// muda de cor apos 0.5seg
-						setTimeout(changeColor, 500, ctx, spArray, i);
-						break;
+						setTimeout(changeColor, 500, ctx, spArray, i); 
+
+						// --- DANO ---
+						// balas que acertaram na nave
+						// passar info para esse objeto
+						spArray[i].hitBullets.push(bulletsArray[k]);
+						var pos = spArray[i].numBullets;
+						// formatar info do damage	
+						spArray[i].hitBullets[pos].damageX = spArray[i].x+spArray[i].width/2;
+						spArray[i].hitBullets[pos].damageY = spArray[i].y-spArray[i].height/6;					
 					}
 				}
 			}
@@ -220,16 +259,17 @@ function VerifyCollision(ctx, spArray, bulletsArray) {
 }
 
 function changeColorDamage(ctx, spArray, i) {
-	var sp = new SpriteImage(spArray[i].x, spArray[i].y, spArray[i].width, spArray[i].height, 3, true, imageRepository.shipEnemyDamaged);
+	//var sp = new Ship(spArray[i].x, spArray[i].y, spArray[i].width, spArray[i].height, 3, true, imageRepository.shipEnemyDamaged);
+	spArray[i].img = imageRepository.shipEnemyDamaged;
 	// substituir no array
-	spArray.splice(i, 1, sp);
+	spArray.splice(i, 1, spArray[i]);
 }
 
 // muda de cor a nave quando embate missel
 function changeColor(ctx, spArray, i) {
-	var sp = new SpriteImage(spArray[i].x, spArray[i].y, spArray[i].width, spArray[i].height, 3, true, imageRepository.shipEnemy);
+	spArray[i].img = imageRepository.shipEnemy;
 	// substituir no array
-	spArray.splice(i, 1, sp);
+	spArray.splice(i, 1, spArray[i]);
 }
 
 
@@ -328,7 +368,7 @@ function shoot(ctx, spArray, bulletsArray) {
 
 	if (countBullets != size) {
 		// definir tempo entre bullets
-		var sp = new SpriteImage(getShipX+getShipWidth/2, getShipY, imageRepository.bullet.naturalWidth, imageRepository.bullet.naturalHeight, 3, true, imageRepository.bullet);
+		var sp = new Bullet(getShipX+getShipWidth/2, getShipY, imageRepository.bullet.naturalWidth, imageRepository.bullet.naturalHeight, 3, true, imageRepository.bullet);
 		bulletsArray.push(sp);
 		countBullets++;
 	}
@@ -342,5 +382,91 @@ function drawBullets(ctx, bulletsArray)
 		for (let i = 0; i < dim; i++) {
 			bulletsArray[i].draw(ctx);
 		}
+	}
+}
+
+class Bullet {
+	constructor(x, y, w, h, speed, alive, img) {
+		//posição e movimento
+		this.xIni = x;
+		this.yIni = y;
+		this.x = x;
+		this.y = y;
+		this.width = w;
+		this.height = h;
+		this.speed = speed;
+
+		//imagem
+		this.img = img;		
+
+		//eliminar ou nao
+		this.aliveIni = alive;
+		this.alive = alive;	
+
+		// dano
+		this.damage = Math.floor((Math.random() * 200) + 100);
+		// nave no qual o tiro acertou, start null
+		this.hitShip = null;
+		this.damageX;
+		this.damageY;
+
+	}
+
+	draw(ctx)
+	{
+		ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
+	}
+
+
+	clear(ctx)
+	{
+		ctx.clearRect(this.x, this.y, this.width, this.height);
+	}	
+
+	reset(ev, ctx)
+	{
+		this.clear(ctx);
+		this.x = this.xIni;
+		this.y = this.yIni;
+		this.clickable = this.clickableIni;
+	}
+
+	verify_inside(mx, my) {
+		console.log(this.img);
+		if (mx >= this.x && 
+			mx <= this.x + this.width && 
+			my >= this.y && 
+			my <= this.y + this.height)
+			return true;
+		else
+			return false;
+		
+	}
+
+	verifyIntersect(fig) {
+		if ((fig.getX() + fig.getLarg() ) < this.getX() || 
+			fig.getX() > (this.getX() + this.getLarg()) ||
+			(fig.getY() + fig.getAlt()) < this.getY() ||
+			fig.getY() > (this.getAlt() + this.getY())) {
+			return false;
+		} 
+		else
+			return true;
+	}
+
+	getX() {
+		return this.x;
+	}
+
+	getY() {
+		return this.y;
+	}
+
+	getLarg() {
+		return this.width;
+	}
+	
+	getAlt() {
+		return this.height;
 	}
 }

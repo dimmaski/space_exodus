@@ -1,6 +1,6 @@
 "use strict";
 
-class SpriteImage
+class Ship
 {
 	constructor(x, y, w, h, speed, alive, img)
 	{
@@ -16,18 +16,26 @@ class SpriteImage
 		//imagem
 		this.img = img;		
 		
-		//eliminar ou nao
-		this.aliveIni = alive;
-		this.alive = alive;			
+		// bullet que lhe acertou, start at null
+		this.hitBullets = [];
+		this.numBullets= this.hitBullets.length;
 	}
 
 	getType() {
-		return "sprite";
+		return "ship";
 	}
 
-	drawBackground(ctx) 
-	{
-		ctx.drawImage(this.img, this.x, this.y - this.height+2, this.width, this.height);
+	setTeste(t) {
+		this.teste = t;
+	}
+
+	printHitBullets() 
+	{	
+		//console.log(this.teste);
+		//console.log(this.HitBullets.length);
+		for (let i=0; i<this.hitBullets.length; i++) {
+			console.log(this.hitBullets[i]);
+		}
 	}
 
 	draw(ctx)
@@ -50,9 +58,6 @@ class SpriteImage
 		this.clickable = this.clickableIni;
 	}
 
-	turbo(ev, ctx) {	
-		this.speed = TURBO;
-	}
 
 	verify_inside(mx, my) {
 		console.log(this.img);
@@ -93,36 +98,6 @@ class SpriteImage
 		return this.height;
 	}
 
-	mouseOverBoundingBox(ev, ctx) //ev.target é a canvas
-	{
-		var mx = ev.offsetX;  //mx, my = mouseX, mouseY na canvas
-		var my = ev.offsetY;
-
-		//console.log(mx+" , "+my);
-		//console.log(this.x+" - "+this.y);
-
-		var carroData = ctx.getImageData(this.x, this.y, this.width, this.height);
-		// pixel onde se clicou
-		var imageData = ctx.getImageData(mx, my, 1, 1);
-
-		// verificar opacidade deste
-		// se o pixel[3] == 0, não tem nada sobreposto
-		if (imageData.data[3] == 0 || this.verify_inside(mx, my) == false) {
-			return false;
-		}
-		return true;						
-	}
-
-
-
-
-	clickedBoundingBox(ev, ctx) //ev.target é a canvas
-	{
-		if (!this.clickable)
-			return false;
-		else
-			return this.mouseOverBoundingBox(ev, ctx);
-	}
 
 	moveLeft() {
 		this.x -= this.speed;		
