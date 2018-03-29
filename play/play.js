@@ -23,6 +23,8 @@ var imageRepository = new function() {
 	this.bullet = new Image();
 	this.background = new Image();
 	this.ship = new Image(); 
+	this.shipEnemy = new Image();
+	this.shipEnemyDamaged = new Image();
 
 	function imageLoad() {
 		nLoad++;
@@ -40,14 +42,24 @@ var imageRepository = new function() {
 	this.bullet.onload = function() {
 		imageLoad();
 	}
+	this.shipEnemy.onload = function() {
+		imageLoad();
+	}
+	this.shipEnemyDamaged.onload = function() {
+		imageLoad();
+	}
 
 	this.background.id = "background";
 	this.ship.id = "ship1";
 	this.bullet.id = "bullet";
+	this.shipEnemy.id = "shipEnemy";
+	this.shipEnemyDamaged.id = "shipEnemyDamaged";
 		
 	this.background.src = "../resources/backgrounds/background_space2.jpg";
 	this.ship.src = "../resources/ships/ship1.png"; 
 	this.bullet.src = "../resources/bullets/bullet1.png";
+	this.shipEnemy.src = "../resources/ships/shipEnemy.png"; 
+	this.shipEnemyDamaged.src = "../resources/ships/shipEnemyDamaged.png";
 }
 
 
@@ -71,21 +83,21 @@ function init(ctx) {
 
 	var nw = imageRepository.background.naturalWidth;
 	var nh = imageRepository.background.naturalHeight;
-	var sp = new SpriteImage(0, 0, nw, nh, 3, false, imageRepository.background);
+	var sp = new SpriteImage(0, 0, nw, nh, 3, true, imageRepository.background);
 	spArray[nLoad] = sp;
 	nLoad++;		
 
 	var nw = imageRepository.ship.naturalWidth;
 	var nh = imageRepository.ship.naturalHeight;
-	var sp = new SpriteImage(cw/2, ch-ch/6, nw, nh, 3, false, imageRepository.ship);
+	var sp = new SpriteImage(cw/2, ch-ch/6, nw, nh, 3, true, imageRepository.ship);
 	spArray[nLoad] = sp;
 	nLoad++;	
-/*
-	var nw = imageRepository.bullet.naturalWidth;
-	var nh = imageRepository.bullet.naturalHeight;
-	var sp = new SpriteImage(200, 200, nw, nh, 3, false, imageRepository.bullet);
+
+	var nw = imageRepository.shipEnemy.naturalWidth;
+	var nh = imageRepository.shipEnemy.naturalHeight;
+	var sp = new SpriteImage(cw/2, 200, nw, nh, 3, true, imageRepository.shipEnemy);
 	spArray[nLoad] = sp;
-	nLoad++;*/
+	nLoad++;
 
 	window.addEventListener("keydown", keydownHandler);
 	window.addEventListener("keyup", keyupHandler);		
@@ -175,22 +187,49 @@ function animLoop(ctx, spArray, bulletsArray)
 	var reqID = window.requestAnimationFrame(al);
 
 	render(ctx, spArray, bulletsArray, reqID);
-
-
-
 }
 
 // colisoes
-function VerifyCollision(ctx, spArray) {
+function VerifyCollision(ctx, spArray, bulletsArray) {
 	// percorrer figura e ve bounding box
 	for (let i=0; i<spArray.length; i++) {
-		for (let j=i+1; j<spArray.length; j++) {
-			if (spArray[i].verifyIntersect(spArray[j]) == true) {
-				console.log("^^_^^");
-				turbo(ctx, spArray);
+		if (i != 0) {
+			for (let j=i+1; j<spArray.length; j++) {
+				// tira background				
+				if (spArray[i].verifyIntersect(spArray[j]) == true) {
+					console.log("^^_^^");
+					break;
+				}
+			}	
+			// se houver balas e for diferente da nave que disparou	
+			if (bulletsArray.length != 0 && i!=1) {
+				for (let k=0; k<bulletsArray.length; k++) {
+					if (bulletsArray[k].verifyIntersect(spArray[i]) == true) {
+						bulletsArray[k].alive = false;
+						console.log("puummm e pshhhhhhh");
+						// funcoes a fazer para quando ocorre colisao
+						changeColorDamage(ctx, spArray, i);
+						// muda de cor apos 0.5seg
+						setTimeout(changeColor, 500, ctx, spArray, i);
+						break;
+					}
+				}
 			}
-		}
-	}	
+		}	
+	}
+}
+
+function changeColorDamage(ctx, spArray, i) {
+	var sp = new SpriteImage(spArray[i].x, spArray[i].y, spArray[i].width, spArray[i].height, 3, true, imageRepository.shipEnemyDamaged);
+	// substituir no array
+	spArray.splice(i, 1, sp);
+}
+
+// muda de cor a nave quando embate missel
+function changeColor(ctx, spArray, i) {
+	var sp = new SpriteImage(spArray[i].x, spArray[i].y, spArray[i].width, spArray[i].height, 3, true, imageRepository.shipEnemy);
+	// substituir no array
+	spArray.splice(i, 1, sp);
 }
 
 
@@ -205,12 +244,15 @@ function render(ctx, spArray, bulletsArray, reqID, dt)
 	// gere balas
 	moveBullets(ctx, bulletsArray);
 
+	// verifica colisao
+	// tirar background 
+	VerifyCollision(ctx, spArray, bulletsArray);
+
 	//apagar canvas
 	ctx.clearRect(0, 0, cw, ch);
 	//move background
 	backgroundMoving(ctx, spArray);
-	// verifica colisao
-	//VerifyCollision(ctx, spArray);
+
 	draw(ctx, spArray);
 
 	drawBullets(ctx, bulletsArray);
@@ -256,7 +298,15 @@ function moveBullets(ctx, bulletsArray) {
 	var pool = bulletsArray;
 	for (var i = 0; i < pool.length; i++) {
 		if (pool[i].y >= 0) {
-			pool[i].y -= pool[i].speed;
+			if (pool[i].alive == false) {
+				// retirar do array
+				pool.splice(i, 1);
+				countBullets--;
+				console.log("retirou...");
+			} 
+			else {
+				pool[i].y -= pool[i].speed;
+			}
 		}
 		else {
 			// retirar do array
@@ -277,7 +327,8 @@ function shoot(ctx, spArray, bulletsArray) {
 	var getShipHeigth = spArray[1].height;
 
 	if (countBullets != size) {
-		var sp = new SpriteImage(getShipX+getShipWidth/2, getShipY, imageRepository.bullet.naturalWidth, imageRepository.bullet.naturalHeight, 3, false, imageRepository.bullet);
+		// definir tempo entre bullets
+		var sp = new SpriteImage(getShipX+getShipWidth/2, getShipY, imageRepository.bullet.naturalWidth, imageRepository.bullet.naturalHeight, 3, true, imageRepository.bullet);
 		bulletsArray.push(sp);
 		countBullets++;
 	}
@@ -293,5 +344,3 @@ function drawBullets(ctx, bulletsArray)
 		}
 	}
 }
-
-

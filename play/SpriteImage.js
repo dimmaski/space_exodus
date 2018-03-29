@@ -4,7 +4,7 @@ var TURBO = 20;
 
 class SpriteImage
 {
-	constructor(x, y, w, h, speed, clickable, img)
+	constructor(x, y, w, h, speed, alive, img)
 	{
 		//posição e movimento
 		this.xIni = x;
@@ -18,9 +18,9 @@ class SpriteImage
 		//imagem
 		this.img = img;		
 		
-		//rato
-		this.clickableIni = clickable;
-		this.clickable = clickable;			
+		//eliminar ou nao
+		this.aliveIni = alive;
+		this.alive = alive;			
 	}
 
 	drawBackground(ctx) 
