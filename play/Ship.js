@@ -115,3 +115,13 @@ class Ship
 		this.y += this.speed;
 	}
 }
+
+class Damage
+{
+	constructor(x, y, damage) {
+		this.x = x;
+		this.y = y;
+		this.damage = damage;
+	}
+
+}

@@ -1,33 +1,14 @@
 "use strict";
 
-class SpriteImage
+class Sprite 
 {
-	constructor(x, y, w, h, speed, alive, img)
-	{
-		//posição e movimento
-		this.xIni = x;
-		this.yIni = y;
+	constructor(x, y, w, h, img, alive) {
 		this.x = x;
 		this.y = y;
 		this.width = w;
 		this.height = h;
-		this.speed = speed;
-
-		//imagem
-		this.img = img;		
-		
-		//eliminar ou nao
-		this.aliveIni = alive;
-		this.alive = alive;			
-	}
-
-	getType() {
-		return "sprite";
-	}
-
-	drawBackground(ctx) 
-	{
-		ctx.drawImage(this.img, this.x, this.y - this.height+2, this.width, this.height);
+		this.img = img;
+		this.alive = alive;
 	}
 
 	draw(ctx)
@@ -39,19 +20,17 @@ class SpriteImage
 	clear(ctx)
 	{
 		ctx.clearRect(this.x, this.y, this.width, this.height);
-	}	
-
-
-	reset(ev, ctx)
-	{
-		this.clear(ctx);
-		this.x = this.xIni;
-		this.y = this.yIni;
-		this.clickable = this.clickableIni;
 	}
 
-	turbo(ev, ctx) {	
-		this.speed = TURBO;
+	verifyIntersect(fig) {
+		if ((fig.x + fig.width) < this.x || 
+			fig.x > (this.x + this.width) ||
+			(fig.y + fig.height) < this.y ||
+			fig.y > (this.height + this.y)) {
+			return false;
+		} 
+		else
+			return true;
 	}
 
 	verify_inside(mx, my) {
@@ -65,63 +44,68 @@ class SpriteImage
 			return false;
 		
 	}
+}
 
-	verifyIntersect(fig) {
-		if ((fig.getX() + fig.getLarg() ) < this.getX() || 
-			fig.getX() > (this.getX() + this.getLarg()) ||
-			(fig.getY() + fig.getAlt()) < this.getY() ||
-			fig.getY() > (this.getAlt() + this.getY())) {
-			return false;
-		} 
-		else
-			return true;
-	}
-
-	getX() {
-		return this.x;
-	}
-
-	getY() {
-		return this.y;
-	}
-
-	getLarg() {
-		return this.width;
-	}
-	
-	getAlt() {
-		return this.height;
-	}
-
-	mouseOverBoundingBox(ev, ctx) //ev.target é a canvas
+class Background extends Sprite
+{
+	constructor(x, y, w, h, speed, alive, img)
 	{
-		var mx = ev.offsetX;  //mx, my = mouseX, mouseY na canvas
-		var my = ev.offsetY;
+		super(x,y,w,h,img, alive);
+		this.speed = speed;
+		this.img = img;		
+			
+		//eliminar ou nao
+		this.aliveIni = alive;
+		this.alive = alive;			
+	}
 
-		//console.log(mx+" , "+my);
-		//console.log(this.x+" - "+this.y);
+	getType() {
+		return "sprite";
+	}
 
-		var carroData = ctx.getImageData(this.x, this.y, this.width, this.height);
-		// pixel onde se clicou
-		var imageData = ctx.getImageData(mx, my, 1, 1);
+	drawBackground(ctx) 
+	{
+		ctx.drawImage(this.img, this.x, this.y - this.height+2, this.width, this.height);
+	}
+}
 
-		// verificar opacidade deste
-		// se o pixel[3] == 0, não tem nada sobreposto
-		if (imageData.data[3] == 0 || this.verify_inside(mx, my) == false) {
-			return false;
+"use strict";
+ 
+class Ship extends Sprite
+{
+	constructor(x, y, w, h, speed, alive, img, life)
+	{
+		super(x,y,w,h,img, alive);
+		this.speed = speed;
+		this.img = img;		
+		this.life = life;
+		this.alive = true;
+		// array de dano do navio
+		this.damage = [];
+	}
+
+	getDamageLenght() {
+		return this.damage.length;
+	}
+
+	getType() {
+		return "ship";
+	}
+	changeImg(newImg) {
+		this.img = newImg;
+	}
+
+	RemoveLife(dmg, newImg) {
+		this.life -= dmg;
+
+		if (this.life < 0) {
+			console.log("DEAD");
+			this.alive = false;
 		}
-		return true;						
 	}
 
-
-
-
-	clickedBoundingBox(ev, ctx) //ev.target é a canvas
-	{
-		if (!this.clickable)
-			return false;
-		else
-			return this.mouseOverBoundingBox(ev, ctx);
+	RemoveShip() {
+		this.img = null;
 	}
 
 	moveLeft() {
@@ -139,4 +123,53 @@ class SpriteImage
 	moveDown() {
 		this.y += this.speed;
 	}
+
+}
+
+class Bullet extends Sprite{
+	constructor(x, y, w, h, speed, alive, img) {
+		//posição e movimento
+		super(x,y,w,h,img, alive);
+		this.speed = speed;
+		this.img = img;	
+		// bala viva		
+		this.alive = alive;	
+		// dano
+		this.damage = Math.floor((Math.random() * 200) + 100);
+		// nave no qual o tiro acertou, start null
+		this.hitShip = null;
+	}
+}
+
+class Damage
+{
+	constructor(x, y, w, h, damage) {
+		this.x = x;
+		this.y = y;
+		this.w = w;
+		this.h = h;
+		this.damage = damage;
+		this.conta=0;
+		this.alive=true;
+	}
+
+	drawDamage(ctx) {
+		ctx.font = "15px Comic Sans MS";
+		ctx.fillStyle = "red";
+		ctx.textAlign = "center";
+
+		ctx.fillText(-this.damage, this.x+this.w/2, this.y-this.h/6); 
+
+		if (this.conta!=20) {
+			this.y -= 1;
+			this.conta++;
+		} 
+		else {
+			this.conta=0;
+			this.alive=false;
+		}
+	}
+
+
+
 }

@@ -87,19 +87,19 @@ function init(ctx) {
 
 	var nw = imageRepository.background.naturalWidth;
 	var nh = imageRepository.background.naturalHeight;
-	var sp = new SpriteImage(0, 0, nw, nh, 3, true, imageRepository.background);
+	var sp = new Background(0, 0, nw, nh, 3, true, imageRepository.background);
 	spArray[nLoad] = sp;
 	nLoad++;		
 
 	var nw = imageRepository.ship.naturalWidth;
 	var nh = imageRepository.ship.naturalHeight;
-	var sp = new SpriteImage(cw/2, ch-ch/6, nw, nh, 3, true, imageRepository.ship);
+	var sp = new Ship(cw/2, ch-ch/6, nw, nh, 3, true, imageRepository.ship, 1000);
 	spArray[nLoad] = sp;
 	nLoad++;	
 
 	var nw = imageRepository.shipEnemy.naturalWidth;
 	var nh = imageRepository.shipEnemy.naturalHeight;
-	var sp = new Ship(cw/2, 200, nw, nh, 3, true, imageRepository.shipEnemy);
+	var sp = new Ship(cw/2, 200, nw, nh, 3, true, imageRepository.shipEnemy, 1000);
 	spArray[nLoad] = sp;
 	nLoad++;
 
@@ -156,39 +156,20 @@ function draw(ctx, spArray)
 	for (let i = 0; i < dim; i++)
 	{
 		spArray[i].draw(ctx);
-
-		// ver se é nave para ter este metodo especifico
 		if (spArray[i].getType() == "ship") {
-			// desenhar dano
-			for (let j=0; j<spArray[i].hitBullets.length; j++) {
-				drawDamageInfo(ctx, spArray[i].hitBullets[j], spArray[i].hitBullets, j);
+			if (spArray[i].getDamageLenght() != 0) {
+				for (let j=0; j<spArray[i].getDamageLenght(); j++) {
+					if (spArray[i].damage[j].alive == true)
+						spArray[i].damage[j].drawDamage(ctx);
+					else
+						spArray[i].damage.splice(j, 1);
+				}
 			}
 		}
+		if (spArray[i].alive == false)
+			spArray.splice(i,1);
 	}		
 }
-
-function drawDamageInfo(ctx, bullet, arrayBullet, j) {
-				
-	ctx.font = "15px Comic Sans MS";
-	ctx.fillStyle = "red";
-	ctx.textAlign = "center";
-
-	ctx.fillText(-bullet.damage, bullet.damageX, bullet.damageY);
-
-	//subir dano
-	bullet.damageY -= 1;
-
-	// eliminar info dano
-	setTimeout(deleteDamageInfo, 500, arrayBullet, j);
-	console.log("Ok1");
-	
-}
-
-function deleteDamageInfo(bullets, j) {
-	bullets.splice(j, 1);
-	console.log("ok2");
-}
-
 
 //apagar sprites
 function clear(ctx, spArray)
@@ -229,8 +210,8 @@ function VerifyCollision(ctx, spArray, bulletsArray) {
 					break;
 				}
 			}	
-			// se houver balas e for diferente da nave que disparou	
-			if (bulletsArray.length != 0 && i!=1) {
+			// se houver balas e for diferente da nave que disparou	e esta viva
+			if (bulletsArray.length != 0 && spArray[i].img.id == "shipEnemy") {
 				for (let k=0; k<bulletsArray.length; k++) {
 					if (bulletsArray[k].verifyIntersect(spArray[i]) == true) {
 						// "matar" bullet
@@ -238,19 +219,18 @@ function VerifyCollision(ctx, spArray, bulletsArray) {
 						console.log("puummm e pshhhhhhh");
 
 						// >> funcoes a fazer para quando ocorre colisao
-						
 						changeColorDamage(ctx, spArray, i);
-						// muda de cor apos 0.5seg
-						setTimeout(changeColor, 500, ctx, spArray, i); 
+						// muda de cor apos 0.5seg e se a vida tirada for menor que a vida atual da nave
+						if (bulletsArray[k].damage < spArray[i].life)
+							setTimeout(changeColor, 500, ctx, spArray, i); 
 
 						// --- DANO ---
 						// balas que acertaram na nave
 						// passar info para esse objeto
-						spArray[i].hitBullets.push(bulletsArray[k]);
-						var pos = spArray[i].numBullets;
-						// formatar info do damage	
-						spArray[i].hitBullets[pos].damageX = spArray[i].x+spArray[i].width/2;
-						spArray[i].hitBullets[pos].damageY = spArray[i].y-spArray[i].height/6;					
+						spArray[i].damage.push(new Damage(spArray[i].x, spArray[i].y, spArray[i].width, spArray[i].height, bulletsArray[k].damage));	
+
+						// retirar dano
+						spArray[i].RemoveLife(bulletsArray[k].damage);							
 					}
 				}
 			}
@@ -260,14 +240,14 @@ function VerifyCollision(ctx, spArray, bulletsArray) {
 
 function changeColorDamage(ctx, spArray, i) {
 	//var sp = new Ship(spArray[i].x, spArray[i].y, spArray[i].width, spArray[i].height, 3, true, imageRepository.shipEnemyDamaged);
-	spArray[i].img = imageRepository.shipEnemyDamaged;
+	spArray[i].changeImg(imageRepository.shipEnemyDamaged);
 	// substituir no array
 	spArray.splice(i, 1, spArray[i]);
 }
 
 // muda de cor a nave quando embate missel
 function changeColor(ctx, spArray, i) {
-	spArray[i].img = imageRepository.shipEnemy;
+	spArray[i].changeImg(imageRepository.shipEnemy);
 	// substituir no array
 	spArray.splice(i, 1, spArray[i]);
 }
@@ -311,10 +291,11 @@ function backgroundMoving(ctx, spArray) {
 
 function moveShip(ctx, spArray) {
 	var sp = spArray[1];
+	//console.log(sp);
 
 	if (LEFT) {
 		//sp.x -= sp.speed;
-		if (sp.getX()  >= 0)
+		if (sp.x >= 0)
 	     	sp.moveLeft();
 	}
     if (RIGHT) {
@@ -385,88 +366,3 @@ function drawBullets(ctx, bulletsArray)
 	}
 }
 
-class Bullet {
-	constructor(x, y, w, h, speed, alive, img) {
-		//posição e movimento
-		this.xIni = x;
-		this.yIni = y;
-		this.x = x;
-		this.y = y;
-		this.width = w;
-		this.height = h;
-		this.speed = speed;
-
-		//imagem
-		this.img = img;		
-
-		//eliminar ou nao
-		this.aliveIni = alive;
-		this.alive = alive;	
-
-		// dano
-		this.damage = Math.floor((Math.random() * 200) + 100);
-		// nave no qual o tiro acertou, start null
-		this.hitShip = null;
-		this.damageX;
-		this.damageY;
-
-	}
-
-	draw(ctx)
-	{
-		ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
-	}
-
-
-	clear(ctx)
-	{
-		ctx.clearRect(this.x, this.y, this.width, this.height);
-	}	
-
-	reset(ev, ctx)
-	{
-		this.clear(ctx);
-		this.x = this.xIni;
-		this.y = this.yIni;
-		this.clickable = this.clickableIni;
-	}
-
-	verify_inside(mx, my) {
-		console.log(this.img);
-		if (mx >= this.x && 
-			mx <= this.x + this.width && 
-			my >= this.y && 
-			my <= this.y + this.height)
-			return true;
-		else
-			return false;
-		
-	}
-
-	verifyIntersect(fig) {
-		if ((fig.getX() + fig.getLarg() ) < this.getX() || 
-			fig.getX() > (this.getX() + this.getLarg()) ||
-			(fig.getY() + fig.getAlt()) < this.getY() ||
-			fig.getY() > (this.getAlt() + this.getY())) {
-			return false;
-		} 
-		else
-			return true;
-	}
-
-	getX() {
-		return this.x;
-	}
-
-	getY() {
-		return this.y;
-	}
-
-	getLarg() {
-		return this.width;
-	}
-	
-	getAlt() {
-		return this.height;
-	}
-}
