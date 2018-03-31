@@ -60,7 +60,7 @@ class Background extends Sprite
 	}
 
 	getType() {
-		return "sprite";
+		return "background";
 	}
 
 	drawBackground(ctx) 
@@ -73,15 +73,49 @@ class Background extends Sprite
  
 class Ship extends Sprite
 {
-	constructor(x, y, w, h, speed, alive, img, life)
+	constructor(x, y, w, h, speed, alive, imgShip, objLife, life, name)
 	{
-		super(x,y,w,h,img, alive);
+		super(x,y,w,h,imgShip, alive);
 		this.speed = speed;
-		this.img = img;		
+		this.imgShip = imgShip;	
+		this.objLife = objLife;	
 		this.life = life;
 		this.alive = true;
+		this.name = name;
 		// array de dano do navio
 		this.damage = [];
+		this.flagLife2 = true;
+		this.flagLife1 = false;
+	}
+
+	updateLife(dmg, newImg1, newImg2) {
+		if (this.flagLife2 == true) {
+			if (dmg <= 100) {
+				this.objLife.changeImg(newImg1);
+				// redimensionar imagem
+				this.objLife.resizeToLife2();
+				this.flagLife2 = false;
+				this.flagLife1 = true;
+				this.flagLifeZero = false;
+			}
+		} 
+		else if (this.flagLife1 == true) {
+			this.objLife.changeImg(newImg2);
+			// redimensionar imagem
+			this.objLife.resizeToLife1();
+			this.flagLife1 = false;
+			this.flagLifeZero = true;
+			
+		} else if (this.flagLifeZero == true)
+			//alert("Game Over");
+
+
+		/*
+		else if (dmg <= 200)
+			this.objLife.img = newImg2;
+		else
+			this.objLife.alive = false;*/
+		// GAME OVER;
 	}
 
 	getDamageLenght() {
@@ -92,7 +126,7 @@ class Ship extends Sprite
 		return "ship";
 	}
 	changeImg(newImg) {
-		this.img = newImg;
+		this.imgShip = newImg;
 	}
 
 	RemoveLife(dmg, newImg) {
@@ -104,9 +138,6 @@ class Ship extends Sprite
 		}
 	}
 
-	RemoveShip() {
-		this.img = null;
-	}
 
 	moveLeft() {
 		this.x -= this.speed;		
@@ -127,6 +158,7 @@ class Ship extends Sprite
 }
 
 class Bullet extends Sprite{
+
 	constructor(x, y, w, h, speed, alive, img) {
 		//posição e movimento
 		super(x,y,w,h,img, alive);
@@ -151,10 +183,12 @@ class Damage
 		this.damage = damage;
 		this.conta=0;
 		this.alive=true;
+		this.fontsize=13;
 	}
 
 	drawDamage(ctx) {
-		ctx.font = "15px Comic Sans MS";
+		var str =""+this.fontsize+"px Comic Sans MS"
+		ctx.font = str;
 		ctx.fillStyle = "red";
 		ctx.textAlign = "center";
 
@@ -163,13 +197,89 @@ class Damage
 		if (this.conta!=20) {
 			this.y -= 1;
 			this.conta++;
+			if (this.fontsize < 20)
+				this.fontsize++;
 		} 
 		else {
 			this.conta=0;
 			this.alive=false;
 		}
 	}
+}
+
+class BackgroundObject extends Sprite
+{
+	constructor(x, y, w, h, img, alive) {
+		super(x, y, w, h, alive, img);
+	}
+
+	resizeToLife2() {
+		this.width = this.width - this.width/3;
+	}
+
+	resizeToLife1() {
+		this.width = this.width - this.width/2;
+	}
+
+	changeImg(img) {
+		this.img = img;
+	}
+
+	getType() {
+		return "backgroundObject";
+	}
+}
+
+class ShipEnemy extends Sprite
+{
+	constructor(x, y, w, h, speed, alive, imgShip, life, name)
+	{
+		super(x,y,w,h,imgShip, alive);
+		this.speed = speed;
+		this.imgShip = imgShip;	
+		this.life = life;
+		this.alive = true;
+		this.name = name;
+		// array de dano do navio
+		this.damage = [];
+	}
 
 
+	getDamageLenght() {
+		return this.damage.length;
+	}
+
+	getType() {
+		return "ship";
+	}
+	changeImg(newImg) {
+		this.imgShip = newImg;
+	}
+
+	RemoveLife(dmg, newImg) {
+		this.life -= dmg;
+
+		if (this.life < 0) {
+			console.log("DEAD");
+			this.alive = false;
+		}
+	}
+
+
+	moveLeft() {
+		this.x -= this.speed;		
+	}
+
+	moveRight() {
+		this.x += this.speed;
+	}
+
+	moveUp() {
+		this.y -= this.speed;
+	}
+
+	moveDown() {
+		this.y += this.speed;
+	}
 
 }
