@@ -86,6 +86,8 @@ class Ship extends Sprite
 		this.damage = [];
 		this.flagLife2 = true;
 		this.flagLife1 = false;
+
+		this.shield = false;
 	}
 
 	updateLife(dmg, newImg1, newImg2) {
@@ -106,7 +108,8 @@ class Ship extends Sprite
 			this.flagLife1 = false;
 			this.flagLifeZero = true;
 			
-		} else if (this.flagLifeZero == true)
+		} 
+		//else if (this.flagLifeZero == true)
 			//alert("Game Over");
 
 
@@ -116,6 +119,18 @@ class Ship extends Sprite
 		else
 			this.objLife.alive = false;*/
 		// GAME OVER;
+	}
+
+	changeShieldState(time) {
+		/*
+		console.log("OKK");
+		this.shield = true;
+		setTimeout(function(){ this.shield = false; }, time);
+		this.objShield.x = this.x;
+		this.objShield.y = this.y;*/
+		console.log("Mudouuuu");
+		this.shield = true;
+
 	}
 
 	getDamageLenght() {
@@ -209,8 +224,9 @@ class Damage
 
 class BackgroundObject extends Sprite
 {
-	constructor(x, y, w, h, img, alive) {
+	constructor(x, y, w, h, img, alive, name) {
 		super(x, y, w, h, alive, img);
+		this.name = name;
 	}
 
 	resizeToLife2() {
@@ -227,6 +243,17 @@ class BackgroundObject extends Sprite
 
 	getType() {
 		return "backgroundObject";
+	}
+}
+
+class Boost extends Sprite 
+{
+	constructor(x, y, w, h, img, alive, name) {
+		super(x, y, w, h, alive, img);
+		this.name = name;
+	}
+	getType() {
+		return "boost";
 	}
 }
 

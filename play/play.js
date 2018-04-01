@@ -34,6 +34,10 @@ var imageRepository = new function() {
 	this.life2 = new Image();
 	this.life3 = new Image();
 
+	this.shield_star = new Image();
+	this.shield = new Image();
+
+
 	function imageLoad() {
 		nLoad++;
 		if (nLoad == totLoad) {
@@ -66,7 +70,15 @@ var imageRepository = new function() {
 	this.life3.onload = function() {
 		imageLoad();
 	}
+	this.shield_star.onload = function() {
+		imageLoad();
+	}
+	this.shield.ondload = function() {
+		imageLoad();
+	}
 
+	
+	// -- ID --
 	this.background.id = "background";
 	this.ship.id = "ship1";
 	this.bullet.id = "bullet";
@@ -76,7 +88,11 @@ var imageRepository = new function() {
 	this.life1.id = "life1";
 	this.life2.id = "life2";
 	this.life3.id = "life3";
-		
+	
+	this.shield_star.id = "shield_star";
+	this.shield.id = "shield";
+
+	// -- SRC --
 	this.background.src = "../resources/backgrounds/background_space2.jpg";
 	this.ship.src = "../resources/ships/ship1.png"; 
 	this.bullet.src = "../resources/bullets/bullet1.png";
@@ -88,6 +104,8 @@ var imageRepository = new function() {
 	this.life2.src = "../resources/life/life2.png";		
 	this.life3.src = "../resources/life/life3.png";	
 
+	this.shield_star.src = "../resources/boosts/shield_star.png";
+	this.shield.src = "../resources/boosts/shield.png";
 }
 
 
@@ -117,7 +135,7 @@ function init(ctx) {
 
 	var nw = imageRepository.life3.naturalWidth;
 	var nh = imageRepository.life3.naturalHeight;
-	var life = new BackgroundObject(8, ch-nh-8, nw, nh, true, imageRepository.life3);
+	var life = new BackgroundObject(8, ch-nh-8, nw, nh, true, imageRepository.life3, "vida");
 	spArray[nLoad] = life;
 	nLoad++;
 
@@ -129,11 +147,15 @@ function init(ctx) {
 
 	var nw = imageRepository.shipEnemy.naturalWidth;
 	var nh = imageRepository.shipEnemy.naturalHeight;
-	var sp = new ShipEnemy(cw/2, 200, nw, nh, 3, true, imageRepository.shipEnemy, imageRepository.life1, 1000, "mau");
+	var sp = new ShipEnemy(cw/2, 200, nw, nh, 3, true, imageRepository.shipEnemy, 1000, "mau");
 	spArray[nLoad] = sp;
 	nLoad++;
 
-
+	var nw = imageRepository.shield_star.naturalWidth;
+	var nh = imageRepository.shield_star.naturalHeight;
+	var sp = new Boost(300, 300, nw, nh, true, imageRepository.shield_star, "shield_star");
+	spArray[nLoad] = sp;
+	nLoad++;
 
 	window.addEventListener("keydown", keydownHandler);
 	window.addEventListener("keyup", keyupHandler);		
@@ -155,7 +177,6 @@ function init(ctx) {
 				setTimeout(function(){ flag_space = true; }, 500);
 			}
 		}
-
 	}
 
 	function keyupHandler(ev) {
@@ -201,8 +222,12 @@ function draw(ctx, spArray)
 				}
 			}		
 		}
-		if (spArray[i].alive == false)
+		if (spArray[i].alive == false) {
+				console.log("[i] spArray Elements: "+dim);
 				spArray.splice(i,1);
+				dim = spArray.length;
+				console.log("[f] spArray Elements: "+dim);
+		}
 	}		
 }
 
@@ -237,21 +262,34 @@ function VerifyCollision(ctx, spArray, bulletsArray) {
 
 	// percorrer figura e ve bounding box
 	for (let i=0; i<spArray.length; i++) {
-		if (spArray[i].getType() != "background" && spArray[i].getType() != "backgroundObjects") {
-			for (let j=i+1; j<spArray.length; j++) {
-				// tira background				
+		// colisoes só para a nave	
+		if (spArray[i].getType() == "ship") {
+			for (let j=i+1; j<spArray.length; j++) {	
 				if (spArray[i].verifyIntersect(spArray[j]) == true) {
-					console.log("^^_^^");
-					// tira vida
-					if (spArray[i].name == "bom") {
-						var dmg = 80;
-						spArray[i].life -= dmg;
-						spArray[i].updateLife(dmg, imageRepository.life2, imageRepository.life1);
+					// verifica interseção com boosts
+					// se acerta na estrela
+					if (spArray[j].getType() == "boost") {
+						if (spArray[j].name == "shield_star" && spArray[i].shield == false) {
+							// ativa shield
+							spArray[i].changeShieldState(1000);
+							// remove
+							//spArray.splice(j,1);
+						}
+					}
+					else {
+						console.log("^^_^^");
+						// tira vida
+						if (spArray[i].name == "bom") {
+							var dmg = 80;
+							spArray[i].life -= dmg;
+							spArray[i].updateLife(dmg, imageRepository.life2, imageRepository.life1);
+						}
 					}
 				}
-			}	
-
-			// se houver balas e for diferente da nave que disparou	e esta viva
+			}
+		}	
+		if (spArray[i].getType() != "background" && spArray[i].getType() != "backgroundObject") {
+			// se houver balas e for diferente da nave que disparou	
 			if (bulletsArray.length != 0 && spArray[i].img.id == "shipEnemy") {
 				for (let k=0; k<bulletsArray.length; k++) {
 					if (bulletsArray[k].verifyIntersect(spArray[i]) == true) {
@@ -259,11 +297,12 @@ function VerifyCollision(ctx, spArray, bulletsArray) {
 						bulletsArray[k].alive = false;
 						console.log("puummm e pshhhhhhh");
 
-						// >> funcoes a fazer para quando ocorre colisao
-						changeColorDamage(ctx, spArray, i);
-						// muda de cor apos 0.5seg e se a vida tirada for menor que a vida atual da nave
-						if (bulletsArray[k].damage < spArray[i].life)
+						if (bulletsArray[k].damage < spArray[i].life) {
+							// >> funcoes a fazer para quando ocorre colisao
+							changeColorDamage(ctx, spArray, i);
+							// muda de cor apos 0.5seg e se a vida tirada for menor que a vida atual da nave
 							setTimeout(changeColor, 500, ctx, spArray, i); 
+						}
 
 						// --- DANO ---
 						// balas que acertaram na nave
@@ -405,4 +444,3 @@ function drawBullets(ctx, bulletsArray)
 		}
 	}
 }
-
