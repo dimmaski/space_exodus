@@ -139,9 +139,13 @@ function init(ctx) {
 	spArray[nLoad] = life;
 	nLoad++;
 
+	var nw = imageRepository.shield.naturalWidth;
+	var nh = imageRepository.shield.naturalHeight;
+	var shield = new BackgroundObject(200, 100, nw, nh, true, imageRepository.shield, "shield");
+
 	var nw = imageRepository.ship.naturalWidth;
 	var nh = imageRepository.ship.naturalHeight;
-	var sp = new Ship(cw/2, ch-ch/6, nw, nh, 3, true, imageRepository.ship, life, 1000, "bom");
+	var sp = new Ship(cw/2, ch-ch/6, nw, nh, 3, true, imageRepository.ship, life, shield, 1000, "bom");
 	spArray[nLoad] = sp;
 	nLoad++;	
 
@@ -220,7 +224,11 @@ function draw(ctx, spArray)
 							spArray[i].damage.splice(j, 1);
 					}
 				}
-			}		
+				else if (spArray[i].shield == true)	{
+					spArray[i].objShield.draw(ctx);
+					spArray[i].objShield.followCoor(spArray[i].x, spArray[i].y);
+				}	
+			}
 		}
 		if (spArray[i].alive == false) {
 				console.log("[i] spArray Elements: "+dim);
@@ -271,9 +279,12 @@ function VerifyCollision(ctx, spArray, bulletsArray) {
 					if (spArray[j].getType() == "boost") {
 						if (spArray[j].name == "shield_star" && spArray[i].shield == false) {
 							// ativa shield
-							spArray[i].changeShieldState(1000);
+							spArray[i].changeShieldState(2000);
+
+							// muda flag de duração do shield
+							setTimeout(function(){ spArray[i].shield = false; }, spArray[i].shieldDuration);
 							// remove
-							//spArray.splice(j,1);
+							spArray[j].alive = false;
 						}
 					}
 					else {

@@ -73,12 +73,13 @@ class Background extends Sprite
  
 class Ship extends Sprite
 {
-	constructor(x, y, w, h, speed, alive, imgShip, objLife, life, name)
+	constructor(x, y, w, h, speed, alive, imgShip, objLife, objShield, life, name)
 	{
 		super(x,y,w,h,imgShip, alive);
 		this.speed = speed;
 		this.imgShip = imgShip;	
 		this.objLife = objLife;	
+		this.objShield = objShield;
 		this.life = life;
 		this.alive = true;
 		this.name = name;
@@ -88,6 +89,10 @@ class Ship extends Sprite
 		this.flagLife1 = false;
 
 		this.shield = false;
+
+
+		// muda para parametro
+		this.shieldDuration = 3000;
 	}
 
 	updateLife(dmg, newImg1, newImg2) {
@@ -122,14 +127,11 @@ class Ship extends Sprite
 	}
 
 	changeShieldState(time) {
-		/*
-		console.log("OKK");
-		this.shield = true;
-		setTimeout(function(){ this.shield = false; }, time);
-		this.objShield.x = this.x;
-		this.objShield.y = this.y;*/
 		console.log("Mudouuuu");
 		this.shield = true;
+		this.objShield.x = this.x;
+		this.objShield.y = this.y;
+
 
 	}
 
@@ -239,6 +241,11 @@ class BackgroundObject extends Sprite
 
 	changeImg(img) {
 		this.img = img;
+	}
+
+	followCoor(x, y) {
+		this.x = x;
+		this.y = y;
 	}
 
 	getType() {
