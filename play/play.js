@@ -5,149 +5,39 @@
 	window.addEventListener("load", main);
 }());
 
+var spArray = [];
+var nLoad=0;
+
 var LEFT = false; 
 var RIGHT = false;
 var UP = false;
 var DOWN = false;
 var SPACE = false;
-
-// qt de balas
-var SIZE_POOL = 10;
-var countBullets = 0;
-var conta=0;
-var temp=[];
-
 var flag_space=true;
 
-var NUM_METEROIDS=1;
+// qt de balas
+var bulletsArray = [];
+var SIZE_POOL = 10;
+var countBullets = 0;
+
+var NUM_METEROIDS=8;
+var CURRENT_METEROIDS=0;
 var meteroidArray=[];
 
 // niveis 
-var NVL_1 = false;
-var NVL_2 = true;
+var NVL_1 = true;
+var NVL_2 = false;
 var GAME_OVER = false;
+var NVL_WON = false;
 
+// vida
+var flag_treeLifes = true;
+var flag_twoLifes = false;
+var flag_oneLife = false;
 
-
-// repositorios para desenhar imagens com sprites
-var imageRepository = new function() {
-	var nLoad = 0;
-	var totLoad = 3;
-
-	this.shipDown = new Image(); 
-	this.shipUp = new Image(); 
-	this.shipLeft = new Image(); 
-	this.shipRight = new Image(); 
-
-	this.bullet = new Image();
-	this.background = new Image();
-	this.shipEnemy = new Image();
-	this.shipEnemyDamaged = new Image();
-
-	this.life1 = new Image();
-	this.life2 = new Image();
-	this.life3 = new Image();
-
-	this.shield_star = new Image();
-	this.shield = new Image();
-
-	this.meteroid = new Image();
-
-
-	function imageLoad() {
-		nLoad++;
-		if (nLoad == totLoad) {
-			// meter condição aqui para disparar o init na main
-		}
-	}
-
-	this.shipDown.onload = function() {
-		imageLoad();
-	}
-	this.shipUp.onload = function() {
-		imageLoad();
-	}
-	this.shipLeft.onload = function() {
-		imageLoad();
-	}
-	this.shipRight.onload = function() {
-		imageLoad();
-	}
-
-	this.background.onload = function() {
-		imageLoad();
-	}
-	this.bullet.onload = function() {
-		imageLoad();
-	}
-	this.shipEnemy.onload = function() {
-		imageLoad();
-	}
-	this.shipEnemyDamaged.onload = function() {
-		imageLoad();
-	}
-
-	this.life1.onload = function() {
-		imageLoad();
-	}	
-	this.life2.onload = function() {
-		imageLoad();
-	}
-	this.life3.onload = function() {
-		imageLoad();
-	}
-	this.shield_star.onload = function() {
-		imageLoad();
-	}
-	this.shield.ondload = function() {
-		imageLoad();
-	}
-	this.meteroid.ondload = function() {
-		imageLoad();
-	}
-	
-	// -- ID --
-	this.shipDown.id = "shipDown";
-	this.shipUp.id = "shipUp";
-	this.shipLeft.id = "shipLeft";
-	this.shipRight.id = "shipRight";
-
-
-	this.background.id = "background";
-	this.bullet.id = "bullet";
-	this.shipEnemy.id = "shipEnemy";
-	this.shipEnemyDamaged.id = "shipEnemyDamaged";
-
-	this.life1.id = "life1";
-	this.life2.id = "life2";
-	this.life3.id = "life3";
-	
-	this.shield_star.id = "shield_star";
-	this.shield.id = "shield";
-
-	this.meteroid.id = "meteroid";
-
-	// -- SRC --
-	this.shipDown.src = "../resources/ships/shipDown.png"; 
-	this.shipUp.src = "../resources/ships/shipUp.png"; 
-	this.shipLeft.src = "../resources/ships/shipLeft.png"; 
-	this.shipRight.src = "../resources/ships/shipRight.png"; 
-
-	this.background.src = "../resources/backgrounds/background_space2.jpg";	
-	this.bullet.src = "../resources/bullets/bullet1.png";
-	this.shipEnemy.src = "../resources/ships/shipEnemy.png"; 
-	this.shipEnemyDamaged.src = "../resources/ships/shipEnemyDamaged.png";
-
-
-	this.life1.src = "../resources/life/life1.png";
-	this.life2.src = "../resources/life/life2.png";		
-	this.life3.src = "../resources/life/life3.png";	
-
-	this.shield_star.src = "../resources/boosts/shield_star.png";
-	this.shield.src = "../resources/boosts/shield.png";
-
-	this.meteroid.src = "../resources/meteroids/meteroid.png";
-}
+// [SCORE]
+var countMeteroidsPassed=0;
+var flag_RISE = true;
 
 
 function main()
@@ -159,64 +49,9 @@ function main()
 }
 
 function init(ctx) {
-	var nLoad = 0;
-	var totLoad = 2;
-	var spArray = new Array(totLoad);
-	var bulletsArray = [];
 
-	// carregar sprites
-	var cw = ctx.canvas.width;
-	var ch = ctx.canvas.height;
-
-	var nw = imageRepository.background.naturalWidth;
-	var nh = imageRepository.background.naturalHeight;
-	var sp = new Background(0, 0, nw, nh, 3, true, imageRepository.background);
-	spArray[nLoad] = sp;
-	nLoad++;		
-
-	var nw = imageRepository.life3.naturalWidth;
-	var nh = imageRepository.life3.naturalHeight;
-	var life = new BackgroundObject(8, ch-nh-8, nw, nh, true, imageRepository.life3, "vida");
-	spArray[nLoad] = life;
-	nLoad++;
-
-	var nw = imageRepository.shield.naturalWidth;
-	var nh = imageRepository.shield.naturalHeight;
-	var shield = new BackgroundObject(200, 100, nw, nh, true, imageRepository.shield, "shield");
-
-	var nw = imageRepository.shipDown.naturalWidth;
-	var nh = imageRepository.shipDown.naturalHeight;
-	var ship = new Ship(cw/2, ch-ch/6, nw, nh, 3, true, imageRepository.shipDown, life, shield, 1000, "bom");
-	spArray[nLoad] = ship;
-	nLoad++;	
-
-	if (NVL_1 == true) {
-
-		var nw = imageRepository.shipEnemy.naturalWidth;
-		var nh = imageRepository.shipEnemy.naturalHeight;
-		var sp = new ShipEnemy(cw/2, 200, nw, nh, 3, true, imageRepository.shipEnemy, 1000, "mau");
-		spArray[nLoad] = sp;
-		nLoad++;
-
-		var nw = imageRepository.shield_star.naturalWidth;
-		var nh = imageRepository.shield_star.naturalHeight;
-		var sp = new Boost(300, 300, nw, nh, true, imageRepository.shield_star, "shield_star");
-		spArray[nLoad] = sp;
-		nLoad++;
-
-	}
-	else if (NVL_2 == true) {
-
-		var nw = imageRepository.meteroid.naturalWidth;
-		var nh = imageRepository.meteroid.naturalHeight;
-		// criar varios meteroids
-		for (let i=0; i<NUM_METEROIDS; i++) {
-			// inicializar meteroids a tempo random da posicao 0
-			var sp = new Meteroid(Math.floor((Math.random() * 700) + 1), -Math.floor((Math.random() * 200) + 1), nw, nh, true, imageRepository.meteroid, "meteroid");
-			
-			meteroidArray[i]=sp;
-		}
-	}
+	loadSprites(ctx);
+	loadSprites_NVL_1(ctx);
 
 	window.addEventListener("keydown", keydownHandler);
 	window.addEventListener("keyup", keyupHandler);		
@@ -251,87 +86,129 @@ function init(ctx) {
 			DOWN = false;
 
 		// reset nave
+		var ship = searchSprite(spArray, "bom");
 		ship.changeImg(imageRepository.shipDown);
 	}
 
-	startAnim(ctx, spArray, bulletsArray);	
-
-}
-
-//iniciar animação
-function startAnim(ctx, spArray, bulletsArray)
-{
-	draw(ctx, spArray);
 	animLoop(ctx, spArray, bulletsArray);	
 }
 
-function drawMeteroids(ctx, meteroidArray) {
+function loadSprites(ctx) {
+	// carregar sprites
 
-	for (let i=0; i<meteroidArray.length; i++) {
-		//console.log(meteroidArray.length);
-		meteroidArray[i].draw(ctx);
+	var cw = ctx.canvas.width;
+	var ch = ctx.canvas.height;
 
-		meteroidArray[i].y += 4;	
-		
-		if (meteroidArray[i].y >= ctx.canvas.height) {
-			meteroidArray[i].y = -Math.floor((Math.random() * 200) + 1);
-			// evitar meteroids sobrepostos
-			// guarda x anterior
-			meteroidArray[i].x = Math.floor((Math.random() * 800 - meteroidArray[i].width) + (1+ meteroidArray[i].width));
-		}	
-	}
+	var nw = imageRepository.shield.naturalWidth;
+	var nh = imageRepository.shield.naturalHeight;
+	var shield = new BackgroundObject(200, 100, nw, nh, true, imageRepository.shield, "shield");
+
+	
+	var nw = imageRepository.background.naturalWidth;
+	var nh = imageRepository.background.naturalHeight;
+	var sp = new Background(0, 0, nw, nh, 3, true, imageRepository.background);
+	spArray[nLoad] = sp;
+	nLoad++;		
+
+	var nw = imageRepository.life3.naturalWidth;
+	var nh = imageRepository.life3.naturalHeight;
+	var life = new BackgroundObject(8, ch-nh-8, nw, nh, true, imageRepository.life3, "vida");
+	spArray[nLoad] = life;
+	nLoad++;
+
+	var nw = imageRepository.shipDown.naturalWidth;
+	var nh = imageRepository.shipDown.naturalHeight;
+	var ship = new Ship(cw/2, ch-ch/6, nw, nh, 4, true, imageRepository.shipDown, life, shield, 1000, "bom");
+	spArray[nLoad] = ship;
+	nLoad++;	
+
+}
+
+function loadSprites_NVL_1(ctx) {
+
+	var cw = ctx.canvas.width;
+	var ch = ctx.canvas.height;
+}
+
+function loadSprites_NVL_2(ctx) {
+
+	var cw = ctx.canvas.width;
+	var ch = ctx.canvas.height;
+
+	var nw = imageRepository.shipEnemy.naturalWidth;
+	var nh = imageRepository.shipEnemy.naturalHeight;
+	var sp = new ShipEnemy(cw/2, 200, nw, nh, 3, true, imageRepository.shipEnemy, 1000, "mau");
+	spArray[nLoad] = sp;
+	nLoad++;
+
+	var nw = imageRepository.shield_star.naturalWidth;
+	var nh = imageRepository.shield_star.naturalHeight;
+	var sp = new Boost(300, 300, nw, nh, true, imageRepository.shield_star, "shield_star");
+	spArray[nLoad] = sp;
+	nLoad++;
 }
 
 
+
 //desenhar sprites
-function draw(ctx, spArray)
+function draw_NVL_1(ctx, spArray)
 {
 	var dim = spArray.length;
 
-	if (NVL_1 == true) {
-
-		for (let i = 0; i < dim; i++)
-		{
-			// so desenha sprites vivos...
-			if (spArray[i].alive == true) {
-				spArray[i].draw(ctx);
-				if (spArray[i].getType() == "ship") {
-					if (spArray[i].getDamageLenght() != 0) {
-						for (let j=0; j<spArray[i].getDamageLenght(); j++) {
-							if (spArray[i].damage[j].alive == true)
-								spArray[i].damage[j].drawDamage(ctx);
-							else
-								spArray[i].damage.splice(j, 1);
-						}
-					}
-					else if (spArray[i].shield == true)	{
-						spArray[i].objShield.draw(ctx);
-						spArray[i].objShield.followCoor(spArray[i].x, spArray[i].y);
-					}	
-				}
-			}
-			if (spArray[i].alive == false) {
-					console.log("[i] spArray Elements: "+dim);
-					spArray.splice(i,1);
-					dim = spArray.length;
-					console.log("[f] spArray Elements: "+dim);
-			}
-		}		
+	for (let i = 0; i < dim; i++)
+	{
+		// so desenha sprites vivos...
+		if (spArray[i].alive == true) {
+			spArray[i].draw(ctx);
+		}
+		if (spArray[i].alive == false) {
+			console.log("[i] spArray Elements: "+dim);
+			spArray.splice(i,1);
+			dim = spArray.length;
+			console.log("[f] spArray Elements: "+dim);
+		}
 	}
 
-	else if (NVL_2 == true) {
-		for (let i = 0; i < dim; i++)
-		{
-			// so desenha sprites vivos...
-			if (spArray[i].alive == true) {
-				spArray[i].draw(ctx);
+	// desenha SCORE
+	ctx.font = "15px Comic Sans MS"
+	ctx.fillStyle = "white";
+	ctx.textAlign = "left";
+	var str = "Score: " + countMeteroidsPassed;
+	ctx.fillText(str, 0+5, 0+15); 		
+}
+
+function draw_NVL_2(ctx, spArray) 
+{	
+	var dim = spArray.length;
+
+	for (let i = 0; i < dim; i++)
+	{
+		// so desenha sprites vivos...
+		if (spArray[i].alive == true) {
+			spArray[i].draw(ctx);
+
+			if (spArray[i].getType() == "ship") {
+
+				if (spArray[i].getDamageLenght() != 0) {
+					for (let j=0; j<spArray[i].getDamageLenght(); j++) {
+
+						if (spArray[i].damage[j].alive == true)
+							spArray[i].damage[j].drawDamage(ctx);
+						else
+							spArray[i].damage.splice(j, 1);
+					}
+				}
+				else if (spArray[i].shield == true)	{
+					spArray[i].objShield.draw(ctx);
+					spArray[i].objShield.followCoor(spArray[i].x, spArray[i].y);
+				}	
 			}
-			if (spArray[i].alive == false) {
-					console.log("[i] spArray Elements: "+dim);
-					spArray.splice(i,1);
-					dim = spArray.length;
-					console.log("[f] spArray Elements: "+dim);
-			}
+		}
+		if (spArray[i].alive == false) {
+				console.log("[i] spArray Elements: "+dim);
+				spArray.splice(i,1);
+				dim = spArray.length;
+				console.log("[f] spArray Elements: "+dim);
 		}
 	}
 }
@@ -356,25 +233,36 @@ function animLoop(ctx, spArray, bulletsArray)
 
 	var al = function(time)
 	{
-			animLoop(ctx, spArray, bulletsArray);
+		animLoop(ctx, spArray, bulletsArray);
 	}
 	var reqID = window.requestAnimationFrame(al);
+
+	if (NVL_WON == true) {
+		// mudar de nivel
+		NVL_WON = false;
+		NVL_1 = false;
+		NVL_2 = true;
+		console.log("ganhou");
+
+		// wait 2 sec..
+		setTimeout(function() { loadSprites_NVL_2(ctx); }, 2000);
+	}
 	
-	if (GAME_OVER == false) {
+	else if (GAME_OVER == false) {
 		render(ctx, spArray, bulletsArray, reqID);
 	}
 	// game over
-	else {
+	else if (GAME_OVER == true) {
 		ctx.font = "40px Comic Sans MS"
 		ctx.fillStyle = "red";
 		ctx.textAlign = "center";
 		ctx.fillText("GAME OVER", ctx.canvas.width/2, ctx.canvas.height/2); 
 
 		ctx.font = "20px Comic Sans MS"
-		ctx.fillStyle = "red";
-		ctx.textAlign = "center";
-		ctx.fillText("[enter] to restart", ctx.canvas.width/2, ctx.canvas.height/2+30); 
-
+		//ctx.fillStyle = "red";
+		//ctx.textAlign = "center";
+		ctx.fillText("[ENTER] to restart", ctx.canvas.width/2, ctx.canvas.height/2+30); 
+		ctx.fillText("[ESC] back to menu", ctx.canvas.width/2, ctx.canvas.height/2+60); 
 
 		var rr = function(ev) 
 		{
@@ -387,173 +275,15 @@ function animLoop(ctx, spArray, bulletsArray)
 
 function restartGame(ev, ctx, spArray) {
 	console.log(ev.keyCode);
+	// reinicia jogo
 	if (ev.keyCode == 13) {
-		GAME_OVER = false;
-
-		// apaga array 
-		meteroidArray.splice(0, meteroidArray.length);
-		// cria novo
-		// reposiciona nave
-		var ship = searchSprite(spArray, "ship");
-		var cw = ctx.canvas.width;
-		var ch = ctx.canvas.height;
-		ship.x = cw/2;
-		ship.y = ch-ch/6;
-
-		
-		// cria meteroids
-
-		//meteroidArray[j].x = Math.floor((Math.random() * 800 - meteroidArray[j].width) + (1+ meteroidArray[j].width));
-		//meteroidArray[j].y = -Math.floor((Math.random() * 200) + 1);
+		document.location.reload();
 	}
-}
-
-// colisoes
-function VerifyCollision(ctx, spArray, bulletsArray) {
-
-
-	if (NVL_1 == true) {
-		// percorrer figura e ve bounding box
-		for (let i=0; i<spArray.length; i++) {
-			// colisoes só para a nave	
-			if (spArray[i].getType() == "ship") {
-				for (let j=i+1; j<spArray.length; j++) {	
-					if (spArray[i].verifyIntersect(spArray[j]) == true) {
-						// verifica interseção com boosts
-						// se acerta na estrela
-						if (spArray[j].getType() == "boost") {
-							if (spArray[j].name == "shield_star" && spArray[i].shield == false) {
-								// ativa shield
-								spArray[i].changeShieldState(2000);
-
-								// muda flag de duração do shield
-								setTimeout(function(){ spArray[i].shield = false; }, spArray[i].shieldDuration);
-								// remove
-								spArray[j].alive = false;
-							}
-						}
-						else if (spArray[i].shield == false) {
-							console.log("^^_^^");
-							// tira vida
-							if (spArray[i].name == "bom") {
-								var dmg = 80;
-								spArray[i].life -= dmg;
-								spArray[i].updateLife(dmg, imageRepository.life2, imageRepository.life1);
-							}
-						}
-					}
-				}
-			}	
-			if (spArray[i].getType() != "background" && spArray[i].getType() != "backgroundObject") {
-				// se houver balas e for diferente da nave que disparou	
-				if (bulletsArray.length != 0 && spArray[i].img.id == "shipEnemy") {
-					for (let k=0; k<bulletsArray.length; k++) {
-						if (bulletsArray[k].verifyIntersect(spArray[i]) == true) {
-							// "matar" bullet
-							bulletsArray[k].alive = false;
-							console.log("puummm e pshhhhhhh");
-
-							if (bulletsArray[k].damage < spArray[i].life) {
-								// >> funcoes a fazer para quando ocorre colisao
-								changeColorDamage(ctx, spArray, i);
-								// muda de cor apos 0.5seg e se a vida tirada for menor que a vida atual da nave
-								setTimeout(changeColor, 500, ctx, spArray, i); 
-							}
-
-							// --- DANO ---
-							// balas que acertaram na nave
-							// passar info para esse objeto
-							spArray[i].damage.push(new Damage(spArray[i].x, spArray[i].y, spArray[i].width, spArray[i].height, bulletsArray[k].damage));	
-
-							// retirar dano
-							spArray[i].RemoveLife(bulletsArray[k].damage);							
-						}
-					}
-				}
-			}	
-		}
+	else if (ev.keyCode == 27) {
+		var url = "../main/startpage.html";
+		document.location.href = url;
+		document.location.reload();
 	}
-	else if (NVL_2 == true) {
-		for (let i=0; i<spArray.length; i++) {
-			// colisoes só para a nave	
-			if (spArray[i].getType() == "ship") {
-				for (let j=0; j<meteroidArray.length; j++) {
-					if (spArray[i].verifyIntersect(meteroidArray[j]) == true) {
-						GAME_OVER = true;
-					}
-				}
-			}
-		}
-	}
-}
-
-function changeColorDamage(ctx, spArray, i) {
-	//var sp = new Ship(spArray[i].x, spArray[i].y, spArray[i].width, spArray[i].height, 3, true, imageRepository.shipEnemyDamaged);
-	spArray[i].changeImg(imageRepository.shipEnemyDamaged);
-	// substituir no array
-	spArray.splice(i, 1, spArray[i]);
-}
-
-// muda de cor a nave quando embate missel
-function changeColor(ctx, spArray, i) {
-	spArray[i].changeImg(imageRepository.shipEnemy);
-	// substituir no array
-	spArray.splice(i, 1, spArray[i]);
-}
-
-
-//resedenho, actualizações, ...
-function render(ctx, spArray, bulletsArray, reqID, dt)
-{
-	var cw = ctx.canvas.width;
-	var ch = ctx.canvas.height;
-
-	// move nave
-	moveShip(ctx, spArray);
-	// gere balas
-	moveBullets(ctx, bulletsArray);
-
-	//moveMeteroids(ctx, meteroidArray);
-
-	// verifica colisao
-	// tirar background 
-	VerifyCollision(ctx, spArray, bulletsArray);
-
-	//apagar canvas
-	ctx.clearRect(0, 0, cw, ch);
-	//move background
-	backgroundMoving(ctx, spArray);
-
-
-	draw(ctx, spArray);
-
-	drawMeteroids(ctx, meteroidArray);
-
-	drawBullets(ctx, bulletsArray);
-}
-
-function searchSprite(spArray, name) {
-	var conta=0;
-	var searched;
-
-	for (let i=0; i<spArray.length; i++) {
-		if (spArray[i].getType() == name) {
-			searched = spArray[i];
-		}
-	}
-	return searched;
-}
-
-
-function backgroundMoving(ctx, spArray) {
-	var sp = spArray[0];
-
-	sp.drawBackground(ctx);
-	sp.y += 1;
-
-	if (sp.y >= ctx.canvas.height)
-		sp.y = 0;
-	
 }
 
 function moveShip(ctx, spArray) {
@@ -588,6 +318,196 @@ function moveShip(ctx, spArray) {
 	     	sp.moveDown();   
     	}
     }
+}
+
+// colisoes
+function VerifyCollision_NVL_2(ctx, spArray, bulletsArray) {
+
+	// percorrer figura e ve bounding box
+	for (let i=0; i<spArray.length; i++) {
+		// colisoes só para a nave	
+		if (spArray[i].getType() == "ship") {
+			for (let j=i+1; j<spArray.length; j++) {	
+				if (spArray[i].verifyIntersect(spArray[j]) == true) {
+					// verifica interseção com boosts
+					// se acerta na estrela
+					if (spArray[j].getType() == "boost") {
+						if (spArray[j].name == "shield_star" && spArray[i].shield == false) {
+							// ativa shield
+							spArray[i].changeShieldState(2000);
+							// muda flag de duração do shield
+							setTimeout(function(){ spArray[i].shield = false; }, spArray[i].shieldDuration);
+							// remove
+							spArray[j].alive = false;
+						}
+					}
+					else if (spArray[i].shield == false) {
+						console.log("^^_^^");
+						// tira vida
+						if (spArray[i].name == "bom") {
+							var dmg = 80;
+							spArray[i].life -= dmg;
+							spArray[i].updateLife(dmg, imageRepository.life2, imageRepository.life1);
+						}
+					}
+				}
+			}
+		}	
+		if (spArray[i].getType() != "background" && spArray[i].getType() != "backgroundObject") {
+			// se houver balas e for diferente da nave que disparou	
+			if (bulletsArray.length != 0 && spArray[i].img.id == "shipEnemy") {
+				for (let k=0; k<bulletsArray.length; k++) {
+					if (bulletsArray[k].verifyIntersect(spArray[i]) == true) {
+						// "matar" bullet
+						bulletsArray[k].alive = false;
+						console.log("puummm e pshhhhhhh");
+
+						if (bulletsArray[k].damage < spArray[i].life) {
+							// >> funcoes a fazer para quando ocorre colisao
+							changeColorDamage(ctx, spArray, i);
+							// muda de cor apos 0.5seg e se a vida tirada for menor que a vida atual da nave
+							setTimeout(changeColor, 500, ctx, spArray, i); 
+						}
+
+						// --- DANO ---
+						// balas que acertaram na nave
+						// passar info para esse objeto
+						spArray[i].damage.push(new Damage(spArray[i].x, spArray[i].y, spArray[i].width, spArray[i].height, bulletsArray[k].damage));	
+
+						// retirar dano
+						spArray[i].RemoveLife(bulletsArray[k].damage);							
+					}
+				}
+			}
+		}	
+	}
+}
+
+function VerifyCollision_NVL_1(ctx, spArray) {
+	for (let i=0; i<spArray.length; i++) {
+		// colisoes só para a nave	
+		if (spArray[i].getType() == "ship") {
+			for (let j=0; j<meteroidArray.length; j++) {
+				if (spArray[i].verifyIntersect(meteroidArray[j]) == true) {
+
+					// tira 1 vida
+					if (flag_treeLifes == true) {
+						// esperar 1 seg até tirar outra vida
+						setTimeout(function() {
+							flag_twoLifes = true; 
+						}, 1000);
+
+						flag_treeLifes = false;
+						// update imagem
+						var sp = searchSprite(spArray, "vida");
+						sp.resizeToLife2(imageRepository.life2);
+					}
+
+					// tira 1 vida
+					else if (flag_twoLifes == true) {
+						// esperar 1 seg até tirar outra vida
+						setTimeout(function() {
+							flag_oneLife = true;
+							}, 1000);
+
+						flag_twoLifes = false;
+						// update imagem
+						var sp = searchSprite(spArray, "vida");
+						sp.resizeToLife1(imageRepository.life1);
+					}
+
+					// game over
+					if (flag_oneLife == true) {
+						GAME_OVER = true;
+					}
+				}
+			}
+		}
+	}
+}
+
+function changeColorDamage(ctx, spArray, i) {
+	//var sp = new Ship(spArray[i].x, spArray[i].y, spArray[i].width, spArray[i].height, 3, true, imageRepository.shipEnemyDamaged);
+	spArray[i].changeImg(imageRepository.shipEnemyDamaged);
+	// substituir no array
+	spArray.splice(i, 1, spArray[i]);
+}
+
+// muda de cor a nave quando embate missel
+function changeColor(ctx, spArray, i) {
+	spArray[i].changeImg(imageRepository.shipEnemy);
+	// substituir no array
+	spArray.splice(i, 1, spArray[i]);
+}
+
+
+//resedenho, actualizações, ...
+function render(ctx, spArray, bulletsArray, reqID, dt)
+{
+	var cw = ctx.canvas.width;
+	var ch = ctx.canvas.height;
+
+	if (NVL_1 == true) {
+
+		// move nave
+		moveShip(ctx, spArray);
+
+		VerifyCollision_NVL_1(ctx, spArray);
+
+		//apagar canvas
+		ctx.clearRect(0, 0, cw, ch);
+		//move background
+		backgroundMoving(ctx, spArray);
+
+		draw_NVL_1(ctx, spArray) 
+		
+		drawMeteroids(ctx, meteroidArray);
+	}
+
+	else if (NVL_2 == true) {
+		// move nave
+		moveShip(ctx, spArray);
+		// gere balas
+		moveBullets(ctx, bulletsArray);
+
+		//moveMeteroids(ctx, meteroidArray);
+
+		// verifica colisao
+		VerifyCollision_NVL_2(ctx, spArray, bulletsArray);
+
+		//apagar canvas
+		ctx.clearRect(0, 0, cw, ch);
+		//move background
+		backgroundMoving(ctx, spArray);
+
+		draw_NVL_2(ctx, spArray);
+
+		drawBullets(ctx, bulletsArray);
+	}
+}
+
+function searchSprite(spArray, name) {
+	var conta=0;
+	var searched;
+
+	for (let i=0; i<spArray.length; i++) {
+		if (spArray[i].name == name) {
+			searched = spArray[i];
+		}
+	}
+	return searched;
+}
+
+
+function backgroundMoving(ctx, spArray) {
+	var sp = spArray[0];
+
+	sp.drawBackground(ctx);
+	sp.y += 1;
+
+	if (sp.y >= ctx.canvas.height)
+		sp.y = 0;
+	
 }
 
 function moveBullets(ctx, bulletsArray) {
@@ -638,4 +558,85 @@ function drawBullets(ctx, bulletsArray)
 			bulletsArray[i].draw(ctx);
 		}
 	}
+}
+
+function drawMeteroids(ctx, meteroidArray) {
+
+		var nw = imageRepository.meteroid.naturalWidth;
+		var nh = imageRepository.meteroid.naturalHeight;
+
+		// SE CHEGAR AOS 100 CURRENT_METEROIDS ACABA ESTE NIVEL
+		if (countMeteroidsPassed == 100) {
+			NVL_WON = true;
+		}
+
+
+		var time = 500;
+		if (CURRENT_METEROIDS <= NUM_METEROIDS) {
+			// aumentar meteroids, tempo de spawn...
+
+			if (countMeteroidsPassed <= 25) {
+
+				if (flag_RISE == true) {
+					NUM_METEROIDS += 7;
+					flag_RISE = false;
+				}
+
+			} else if (countMeteroidsPassed <= 50) {
+
+				if (flag_RISE == false) {
+					flag_RISE = true;
+					NUM_METEROIDS += 7;
+				}
+
+			} else if (countMeteroidsPassed <= 75) {
+
+				if (flag_RISE == true) {
+					NUM_METEROIDS += 7;
+					flag_RISE = false;
+				}
+
+			} else {
+
+				if (flag_RISE == false) {
+					flag_RISE = true;
+					NUM_METEROIDS += 7;
+				}
+
+			}
+
+			setTimeout(function() 	{	var sp = new Meteroid(Math.floor(Math.random() * 700 + 100), -Math.floor(Math.random()*10 + imageRepository.meteroid.naturalHeight), nw, nh, true, imageRepository.meteroid, "meteroid");
+										meteroidArray.push(sp);
+									}, time+CURRENT_METEROIDS*time);
+
+			CURRENT_METEROIDS++;
+		}
+
+	for (let i=meteroidArray.length-1; i>=0; i--) {
+		
+		if (meteroidArray[i].y >= ctx.canvas.height) {
+
+			// SCORE
+			countMeteroidsPassed++;
+
+			// coloca-o novamente em cima
+			meteroidArray[i].x = Math.floor(Math.random() * 700 + 100);
+			meteroidArray[i].y = -Math.floor(Math.random()*10 + meteroidArray[i].height);
+
+		} else {
+			meteroidArray[i].draw(ctx);
+			meteroidArray[i].y += 4;		
+		}
+	
+	}		
+}
+
+function save() {
+  localStorage.setItem('player', JSON.stringify(player));
+  localStorage.setItem('score', JSON.stringify(score));
+}
+
+function load() {
+  player = JSON.parse(localStorage.getItem('player'));
+  score = JSON.parse(localStorage.getItem('score'));
 }

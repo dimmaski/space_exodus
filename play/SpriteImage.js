@@ -229,12 +229,14 @@ class BackgroundObject extends Sprite
 		this.name = name;
 	}
 
-	resizeToLife2() {
+	resizeToLife2(img) {
 		this.width = this.width - this.width/3;
+		this.changeImg(img);
 	}
 
-	resizeToLife1() {
+	resizeToLife1(img) {
 		this.width = this.width - this.width/2;
+		this.changeImg(img);
 	}
 
 	changeImg(img) {
