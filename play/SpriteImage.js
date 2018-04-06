@@ -131,8 +131,6 @@ class Ship extends Sprite
 		this.shield = true;
 		this.objShield.x = this.x;
 		this.objShield.y = this.y;
-
-
 	}
 
 	getDamageLenght() {
@@ -143,7 +141,7 @@ class Ship extends Sprite
 		return "ship";
 	}
 	changeImg(newImg) {
-		this.imgShip = newImg;
+		this.img = newImg;
 	}
 
 	RemoveLife(dmg, newImg) {
@@ -261,6 +259,23 @@ class Boost extends Sprite
 	}
 	getType() {
 		return "boost";
+	}
+}
+
+class Meteroid extends Sprite
+{
+	constructor(x, y, w, h, img, alive, name) {
+		super(x, y, w, h, alive, img);
+		this.name = name;
+	}
+
+
+	drawMeteroid(ctx) {
+		ctx.drawImage(this.img, this.x, this.y - this.height+2, this.width, this.height);
+	}
+
+	getType() {
+		return "meteroid";
 	}
 }
 
