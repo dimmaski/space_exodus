@@ -14,6 +14,7 @@ var imageRepository = new function() {
 	this.background = new Image();
 	this.shipEnemy = new Image();
 	this.shipEnemyDamaged = new Image();
+	this.shipKamikaze = new Image();
 
 	this.life1 = new Image();
 	this.life2 = new Image();
@@ -76,6 +77,9 @@ var imageRepository = new function() {
 	this.meteroid.ondload = function() {
 		imageLoad();
 	}
+	this.shipKamikaze.onload = function() {
+		imageLoad();
+	}
 	
 	// -- ID --
 	this.shipDown.id = "shipDown";
@@ -97,6 +101,7 @@ var imageRepository = new function() {
 	this.shield.id = "shield";
 
 	this.meteroid.id = "meteroid";
+	this.shipKamikaze.id = "shipKamikaze";
 
 	// -- SRC --
 	this.shipDown.src = "../resources/ships/shipDown.png"; 
@@ -118,4 +123,6 @@ var imageRepository = new function() {
 	this.shield.src = "../resources/boosts/shield.png";
 
 	this.meteroid.src = "../resources/meteroids/meteroid.png";
+
+	this.shipKamikaze.src = "../resources/ships/ship2.png";
 }

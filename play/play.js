@@ -25,8 +25,9 @@ var CURRENT_METEROIDS=0;
 var meteroidArray=[];
 
 // niveis 
-var NVL_1 = true;
+var NVL_1 = false;
 var NVL_2 = false;
+var NVL_3 = true;
 var GAME_OVER = false;
 var NVL_WON = false;
 
@@ -51,7 +52,8 @@ function main()
 function init(ctx) {
 
 	loadSprites(ctx);
-	loadSprites_NVL_1(ctx);
+	loadSprites_NVL_3(ctx);
+	console.log("OK");
 
 	window.addEventListener("keydown", keydownHandler);
 	window.addEventListener("keyup", keyupHandler);		
@@ -148,6 +150,18 @@ function loadSprites_NVL_2(ctx) {
 	nLoad++;
 }
 
+function loadSprites_NVL_3(ctx) {
+
+	var cw = ctx.canvas.width;
+	var ch = ctx.canvas.height;
+
+	var nw = imageRepository.shipEnemy.naturalWidth;
+	var nh = imageRepository.shipEnemy.naturalHeight;
+	var sp = new ShipEnemy(0, 0, nw, nh, 3, true, imageRepository.shipEnemy, 1000, "mau");
+	spArray[nLoad] = sp;
+	nLoad++;
+
+}
 
 
 //desenhar sprites
@@ -209,6 +223,20 @@ function draw_NVL_2(ctx, spArray)
 				spArray.splice(i,1);
 				dim = spArray.length;
 				console.log("[f] spArray Elements: "+dim);
+		}
+	}
+}
+
+function draw_NVL_3(ctx, spArray) {
+
+	var dim = spArray.length;
+	var ship = spArray[2];
+
+	for (let i=0; i<dim; i++) {
+		if (spArray[i].alive == true) {
+			if (spArray[i].name == "mau")
+				spArray[i].moveShip(spArray[i].x, spArray[i].y, ship.x, ship.y);
+			spArray[i].draw(ctx);
 		}
 	}
 }
@@ -318,6 +346,19 @@ function moveShip(ctx, spArray) {
 	     	sp.moveDown();   
     	}
     }
+}
+
+function VerifyCollision_NVL_3(ctx, spArray) {
+	for (let i=0; i<spArray.length; i++) {
+		for (let j=i+1; j<spArray.length; j++) {
+			if (spArray[i].getType() == "ship") {
+					if (spArray[i].verifyIntersect(spArray[j]) == true) {
+						GAME_OVER = true;
+						console.log("toca")
+					}
+			}
+		}
+	}
 }
 
 // colisoes
@@ -483,6 +524,19 @@ function render(ctx, spArray, bulletsArray, reqID, dt)
 		draw_NVL_2(ctx, spArray);
 
 		drawBullets(ctx, bulletsArray);
+	}
+
+	else if (NVL_3 == true) {
+		moveShip(ctx, spArray);
+
+		VerifyCollision_NVL_3(ctx, spArray);
+
+		//apagar canvas
+		ctx.clearRect(0, 0, cw, ch);
+		//move background
+		backgroundMoving(ctx, spArray);
+
+		draw_NVL_3(ctx, spArray);
 	}
 }
 

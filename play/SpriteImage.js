@@ -316,6 +316,17 @@ class ShipEnemy extends Sprite
 		}
 	}
 
+	moveShip(x, y, shipX, shipY) {
+		if (this.x < shipX)
+			this.x+=2;
+		else if (this.x > shipX)
+			this.x-=2;
+		if (this.y < shipY)
+			this.y+=2;
+		else if (this.y > shipY)
+			this.y-=2;
+	}
+
 
 	moveLeft() {
 		this.x -= this.speed;		
