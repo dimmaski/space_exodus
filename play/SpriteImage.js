@@ -9,6 +9,7 @@ class Sprite
 		this.height = h;
 		this.img = img;
 		this.alive = alive;
+		this.name = "none";
 	}
 
 	draw(ctx)
@@ -43,6 +44,9 @@ class Sprite
 		else
 			return false;
 		
+	}
+	getType() {
+		return "none";
 	}
 }
 
@@ -89,6 +93,7 @@ class Ship extends Sprite
 		this.flagLife1 = false;
 
 		this.shield = false;
+		this.bulletsArray=[];
 
 
 		// muda para parametro
@@ -174,17 +179,32 @@ class Ship extends Sprite
 
 class Bullet extends Sprite{
 
-	constructor(x, y, w, h, speed, alive, img) {
+	constructor(x, y, w, h, speed, alive, img, name) {
 		//posição e movimento
 		super(x,y,w,h,img, alive);
 		this.speed = speed;
 		this.img = img;	
 		// bala viva		
 		this.alive = alive;	
+		this.name = name;
 		// dano
 		this.damage = Math.floor((Math.random() * 200) + 100);
 		// nave no qual o tiro acertou, start null
 		this.hitShip = null;
+		this.speedMissile = 0.1;
+	}
+
+	moveMissile(x, y, shipX, shipY) {
+		if (this.speedMissile < 1.5)
+			this.speedMissile = this.speedMissile + 0.05;
+		if (this.x < shipX)
+			this.x+=this.speedMissile;
+		else if (this.x > shipX)
+			this.x-=this.speedMissile;
+		if (this.y < shipY)
+			this.y+=this.speedMissile;
+		else if (this.y > shipY)
+			this.y-=this.speedMissile;
 	}
 }
 
@@ -293,6 +313,7 @@ class ShipEnemy extends Sprite
 		this.name = name;
 		// array de dano do navio
 		this.damage = [];
+		this.bulletsArray=[];
 	}
 
 

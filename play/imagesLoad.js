@@ -11,6 +11,7 @@ var imageRepository = new function() {
 	this.shipRight = new Image(); 
 
 	this.bullet = new Image();
+	this.missile = new Image();
 	this.background = new Image();
 	this.shipEnemy = new Image();
 	this.shipEnemyDamaged = new Image();
@@ -52,6 +53,9 @@ var imageRepository = new function() {
 	this.bullet.onload = function() {
 		imageLoad();
 	}
+	this.missile.onload = function() {
+		imageLoad();
+	}
 	this.shipEnemy.onload = function() {
 		imageLoad();
 	}
@@ -90,6 +94,7 @@ var imageRepository = new function() {
 
 	this.background.id = "background";
 	this.bullet.id = "bullet";
+	this.missile.id = "missile";
 	this.shipEnemy.id = "shipEnemy";
 	this.shipEnemyDamaged.id = "shipEnemyDamaged";
 
@@ -111,6 +116,7 @@ var imageRepository = new function() {
 
 	this.background.src = "../resources/backgrounds/background_space2.jpg";	
 	this.bullet.src = "../resources/bullets/bullet1.png";
+	this.missile.src = "../resources/bullets/missil.png";
 	this.shipEnemy.src = "../resources/ships/shipEnemy.png"; 
 	this.shipEnemyDamaged.src = "../resources/ships/shipEnemyDamaged.png";
 
