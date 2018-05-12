@@ -8,7 +8,7 @@
 var spArray = [];
 var nLoad=0;
 
-var LEFT = false; 
+var LEFT = false;
 var RIGHT = false;
 var UP = false;
 var DOWN = false;
@@ -25,10 +25,11 @@ var NUM_METEROIDS=8;
 var CURRENT_METEROIDS=0;
 var meteroidArray=[];
 
-// niveis 
-var NVL_1 = false;
+// niveis
+var NVL_1 = true;
 var NVL_2 = false;
-var NVL_3 = true;
+var NVL_3 = false;
+var NVL_Boss = false;
 var GAME_OVER = false;
 var NVL_WON = false;
 
@@ -53,28 +54,28 @@ function main()
 function init(ctx) {
 
 	loadSprites(ctx);
-	loadSprites_NVL_3(ctx);
+	loadSprites_NVL_Boss(ctx);
 	console.log("OK");
 
 	window.addEventListener("keydown", keydownHandler);
-	window.addEventListener("keyup", keyupHandler);	
+	window.addEventListener("keyup", keyupHandler);
 
-	var ship = searchSprite(spArray, "bom");	
+	var ship = searchSprite(spArray, "bom");
 
-	function keydownHandler(ev) {	
-		if (ev.keyCode == 37 || ev.keyCode == 65) 
+	function keydownHandler(ev) {
+		if (ev.keyCode == 37 || ev.keyCode == 65)
 			LEFT = true;
-		else if (ev.keyCode == 39 || ev.keyCode == 68) 
+		else if (ev.keyCode == 39 || ev.keyCode == 68)
 			RIGHT = true;
-		else if (ev.keyCode == 38 || ev.keyCode == 87) 
+		else if (ev.keyCode == 38 || ev.keyCode == 87)
 			UP = true;
-		else if (ev.keyCode == 40 || ev.keyCode == 83) 
+		else if (ev.keyCode == 40 || ev.keyCode == 83)
 			DOWN = true;
 		else if (ev.keyCode == 32) {
 			// espaço de tempo entre tiros
 			if (flag_space == true) {
 				flag_space = false;
-				shoot(ctx, spArray, bulletsArray, ship, "bullet");
+				shoot(ctx, spArray, bulletsArray, ship, "bullet", 3);
 				setTimeout(function(){ flag_space = true; }, 500);
 			}
 		}
@@ -83,27 +84,27 @@ function init(ctx) {
 			// espaço de tempo entre tiros
 			if (flag_missile == true) {
 				flag_missile = false;
-				shoot(ctx, spArray, bulletsArray, ship, "missile");
+				shoot(ctx, spArray, bulletsArray, ship, "missile", 3);
 				setTimeout(function(){ flag_missile = true; }, 500);
 			}
 		}
 	}
 
 	function keyupHandler(ev) {
-		if (ev.keyCode == 37 || ev.keyCode == 65) 
+		if (ev.keyCode == 37 || ev.keyCode == 65)
 			LEFT = false;
-		else if (ev.keyCode == 39 || ev.keyCode == 68) 
+		else if (ev.keyCode == 39 || ev.keyCode == 68)
 			RIGHT = false;
-		else if (ev.keyCode == 38 || ev.keyCode == 87) 
+		else if (ev.keyCode == 38 || ev.keyCode == 87)
 			UP = false;
-		else if (ev.keyCode == 40 || ev.keyCode == 83) 
+		else if (ev.keyCode == 40 || ev.keyCode == 83)
 			DOWN = false;
 
 		// reset nave
 		ship.changeImg(imageRepository.shipDown);
 	}
 
-	animLoop(ctx, spArray, bulletsArray);	
+	animLoop(ctx, spArray, bulletsArray);
 }
 
 function loadSprites(ctx) {
@@ -116,12 +117,12 @@ function loadSprites(ctx) {
 	var nh = imageRepository.shield.naturalHeight;
 	var shield = new BackgroundObject(200, 100, nw, nh, true, imageRepository.shield, "shield");
 
-	
+
 	var nw = imageRepository.background.naturalWidth;
 	var nh = imageRepository.background.naturalHeight;
 	var sp = new Background(0, 0, nw, nh, 3, true, imageRepository.background);
 	spArray[nLoad] = sp;
-	nLoad++;		
+	nLoad++;
 
 	var nw = imageRepository.life3.naturalWidth;
 	var nh = imageRepository.life3.naturalHeight;
@@ -133,7 +134,7 @@ function loadSprites(ctx) {
 	var nh = imageRepository.shipDown.naturalHeight;
 	var ship = new Ship(cw/2, ch-ch/6, nw, nh, 4, true, imageRepository.shipDown, life, shield, 1000, "bom");
 	spArray[nLoad] = ship;
-	nLoad++;	
+	nLoad++;
 
 }
 
@@ -154,7 +155,7 @@ function clear(ctx, spArray)
 //-------------------------------------------------------------
 var auxDebug = 0;  //eliminar
 function animLoop(ctx, spArray, bulletsArray)
-{	
+{
 
 	var al = function(time)
 	{
@@ -172,7 +173,7 @@ function animLoop(ctx, spArray, bulletsArray)
 		// wait 2 sec..
 		setTimeout(function() { loadSprites_NVL_2(ctx); }, 2000);
 	}
-	
+
 	else if (GAME_OVER == false) {
 		render(ctx, spArray, bulletsArray, reqID);
 	}
@@ -181,15 +182,15 @@ function animLoop(ctx, spArray, bulletsArray)
 		ctx.font = "40px Comic Sans MS"
 		ctx.fillStyle = "red";
 		ctx.textAlign = "center";
-		ctx.fillText("GAME OVER", ctx.canvas.width/2, ctx.canvas.height/2); 
+		ctx.fillText("GAME OVER", ctx.canvas.width/2, ctx.canvas.height/2);
 
 		ctx.font = "20px Comic Sans MS"
 		//ctx.fillStyle = "red";
 		//ctx.textAlign = "center";
-		ctx.fillText("[ENTER] to restart", ctx.canvas.width/2, ctx.canvas.height/2+30); 
-		ctx.fillText("[ESC] back to menu", ctx.canvas.width/2, ctx.canvas.height/2+60); 
+		ctx.fillText("[ENTER] to restart", ctx.canvas.width/2, ctx.canvas.height/2+30);
+		ctx.fillText("[ESC] back to menu", ctx.canvas.width/2, ctx.canvas.height/2+60);
 
-		var rr = function(ev) 
+		var rr = function(ev)
 		{
 			restartGame(ev, ctx, spArray);
 			window.removeEventListener("keypress", rr);
@@ -226,21 +227,21 @@ function moveShip(ctx, spArray) {
     	//sp.x += sp.speed;
     	if (sp.x + sp.width < ctx.canvas.width) {
     		sp.changeImg(imageRepository.shipRight);
-	     	sp.moveRight();	  
+	     	sp.moveRight();
     	}
     }
     if (UP) {
     	//sp.y -= sp.speed;
     	if (sp.y >= 0) {
     		sp.changeImg(imageRepository.shipUp);
-	     	sp.moveUp(); 
+	     	sp.moveUp();
     	}
     }
     if (DOWN) {
     	//sp.y += sp.speed;
     	if (sp.y + sp.height < ctx.canvas.height) {
     		sp.changeImg(imageRepository.shipDown);
-	     	sp.moveDown();   
+	     	sp.moveDown();
     	}
     }
 }
@@ -279,8 +280,8 @@ function render(ctx, spArray, bulletsArray, reqID, dt)
 		//move background
 		backgroundMoving(ctx, spArray);
 
-		draw_NVL_1(ctx, spArray) 
-		
+		draw_NVL_1(ctx, spArray)
+
 		drawMeteroids(ctx, meteroidArray);
 	}
 
@@ -317,6 +318,24 @@ function render(ctx, spArray, bulletsArray, reqID, dt)
 
 		draw_NVL_3(ctx, spArray);
 	}
+	else if (NVL_Boss == true) {
+				// move nave
+		moveShip(ctx, spArray);
+		// gere balas
+		moveBullets(ctx, bulletsArray);
+
+		// verifica colisao
+		VerifyCollision_NVL_Boss(ctx, spArray, bulletsArray);
+
+		//apagar canvas
+		ctx.clearRect(0, 0, cw, ch);
+		//move background
+		backgroundMoving(ctx, spArray);
+
+		draw_NVL_Boss(ctx, spArray);
+
+		drawBullets(ctx, bulletsArray);
+	}
 }
 
 function searchSprite(spArray, name) {
@@ -340,7 +359,7 @@ function backgroundMoving(ctx, spArray) {
 
 	if (sp.y >= ctx.canvas.height)
 		sp.y = 0;
-	
+
 }
 
 function moveBullets(ctx, bulletsArray) {
@@ -352,7 +371,7 @@ function moveBullets(ctx, bulletsArray) {
 				pool.splice(i, 1);
 				countBullets--;
 				console.log("retirou...");
-			} 
+			}
 			else {
 				pool[i].y -= pool[i].speed;
 			}
@@ -365,19 +384,21 @@ function moveBullets(ctx, bulletsArray) {
 	}
 }
 
-function shoot(ctx, spArray, bulletsArray, ship, type) {
+function shoot(ctx, spArray, bulletsArray, ship, type, speed) {
 	var size = SIZE_POOL;
 
 	var getShipX = ship.x;
 	var getShipY = ship.y;
 	var getShipWidth = ship.width;
 	var getShipHeigth = ship.height;
-	//console.log(type);
+	// array com diferentes bullets
+	var colorBullets = [imageRepository.bullet, imageRepository.bullet_blue, imageRepository.bullet_red, imageRepository.bullet_yellow];
+	var randomBullet = colorBullets[Math.floor(Math.random()*4)];
 
 	if (type == "bullet") {
 		if (countBullets != size) {
 			// definir tempo entre bullets
-			var sp = new Bullet(getShipX+getShipWidth/2, getShipY, imageRepository.bullet.naturalWidth, imageRepository.bullet.naturalHeight, 3, true, imageRepository.bullet);
+			var sp = new Bullet(getShipX+getShipWidth/2, getShipY, randomBullet.naturalWidth, randomBullet.naturalHeight, speed, true, randomBullet);
 			ship.bulletsArray.push(sp);
 			countBullets++;
 		}
@@ -386,7 +407,7 @@ function shoot(ctx, spArray, bulletsArray, ship, type) {
 		if (countBullets != size) {
 			var nw = imageRepository.missile.naturalWidth;
 			var nh = imageRepository.missile.naturalHeight;
-			var sp = new Bullet(getShipX+getShipWidth/2, getShipY, nw, nh, 3, true, imageRepository.missile, "missile");
+			var sp = new Bullet(getShipX+getShipWidth/2, getShipY, nw, nh, speed, true, imageRepository.missile, "missile");
 			ship.bulletsArray.push(sp);
 			countBullets++;
 		}
@@ -402,77 +423,6 @@ function drawBullets(ctx, bulletsArray)
 			bulletsArray[i].draw(ctx);
 		}
 	}
-}
-
-function drawMeteroids(ctx, meteroidArray) {
-
-		var nw = imageRepository.meteroid.naturalWidth;
-		var nh = imageRepository.meteroid.naturalHeight;
-
-		// SE CHEGAR AOS 100 CURRENT_METEROIDS ACABA ESTE NIVEL
-		if (countMeteroidsPassed == 100) {
-			NVL_WON = true;
-		}
-
-
-		var time = 500;
-		if (CURRENT_METEROIDS <= NUM_METEROIDS) {
-			// aumentar meteroids, tempo de spawn...
-
-			if (countMeteroidsPassed <= 25) {
-
-				if (flag_RISE == true) {
-					NUM_METEROIDS += 7;
-					flag_RISE = false;
-				}
-
-			} else if (countMeteroidsPassed <= 50) {
-
-				if (flag_RISE == false) {
-					flag_RISE = true;
-					NUM_METEROIDS += 7;
-				}
-
-			} else if (countMeteroidsPassed <= 75) {
-
-				if (flag_RISE == true) {
-					NUM_METEROIDS += 7;
-					flag_RISE = false;
-				}
-
-			} else {
-
-				if (flag_RISE == false) {
-					flag_RISE = true;
-					NUM_METEROIDS += 7;
-				}
-
-			}
-
-			setTimeout(function() 	{	var sp = new Meteroid(Math.floor(Math.random() * 700 + 100), -Math.floor(Math.random()*10 + imageRepository.meteroid.naturalHeight), nw, nh, true, imageRepository.meteroid, "meteroid");
-										meteroidArray.push(sp);
-									}, time+CURRENT_METEROIDS*time);
-
-			CURRENT_METEROIDS++;
-		}
-
-	for (let i=meteroidArray.length-1; i>=0; i--) {
-		
-		if (meteroidArray[i].y >= ctx.canvas.height) {
-
-			// SCORE
-			countMeteroidsPassed++;
-
-			// coloca-o novamente em cima
-			meteroidArray[i].x = Math.floor(Math.random() * 700 + 100);
-			meteroidArray[i].y = -Math.floor(Math.random()*10 + meteroidArray[i].height);
-
-		} else {
-			meteroidArray[i].draw(ctx);
-			meteroidArray[i].y += 4;		
-		}
-	
-	}		
 }
 
 function save() {

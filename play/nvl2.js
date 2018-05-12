@@ -9,6 +9,10 @@
 
 function loadSprites_NVL_2(ctx) {
 
+	NVL_1 = false;
+ 	NVL_2 = true;
+	NVL_3 = false;
+
 	var cw = ctx.canvas.width;
 	var ch = ctx.canvas.height;
 

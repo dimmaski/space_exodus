@@ -1,6 +1,6 @@
 "use strict";
 
-class Sprite 
+class Sprite
 {
 	constructor(x, y, w, h, img, alive) {
 		this.x = x;
@@ -24,26 +24,26 @@ class Sprite
 	}
 
 	verifyIntersect(fig) {
-		if ((fig.x + fig.width) < this.x || 
+		if ((fig.x + fig.width) < this.x ||
 			fig.x > (this.x + this.width) ||
 			(fig.y + fig.height) < this.y ||
 			fig.y > (this.height + this.y)) {
 			return false;
-		} 
+		}
 		else
 			return true;
 	}
 
 	verify_inside(mx, my) {
 		console.log(this.img);
-		if (mx >= this.x && 
-			mx <= this.x + this.width && 
-			my >= this.y && 
+		if (mx >= this.x &&
+			mx <= this.x + this.width &&
+			my >= this.y &&
 			my <= this.y + this.height)
 			return true;
 		else
 			return false;
-		
+
 	}
 	getType() {
 		return "none";
@@ -56,33 +56,33 @@ class Background extends Sprite
 	{
 		super(x,y,w,h,img, alive);
 		this.speed = speed;
-		this.img = img;		
-			
+		this.img = img;
+
 		//eliminar ou nao
 		this.aliveIni = alive;
-		this.alive = alive;			
+		this.alive = alive;
 	}
 
 	getType() {
 		return "background";
 	}
 
-	drawBackground(ctx) 
+	drawBackground(ctx)
 	{
 		ctx.drawImage(this.img, this.x, this.y - this.height+2, this.width, this.height);
 	}
 }
 
 "use strict";
- 
+
 class Ship extends Sprite
 {
 	constructor(x, y, w, h, speed, alive, imgShip, objLife, objShield, life, name)
 	{
 		super(x,y,w,h,imgShip, alive);
 		this.speed = speed;
-		this.imgShip = imgShip;	
-		this.objLife = objLife;	
+		this.imgShip = imgShip;
+		this.objLife = objLife;
 		this.objShield = objShield;
 		this.life = life;
 		this.alive = true;
@@ -94,7 +94,6 @@ class Ship extends Sprite
 
 		this.shield = false;
 		this.bulletsArray=[];
-
 
 		// muda para parametro
 		this.shieldDuration = 3000;
@@ -110,15 +109,15 @@ class Ship extends Sprite
 				this.flagLife1 = true;
 				this.flagLifeZero = false;
 			}
-		} 
+		}
 		else if (this.flagLife1 == true) {
 			this.objLife.changeImg(newImg2);
 			// redimensionar imagem
 			this.objLife.resizeToLife1();
 			this.flagLife1 = false;
 			this.flagLifeZero = true;
-			
-		} 
+
+		}
 		//else if (this.flagLifeZero == true)
 			//alert("Game Over");
 
@@ -158,9 +157,12 @@ class Ship extends Sprite
 		}
 	}
 
+	removeLifeDmg(dmg) {
+		this.life-=dmg;
+	}
 
 	moveLeft() {
-		this.x -= this.speed;		
+		this.x -= this.speed;
 	}
 
 	moveRight() {
@@ -183,9 +185,9 @@ class Bullet extends Sprite{
 		//posição e movimento
 		super(x,y,w,h,img, alive);
 		this.speed = speed;
-		this.img = img;	
-		// bala viva		
-		this.alive = alive;	
+		this.img = img;
+		// bala viva
+		this.alive = alive;
 		this.name = name;
 		// dano
 		this.damage = Math.floor((Math.random() * 200) + 100);
@@ -227,14 +229,14 @@ class Damage
 		ctx.fillStyle = "red";
 		ctx.textAlign = "center";
 
-		ctx.fillText(-this.damage, this.x+this.w/2, this.y-this.h/6); 
+		ctx.fillText(-this.damage, this.x+this.w/2, this.y-this.h/6);
 
 		if (this.conta!=20) {
 			this.y -= 1;
 			this.conta++;
 			if (this.fontsize < 20)
 				this.fontsize++;
-		} 
+		}
 		else {
 			this.conta=0;
 			this.alive=false;
@@ -273,7 +275,7 @@ class BackgroundObject extends Sprite
 	}
 }
 
-class Boost extends Sprite 
+class Boost extends Sprite
 {
 	constructor(x, y, w, h, img, alive, name) {
 		super(x, y, w, h, alive, img);
@@ -307,7 +309,7 @@ class ShipEnemy extends Sprite
 	{
 		super(x,y,w,h,imgShip, alive);
 		this.speed = speed;
-		this.imgShip = imgShip;	
+		this.imgShip = imgShip;
 		this.life = life;
 		this.alive = true;
 		this.name = name;
@@ -322,7 +324,7 @@ class ShipEnemy extends Sprite
 	}
 
 	getType() {
-		return "ship";
+		return "shipEnemy";
 	}
 	changeImg(newImg) {
 		this.imgShip = newImg;
@@ -339,18 +341,18 @@ class ShipEnemy extends Sprite
 
 	moveShip(x, y, shipX, shipY) {
 		if (this.x < shipX)
-			this.x+=2;
+			this.x += this.speed;
 		else if (this.x > shipX)
-			this.x-=2;
+			this.x -= this.speed;
 		if (this.y < shipY)
-			this.y+=2;
+			this.y += this.speed;
 		else if (this.y > shipY)
-			this.y-=2;
+			this.y -= this.speed;
 	}
 
 
 	moveLeft() {
-		this.x -= this.speed;		
+		this.x -= this.speed;
 	}
 
 	moveRight() {
