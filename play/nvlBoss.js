@@ -13,6 +13,7 @@ var shipsKilled=0;
 var wave=1;
 var displayWave=false;
 var flagShootBoss=false;
+var displayShipsKilled=true;
 
 var ShootsTakenByWave=5;
 var countShoots=0;
@@ -102,10 +103,12 @@ function draw_NVL_Boss(ctx, spArray) {
 }
 
 function displayText(ctx, spArray) {
-	ctx.font = "20px Comic Sans MS"
-	ctx.fillStyle = "white";
-	ctx.textAlign = "center";
-	ctx.fillText(shipsKilled+"/"+maxShipsKilled, ctx.canvas.width-30, ctx.canvas.height-10);
+	if (displayShipsKilled == true) {
+		ctx.font = "20px Comic Sans MS"
+		ctx.fillStyle = "white";
+		ctx.textAlign = "center";
+		ctx.fillText(shipsKilled+"/"+maxShipsKilled, ctx.canvas.width-30, ctx.canvas.height-10);
+	}
 
 	if (displayWave == true) {
 		ctx.font = "40px Comic Sans MS"
@@ -212,6 +215,7 @@ function bossColision(ctx, spArray) {
 								boss.alive = false;
 							}, 1000);
 							flagStopSpawn=true;
+
 						}
 						else {
 							countShoots += 1;
