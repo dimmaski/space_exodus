@@ -208,6 +208,17 @@ class Bullet extends Sprite{
 		else if (this.y > shipY)
 			this.y-=this.speedMissile;
 	}
+
+	moveFireball(x, y, shipX, shipY) {
+		if (this.x < shipX)
+			this.x += this.speed;
+		else if (this.x > shipX)
+			this.x -= this.speed;
+		if (this.y < shipY)
+			this.y += this.speed;
+		else if (this.y > shipY)
+			this.y -= this.speed;
+	}
 }
 
 class Damage
@@ -305,7 +316,7 @@ class Meteroid extends Sprite
 
 class ShipEnemy extends Sprite
 {
-	constructor(x, y, w, h, speed, alive, imgShip, life, name)
+	constructor(x, y, w, h, speed, alive, imgShip, life, name, life_bar)
 	{
 		super(x,y,w,h,imgShip, alive);
 		this.speed = speed;
@@ -316,6 +327,7 @@ class ShipEnemy extends Sprite
 		// array de dano do navio
 		this.damage = [];
 		this.bulletsArray=[];
+		this.life_bar = life_bar;
 	}
 
 

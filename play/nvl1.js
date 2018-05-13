@@ -43,43 +43,47 @@ function draw_NVL_1(ctx, spArray)
 	ctx.fillText(str, 0+5, 0+15);
 }
 
+function updateShipLife(spArray) {
+
+						// tira 1 vida
+						if (flag_treeLifes == true) {
+							// esperar 1 seg até tirar outra vida
+							setTimeout(function() {
+								flag_twoLifes = true;
+							}, 1000);
+
+							flag_treeLifes = false;
+							// update imagem
+							var sp = searchSprite(spArray, "vida");
+							sp.resizeToLife2(imageRepository.life2);
+						}
+
+						// tira 1 vida
+						else if (flag_twoLifes == true) {
+							// esperar 1 seg até tirar outra vida
+							setTimeout(function() {
+								flag_oneLife = true;
+								}, 1000);
+
+							flag_twoLifes = false;
+							// update imagem
+							var sp = searchSprite(spArray, "vida");
+							sp.resizeToLife1(imageRepository.life1);
+						}
+
+						// game over
+						if (flag_oneLife == true) {
+							GAME_OVER = true;
+						}
+}
+
 function VerifyCollision_NVL_1(ctx, spArray) {
 	for (let i=0; i<spArray.length; i++) {
 		// colisoes só para a nave
 		if (spArray[i].getType() == "ship") {
 			for (let j=0; j<meteroidArray.length; j++) {
 				if (spArray[i].verifyIntersect(meteroidArray[j]) == true) {
-
-					// tira 1 vida
-					if (flag_treeLifes == true) {
-						// esperar 1 seg até tirar outra vida
-						setTimeout(function() {
-							flag_twoLifes = true;
-						}, 1000);
-
-						flag_treeLifes = false;
-						// update imagem
-						var sp = searchSprite(spArray, "vida");
-						sp.resizeToLife2(imageRepository.life2);
-					}
-
-					// tira 1 vida
-					else if (flag_twoLifes == true) {
-						// esperar 1 seg até tirar outra vida
-						setTimeout(function() {
-							flag_oneLife = true;
-							}, 1000);
-
-						flag_twoLifes = false;
-						// update imagem
-						var sp = searchSprite(spArray, "vida");
-						sp.resizeToLife1(imageRepository.life1);
-					}
-
-					// game over
-					if (flag_oneLife == true) {
-						GAME_OVER = true;
-					}
+					updateShipLife(spArray);
 				}
 			}
 		}

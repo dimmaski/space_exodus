@@ -21,7 +21,7 @@ function loadSprites_NVL_3(ctx) {
 
 	var cw = ctx.canvas.width;
 	var ch = ctx.canvas.height;
-	
+
 /*
 	var nw = imageRepository.shipEnemy.naturalWidth;
 	var nh = imageRepository.shipEnemy.naturalHeight;
@@ -36,9 +36,9 @@ function loadSprites_NVL_3(ctx) {
 	var countShips=0;
 
 
-	for (let i=0; i<numEnemyShips; i++) {	
+	for (let i=0; i<numEnemyShips; i++) {
 		// limite horizontal de naves
-		if (countShips > shipsHorizontalLimit) {	
+		if (countShips > shipsHorizontalLimit) {
 			changeColumn = true;
 			changeRow = true;
 			countShips = 0;
@@ -46,7 +46,7 @@ function loadSprites_NVL_3(ctx) {
 
 		if (changeRow == false) {
 			x += nw+xIni;
-			
+
 		}
 
 		if (changeColumn == true) {
@@ -84,7 +84,7 @@ function draw_NVL_3(ctx, spArray) {
 					if (spArray[j].name == "dispara")
 						moveEnemyShips(ctx, spArray[j]);
 				}
-				
+
 
 	for (let i=0; i<spArray.length; i++) {
 		if (spArray[i].alive == true) {
@@ -100,13 +100,8 @@ function draw_NVL_3(ctx, spArray) {
 			else if (spArray[i].name == "dispara") {
 				drawBullets(ctx, spArray[i].bulletsArray);
 				moveBulletsEnemy(ctx, spArray[i].bulletsArray);
-					
-				
-				
-
-
-			}			
-			spArray[i].draw(ctx);		
+			}
+			spArray[i].draw(ctx);
 		}
 
 
@@ -116,7 +111,7 @@ function draw_NVL_3(ctx, spArray) {
 			dim = spArray.length;
 			console.log("[f] spArray Elements: "+dim);
 		}
-	}	
+	}
 	if (flag == true) {
 		setTimeout(function() { shootFromEnemy(ctx);
 								flag = true;		 }, 2000);
@@ -153,7 +148,7 @@ function VerifyCollision_NVL_3(ctx, spArray) {
 				}
 
 				// interseção das balas com nave "mau"
-				// se houver balas e for diferente da nave que disparou	
+				// se houver balas e for diferente da nave que disparou
 				if (ourShip.bulletsArray.length != 0) {
 					for (let k=0; k<ourShip.bulletsArray.length; k++) {
 						if (ourShip.bulletsArray[k].verifyIntersect(enemyShip) == true) {
@@ -163,25 +158,25 @@ function VerifyCollision_NVL_3(ctx, spArray) {
 							enemyShip.img = imageRepository.explosion;
 							setTimeout(function() { spArray[j].alive = false;
 														}, 50);
-						
+
 							console.log("puummm e pshhhhhhh ourShip");
-						}	
+						}
 					}
 				}
 
 				// interseção das balas com nave "bom"
-				// se houver balas e for diferente da nave que disparou	
+				// se houver balas e for diferente da nave que disparou
 				if (enemyShip.bulletsArray.length != 0) {
 					for (let k=0; k<enemyShip.bulletsArray.length; k++) {
 						if (enemyShip.bulletsArray[k].verifyIntersect(ourShip) == true) {
 							// "matar" bullet
-							enemyShip.bulletsArray[k].alive = false;							
+							enemyShip.bulletsArray[k].alive = false;
 							console.log("puummm e pshhhhhhh enemyShip");
-						}	
+						}
 					}
 				}
 			}
-		}				
+		}
 	}
 }
 
@@ -192,7 +187,7 @@ function moveEnemyShips(ctx, ship) {
 	if (goLeft==false) {
 	// atualiza se lado esquerdo antigo for maior que o atual
 		if (xlimitIni < ship.x) {
-			xlimitIni = ship.x;						
+			xlimitIni = ship.x;
 		}
 
 		if (xLimitEnd < (ship.x + ship.width)) {
@@ -201,18 +196,18 @@ function moveEnemyShips(ctx, ship) {
 
 		if (xLimitEnd >= ctx.canvas.width) {
 			goLeft = true;
-			xlimitIni=1000; 
+			xlimitIni=1000;
 			xLimitEnd=0;
 			console.log("STOPPPPPP")
 		}
 		else
 			ship.x = ship.x + 2;
 	}
-	
+
 	// esquerda
 	else {
 		if (xlimitIni > ship.x) {
-			xlimitIni = ship.x;						
+			xlimitIni = ship.x;
 		}
 
 		if (xLimitEnd > (ship.x + ship.width)) {
@@ -232,7 +227,7 @@ function moveEnemyShips(ctx, ship) {
 
 function getMaxWidthLeft(ctx, spArray) {
 	var max=0;
-	
+
 	for (let i=0; i<spArray.length; i++) {
 		if (spArray[i].name=="dispara") {
 			if (spArray[i].x+spArray[i].width > max) {
@@ -246,17 +241,16 @@ function getMaxWidthLeft(ctx, spArray) {
 
 function shootFromEnemy(ctx) {
 
-	var enemy = searchSprite(spArray, "dispara");	
+	var enemy = searchSprite(spArray, "dispara");
 
-	for (let i=0; i<spArray.length; i++) {			
+	for (let i=0; i<spArray.length; i++) {
 		if (spArray[i].name == "dispara") {
 			shoot(ctx, spArray, bulletsArray, spArray[i], "bullet", 5);
-			
+
 		}
 
 	}
 }
-
 
 function moveBulletsEnemy(ctx, bulletsArray) {
 	//console.log("ok");
@@ -270,7 +264,7 @@ function moveBulletsEnemy(ctx, bulletsArray) {
 				pool.splice(i, 1);
 				countBullets--;
 				console.log("retirou...");
-			} 
+			}
 			else {
 				pool[i].y += pool[i].speed;
 			}

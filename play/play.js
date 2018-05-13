@@ -392,18 +392,17 @@ function shoot(ctx, spArray, bulletsArray, ship, type, speed) {
 	var getShipWidth = ship.width;
 	var getShipHeigth = ship.height;
 	// array com diferentes bullets
-	var colorBullets = [imageRepository.bullet, imageRepository.bullet_blue, imageRepository.bullet_red, imageRepository.bullet_yellow];
-	var randomBullet = colorBullets[Math.floor(Math.random()*4)];
 
 	if (type == "bullet") {
 		if (countBullets != size) {
-			// definir tempo entre bullets
+			var colorBullets = [imageRepository.bullet, imageRepository.bullet_blue, imageRepository.bullet_red, imageRepository.bullet_yellow];
+			var randomBullet = colorBullets[Math.floor(Math.random()*4)];
 			var sp = new Bullet(getShipX+getShipWidth/2, getShipY, randomBullet.naturalWidth, randomBullet.naturalHeight, speed, true, randomBullet);
 			ship.bulletsArray.push(sp);
 			countBullets++;
 		}
 	}
-	else if (type = "missile") {
+	else if (type == "missile") {
 		if (countBullets != size) {
 			var nw = imageRepository.missile.naturalWidth;
 			var nh = imageRepository.missile.naturalHeight;
@@ -411,6 +410,13 @@ function shoot(ctx, spArray, bulletsArray, ship, type, speed) {
 			ship.bulletsArray.push(sp);
 			countBullets++;
 		}
+	}
+	else if (type == "fireball") {
+		var arrayFireballs = [imageRepository.fireball1, imageRepository.fireball2, imageRepository.fireball3];
+		var fireball = arrayFireballs[Math.floor(Math.random()*3)];
+		var sp = new Bullet(getShipX+getShipWidth/2-24, getShipY+getShipHeigth/(1.5), 3*fireball.naturalWidth, 3*fireball.naturalHeight, speed, true, fireball, "missile");
+		ship.bulletsArray.push(sp);
+		countBullets++;
 	}
 }
 

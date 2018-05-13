@@ -32,6 +32,7 @@ var imageRepository = new function() {
 	this.life2 = new Image();
 	this.life3 = new Image();
 	this.boss_life_bar = new Image();
+	this.ship_life_bar = new Image();
 
 	this.shield_star = new Image();
 	this.shield = new Image();
@@ -39,6 +40,9 @@ var imageRepository = new function() {
 	this.explosion = new Image();
 
 	this.boss = new Image();
+	this.fireball1 = new Image();
+	this.fireball2 = new Image();
+	this.fireball3 = new Image();
 
 
 	// -- SRC --
@@ -69,6 +73,7 @@ var imageRepository = new function() {
 	this.life2.src = "../resources/life/life2.png";
 	this.life3.src = "../resources/life/life3.png";
 	this.boss_life_bar.src = "../resources/life/boss_life_bar.png";
+	this.ship_life_bar.src = "../resources/life/ship_life_bar.png";
 
 	this.shield_star.src = "../resources/boosts/shield_star.png";
 	this.shield.src = "../resources/boosts/shield.png";
@@ -76,6 +81,9 @@ var imageRepository = new function() {
 	this.explosion.src = "../resources/bullets/explosion.gif";
 
 	this.boss.src = "../resources/ships/final_boss.png";
+	this.fireball1.src = "../resources/bullets/fireball1.png";
+	this.fireball2.src = "../resources/bullets/fireball2.png";
+	this.fireball3.src = "../resources/bullets/fireball3.png";
 
 
 }
