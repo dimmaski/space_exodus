@@ -10,9 +10,6 @@ class Sprite
 		this.img = img;
 		this.alive = alive;
 		this.name = "none";
-<<<<<<< HEAD
-		this.imageData = this.getImageData(img);
-=======
 
 		this.imageData = this.getImageData(img);
 	}
@@ -25,30 +22,37 @@ class Sprite
 			var ctx = canvasnova.getContext("2d");
 			ctx.drawImage(img, 0, 0, this.width, this.height);
 			return ctx.getImageData(0, 0, this.width, this.height);
->>>>>>> 17fb588bed8958e7ff85cdbb5472be9a3fef900b
 	}
 
-	getImageData(img){
-
-    var canvasnova = document.createElement("canvas");
-    canvasnova.width = this.width;
-    canvasnova.height = this.height;
-
-    var ctx = canvasnova.getContext("2d");
-    ctx.drawImage(img, 0, 0, this.width, this.height);
-
-    return ctx.getImageData(0, 0, this.width, this.height);
+	draw(ctx)
+	{
+		ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
 	}
 
-<<<<<<< HEAD
-	verifyIntersect(fig) {
-	    if (this.verifyColisionBoundingBox(fig)) {
-	        if (this.verifyColisionPixelByPixel(fig))
-=======
+
+	clear(ctx)
+	{
+		ctx.clearRect(this.x, this.y, this.width, this.height);
+	}
+
+
+	resizeToLife2(img) {
+		this.width = this.width - this.width/3;
+		this.changeImg(img);
+	}
+
+	resizeToLife1(img) {
+		this.width = this.width - this.width/2;
+		this.changeImg(img);
+	}
+
+	changeImg(img) {
+		this.img = img;
+	}
+
 	verifyIntersect(outro) {
 	    if (this.verificaColisao(outro)) {
 	        if (this.verificaColisaoPixelPorPixel(outro))
->>>>>>> 17fb588bed8958e7ff85cdbb5472be9a3fef900b
 	            return true;
 	        else
 	        	return false;
@@ -57,59 +61,17 @@ class Sprite
 	        return false;
 	}
 
-<<<<<<< HEAD
-	verifyColisionPixelByPixel(fig) {
-	    let x_left = Math.floor(Math.max(fig.x, this.x));
-	    let x_right = Math.floor(Math.min(fig.x + fig.width, this.x + this.width));
-	    let y_top = Math.floor(Math.max(fig.y, this.y));
-	    let y_bottom = Math.floor(Math.min(fig.y + fig.height, this.y + this.height));
-
-	    for (let y = y_top; y < y_bottom; y++) {
-	        for (let x = x_left; x < x_right; x++) {
-	            let x_0 = Math.round(x - fig.x);
-	            let y_0 = Math.round(y - fig.y);
-	            let n_pix = y_0 * fig.width + x_0; //n pixel to check
-	            let pix_op = fig.imageData.data[4 * n_pix + 3]; //opacity (R G B A)
-
-	            let element_x_0 = Math.round(x - this.x);
-	            let element_y_0 = Math.round(y - this.y);
-	            let element_n_pix = element_y_0 * this.width + element_x_0; //n pixel to check
-	            let element_pix_op = this.imageData.data[4 * element_n_pix + 3]; //opacity (R G B A)
-
-	            if (pix_op != 0 && element_pix_op != 0) {
-	                return true;
-	            }
-	        }
-	    }
-	    return false;
-		}
-
-	verifyColisionBoundingBox(fig) {
-			if ((fig.x + fig.width) < this.x ||
-=======
 	verificaColisao(fig) {
 		if ((fig.x + fig.width) < this.x ||
->>>>>>> 17fb588bed8958e7ff85cdbb5472be9a3fef900b
 			fig.x > (this.x + this.width) ||
 			(fig.y + fig.height) < this.y ||
 			fig.y > (this.height + this.y)) {
-				return false;
-			}
-			else
-			return true;
+			return false;
 		}
-
-	draw(ctx)
-	{
-		ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
+		else
+			return true;
 	}
 
-<<<<<<< HEAD
-
-	clear(ctx)
-	{
-		ctx.clearRect(this.x, this.y, this.width, this.height);
-=======
 	verificaColisaoPixelPorPixel(outro) {
 	    let x_left = Math.floor(Math.max(outro.x, this.x));
 	    let x_right = Math.floor(Math.min(outro.x + outro.width, this.x + this.width));
@@ -128,7 +90,7 @@ class Sprite
 	            let element_n_pix = element_y_0 * this.width + element_x_0; //n pixel to check
 	            let element_pix_op = this.imageData.data[4 * element_n_pix + 3]; //opacity (R G B A)
 
-	            if (pix_op == 255 && element_pix_op == 255) {
+	            if (pix_op != 0 && element_pix_op != 0) {
 	                /*Debug*/
 	                //console.log("colisao no pixel");
 	                return true;
@@ -136,10 +98,7 @@ class Sprite
 	        }
 	    }
 	    return false;
->>>>>>> 17fb588bed8958e7ff85cdbb5472be9a3fef900b
 	}
-
-
 	getType() {
 		return "none";
 	}
@@ -194,66 +153,12 @@ class Ship extends Sprite
 		this.shieldDuration = 3000;
 	}
 
-	updateLife(dmg, newImg1, newImg2) {
-		if (this.flagLife2 == true) {
-			if (dmg <= 100) {
-				this.objLife.changeImg(newImg1);
-				// redimensionar imagem
-				this.objLife.resizeToLife2();
-				this.flagLife2 = false;
-				this.flagLife1 = true;
-				this.flagLifeZero = false;
-			}
-		}
-		else if (this.flagLife1 == true) {
-			this.objLife.changeImg(newImg2);
-			// redimensionar imagem
-			this.objLife.resizeToLife1();
-			this.flagLife1 = false;
-			this.flagLifeZero = true;
-
-		}
-		//else if (this.flagLifeZero == true)
-			//alert("Game Over");
-
-
-		/*
-		else if (dmg <= 200)
-			this.objLife.img = newImg2;
-		else
-			this.objLife.alive = false;*/
-		// GAME OVER;
-	}
-
-	changeShieldState(time) {
-		console.log("Mudouuuu");
-		this.shield = true;
-		this.objShield.x = this.x;
-		this.objShield.y = this.y;
-	}
-
-	getDamageLenght() {
-		return this.damage.length;
-	}
 
 	getType() {
 		return "ship";
 	}
 	changeImg(newImg) {
 		this.img = newImg;
-	}
-
-	RemoveLife(dmg, newImg) {
-		this.life -= dmg;
-
-		if (this.life < 0) {
-			console.log("DEAD");
-			this.alive = false;
-		}
-	}
-
-	removeLifeDmg(dmg) {
-		this.life-=dmg;
 	}
 
 	moveLeft() {
@@ -291,29 +196,6 @@ class Bullet extends Sprite{
 		this.speedMissile = 0.1;
 	}
 
-	moveMissile(x, y, shipX, shipY) {
-		if (this.speedMissile < 1.5)
-			this.speedMissile = this.speedMissile + 0.05;
-		if (this.x < shipX)
-			this.x+=this.speedMissile;
-		else if (this.x > shipX)
-			this.x-=this.speedMissile;
-		if (this.y < shipY)
-			this.y+=this.speedMissile;
-		else if (this.y > shipY)
-			this.y-=this.speedMissile;
-	}
-
-	moveFireball(x, y, shipX, shipY) {
-		if (this.x < shipX)
-			this.x += this.speed;
-		else if (this.x > shipX)
-			this.x -= this.speed;
-		if (this.y < shipY)
-			this.y += this.speed;
-		else if (this.y > shipY)
-			this.y -= this.speed;
-	}
 }
 
 class Damage
@@ -358,12 +240,10 @@ class BackgroundObject extends Sprite
 	}
 
 	resizeToLife2(img) {
-		this.width = this.width - this.width/3;
 		this.changeImg(img);
 	}
 
 	resizeToLife1(img) {
-		this.width = this.width - this.width/2;
 		this.changeImg(img);
 	}
 
