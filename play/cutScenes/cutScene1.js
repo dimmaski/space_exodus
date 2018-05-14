@@ -46,16 +46,6 @@ function nextScript(ctx, backgroud, hero, villain, box, script) {
 
 
 		if (scriptCounter < script.length) {
-			/*
-			var nextScriptHelper = function(ev)
-			{
-				if(ev.keyCode == 13) {
-					waitingForEnter = false;
-					nextScript(ctx, backgroud, hero, villain, box, script);
-				}
-			}
-			canvas.addEventListener("keypress", nextScriptHelper);
-			*/
 
 			ctx.font = "20px Verdana"
 			ctx.fillStyle = "White";
@@ -63,19 +53,15 @@ function nextScript(ctx, backgroud, hero, villain, box, script) {
 
 			document.getElementById("canvasText").innerHTML = script[scriptCounter];
 		  scriptCounter += 1;
-/*
-			setTimeout(function(){
 
-				nextScript(ctx, backgroud, hero, villain, box, script);
-
-			 }, 8000);
-*/
+		} else {
+			shutDownScene(ctx);
 		}
-	}
+
 
 }
 
-function shutDownScene(ev, ctx) {
+function shutDownScene(ctx) {
 
 	var cw = ctx.canvas.width;
 	var ch = ctx.canvas.height;
