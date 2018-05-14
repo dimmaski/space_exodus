@@ -10,10 +10,6 @@ class Sprite
 		this.img = img;
 		this.alive = alive;
 		this.name = "none";
-<<<<<<< HEAD
-		this.imageData = this.getImageData(img);
-=======
-
 		this.imageData = this.getImageData(img);
 	}
 
@@ -25,7 +21,6 @@ class Sprite
 			var ctx = canvasnova.getContext("2d");
 			ctx.drawImage(img, 0, 0, this.width, this.height);
 			return ctx.getImageData(0, 0, this.width, this.height);
->>>>>>> 17fb588bed8958e7ff85cdbb5472be9a3fef900b
 	}
 
 	getImageData(img){
@@ -40,15 +35,9 @@ class Sprite
     return ctx.getImageData(0, 0, this.width, this.height);
 	}
 
-<<<<<<< HEAD
 	verifyIntersect(fig) {
 	    if (this.verifyColisionBoundingBox(fig)) {
 	        if (this.verifyColisionPixelByPixel(fig))
-=======
-	verifyIntersect(outro) {
-	    if (this.verificaColisao(outro)) {
-	        if (this.verificaColisaoPixelPorPixel(outro))
->>>>>>> 17fb588bed8958e7ff85cdbb5472be9a3fef900b
 	            return true;
 	        else
 	        	return false;
@@ -57,7 +46,6 @@ class Sprite
 	        return false;
 	}
 
-<<<<<<< HEAD
 	verifyColisionPixelByPixel(fig) {
 	    let x_left = Math.floor(Math.max(fig.x, this.x));
 	    let x_right = Math.floor(Math.min(fig.x + fig.width, this.x + this.width));
@@ -86,10 +74,6 @@ class Sprite
 
 	verifyColisionBoundingBox(fig) {
 			if ((fig.x + fig.width) < this.x ||
-=======
-	verificaColisao(fig) {
-		if ((fig.x + fig.width) < this.x ||
->>>>>>> 17fb588bed8958e7ff85cdbb5472be9a3fef900b
 			fig.x > (this.x + this.width) ||
 			(fig.y + fig.height) < this.y ||
 			fig.y > (this.height + this.y)) {
@@ -104,39 +88,10 @@ class Sprite
 		ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
 	}
 
-<<<<<<< HEAD
 
 	clear(ctx)
 	{
 		ctx.clearRect(this.x, this.y, this.width, this.height);
-=======
-	verificaColisaoPixelPorPixel(outro) {
-	    let x_left = Math.floor(Math.max(outro.x, this.x));
-	    let x_right = Math.floor(Math.min(outro.x + outro.width, this.x + this.width));
-	    let y_top = Math.floor(Math.max(outro.y, this.y));
-	    let y_bottom = Math.floor(Math.min(outro.y + outro.height, this.y + this.height));
-
-	    for (let y = y_top; y < y_bottom; y++) {
-	        for (let x = x_left; x < x_right; x++) {
-	            let x_0 = Math.round(x - outro.x);
-	            let y_0 = Math.round(y - outro.y);
-	            let n_pix = y_0 * outro.width + x_0; //n pixel to check
-	            let pix_op = outro.imageData.data[4 * n_pix + 3]; //opacity (R G B A)
-
-	            let element_x_0 = Math.round(x - this.x);
-	            let element_y_0 = Math.round(y - this.y);
-	            let element_n_pix = element_y_0 * this.width + element_x_0; //n pixel to check
-	            let element_pix_op = this.imageData.data[4 * element_n_pix + 3]; //opacity (R G B A)
-
-	            if (pix_op == 255 && element_pix_op == 255) {
-	                /*Debug*/
-	                //console.log("colisao no pixel");
-	                return true;
-	            }
-	        }
-	    }
-	    return false;
->>>>>>> 17fb588bed8958e7ff85cdbb5472be9a3fef900b
 	}
 
 
