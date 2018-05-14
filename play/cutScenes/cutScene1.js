@@ -1,7 +1,12 @@
 "use strict";
 
 var scriptCounter = 0;
-var sceneOn = false;
+var scripAuxCounter = 1;
+var scriptAux = "";
+var nextScriptProt = true;
+var interrupt = false;
+var counter = 0;
+var swapped = 0;
 
 (function()
 {
@@ -9,53 +14,119 @@ var sceneOn = false;
 }());
 
 function main() {
-	var script = ["I will take the crystals back with me . . .", "No you won't, it's known that no one escapes mars . ."];
-	var scriptCounter = 0;
-	var spArray = [];
+
+	var script = [" I will take the crystals back with me . . .", " I'll take it back to here it belongs . . .", " No you won't! It's known that no one escapes mars . . .", " You can't cross the Asteroid Barrier. . ."];
 	var backgroud, hero, villain, box;
 	var canvas = document.getElementById("canvas");
 	var ctx = canvas.getContext("2d");
 	init(ctx, backgroud, hero, villain, box, script);
+
 }
 
 function init(ctx, backgroud, hero, villain, box, script) {
 
 	backgroud = new Background(0, 0, 800, 600, 3, true, imageRepositoryScene1.backgroundImg);
-  hero      = new BackgroundObject(0, 200, 400, 400, true, imageRepositoryScene1.heroImg, "hero");
-  villain   = new BackgroundObject(0, 200, 400, 400, false, imageRepositoryScene1.villainImg, "villain");
-	box				= new BackgroundObject(300, 350, 500, 200, true, imageRepositoryScene1.boxImg, "box");
+  hero      = new BackgroundObject(0, 200, 500, 500, true, imageRepositoryScene1.heroImg, "hero");
+  villain   = new BackgroundObject(0, 200, 550, 500, false, imageRepositoryScene1.villainImg, "villain");
 
 	backgroud.draw(ctx);
 	hero.draw(ctx);
-	box.draw(ctx);
-
-	nextScript(ctx, backgroud, hero, villain, box, script);
 
 
 	var keydownHandler = function(ev)
 	{
-		//shutDownScene(ev, ctx);
-		nextScript(ctx, backgroud, hero, villain, box, script);
+
+		if (scriptCounter == 2 && swapped == 0) {
+			swapCharacters(ctx, hero, villain, backgroud);
+			swapped = 1;
+		}
+
+
+		if(nextScriptProt == true && !interrupt) {
+
+			nextScriptProt = false;
+			nextScript(ctx, backgroud, hero, villain, box, script, 100, keydownHandler);
+
+		} else if((nextScriptProt == false) && (scripAuxCounter < script[scriptCounter].length)) {
+
+			interrupt = true;
+			nextScript(ctx, backgroud, hero, villain, box, script, 3, keydownHandler);
+
+		}
+
 	}
+
 	window.addEventListener("keypress", keydownHandler);
 
 }
 
-
-function nextScript(ctx, backgroud, hero, villain, box, script) {
-
+function nextScript(ctx, backgroud, hero, villain, box, script, time, keydownHandler) {
 
 		if (scriptCounter < script.length) {
 
-			ctx.font = "20px Verdana"
-			ctx.fillStyle = "White";
-			ctx.textAlign = "center";
-
-			document.getElementById("canvasText").innerHTML = script[scriptCounter];
-		  scriptCounter += 1;
+			playScript(script[scriptCounter], time, ctx, hero, villain, backgroud);
 
 		} else {
+
+			window.removeEventListener("keypress", keydownHandler);
 			shutDownScene(ctx);
+
+		}
+
+}
+
+function playScript(string, time, ctx, hero, villain, backgroud) {
+
+	if(scripAuxCounter < string.length) {
+
+		if(time == 100 && interrupt == false || time == 3) {
+
+			if(scripAuxCounter % 36 == 0) {
+
+				scriptAux += "<br>";
+				scriptAux += string[scripAuxCounter++];
+				document.getElementById("canvasText").innerHTML = scriptAux;
+				setTimeout(playScript, time, string, time, ctx, hero, villain, backgroud);
+
+			} else {
+
+				scriptAux += string[scripAuxCounter++];
+				document.getElementById("canvasText").innerHTML = scriptAux;
+				setTimeout(playScript, time, string, time, ctx, hero, villain, backgroud);
+
+			}
+		}
+
+	} else {
+
+		scriptAux = "";
+		scripAuxCounter = 1;
+		nextScriptProt = true;
+		scriptCounter += 1;
+		interrupt = false;
+
+	}
+
+}
+
+function swapCharacters(ctx, hero, villain, backgroud) {
+
+		ctx.clearRect(0, 0, 800, 600);
+		backgroud.draw(ctx);
+
+
+		if(hero.alive == true) {
+			hero.alive = false;
+			villain.alive = true;
+		} else {
+			hero.alive = true;
+			villain.alive = false;
+		}
+
+		if(hero.alive == true) {
+			hero.draw(ctx);
+		} else {
+			villain.draw(ctx);
 		}
 
 
@@ -63,18 +134,12 @@ function nextScript(ctx, backgroud, hero, villain, box, script) {
 
 function shutDownScene(ctx) {
 
-	var cw = ctx.canvas.width;
-	var ch = ctx.canvas.height;
+	var shutDownScene = function(ev)
+	{
+		document.getElementById("continue").innerHTML = "Level 1<br>Cross The Asteroid Barrier<br>[ENTER]";
+	}
 
 	window.addEventListener("keypress", shutDownScene);
 
-	ctx.font = "40px Verdana"
-	ctx.fillStyle = "Black";
-	ctx.textAlign = "center";
-	ctx.fillText("Continue...", cw/2, ch/2);
-	ctx.fillText("[ENTER]", cw/2, ch/2+30);
 
-
-
-	// Mover para pŕoximo lvl
 }

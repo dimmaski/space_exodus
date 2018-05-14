@@ -7,21 +7,56 @@
 		<script type="text/javascript" src="../SpriteImage.js" defer="true"></script>
 		<script type="text/javascript" src="cutScene1.js" defer="true"></script>
 		<style>
-			p {
+
+			@font-face {
+					font-family: retro;
+					src: url(PressStart2P.ttf) format("truetype");
+			}
+
+			#canvasWrap {
+				position:relative
+			}
+
+			#canvasText {
+				font-family: retro;
+				font-size: 10px;
 				color: white;
-				font: arial;
+				position: relative;
+				padding-top: 5%;
+				padding-left: 5%;
+			}
+
+			#overlay {
 				position: absolute;
-				top: 51%;
-				left: 22%;
+				width: 500px;
+				height: 200px;
+				bottom: 5%;
+				left: 17%;
+				background-image: url("../../resources/scenes/dialogBox.png");
+				background-repeat: no-repeat;
+			}
+
+			#continue {
+				font-family: retro;
+				font-size: 25px;
+				color: white;
+				align: center;
+				position: relative;
+				text-align: center;
+				bottom: 200px;
 
 			}
+
+
 		</style>
 
 	</head>
 	<body>
-		<p id="canvasText"></p>
-		<canvas id="canvas" width="800" height="600">
-			Your browser does not support HTML5 canvas.
-		</canvas>
+
+		<div id="canvasWrap">
+  		<canvas id="canvas" width="800" height="600"></canvas>
+  		<div id="overlay"><p id="canvasText"></p> <p id="continue"></p> </div>
+		</div>
+
 	</body>
 </html>
