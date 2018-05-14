@@ -31,6 +31,14 @@ function init(ctx, backgroud, hero, villain, box, script) {
 
 	nextScript(ctx, backgroud, hero, villain, box, script);
 
+
+	var keydownHandler = function(ev)
+	{
+		//shutDownScene(ev, ctx);
+		nextScript(ctx, backgroud, hero, villain, box, script);
+	}
+	window.addEventListener("keypress", keydownHandler);
+
 }
 
 
@@ -55,28 +63,30 @@ function nextScript(ctx, backgroud, hero, villain, box, script) {
 
 			document.getElementById("canvasText").innerHTML = script[scriptCounter];
 		  scriptCounter += 1;
-
+/*
 			setTimeout(function(){
 
 				nextScript(ctx, backgroud, hero, villain, box, script);
 
 			 }, 8000);
-
-		} else {
-			shutDownScene(ctx);
+*/
+		}
 	}
 
 }
 
-function shutDownScene(ctx) {
+function shutDownScene(ev, ctx) {
+
+	var cw = ctx.canvas.width;
+	var ch = ctx.canvas.height;
 
 	window.addEventListener("keypress", shutDownScene);
 
-	//ctx.font = "40px Verdana"
-	//ctx.fillStyle = "Black";
-	//ctx.textAlign = "center";
-	//ctx.fillText("Continue...", ctx.canvas.width/2, ctx.canvas.height/2);
-	//ctx.fillText("[ENTER]", ctx.canvas.width/2, ctx.canvas.height/2+30);
+	ctx.font = "40px Verdana"
+	ctx.fillStyle = "Black";
+	ctx.textAlign = "center";
+	ctx.fillText("Continue...", cw/2, ch/2);
+	ctx.fillText("[ENTER]", cw/2, ch/2+30);
 
 
 
