@@ -25,6 +25,7 @@ function init(ctx, backgroud, hero, villain, box, script) {
   villain   = new BackgroundObject(0, 200, 400, 400, false, imageRepositoryScene1.villainImg, "villain");
 	box				= new BackgroundObject(300, 350, 500, 200, true, imageRepositoryScene1.boxImg, "box");
 
+	backgroud.draw(ctx);
 	hero.draw(ctx);
 	box.draw(ctx);
 
