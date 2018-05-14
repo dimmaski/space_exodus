@@ -73,7 +73,7 @@ function nextScript(ctx, backgroud, hero, villain, box, script) {
 		}
 	}
 
-}
+
 
 function shutDownScene(ev, ctx) {
 

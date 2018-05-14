@@ -31,7 +31,8 @@ var NVL_2 = false;
 var NVL_3 = false;
 var NVL_Boss = false;
 var GAME_OVER = false;
-var NVL_WON = false;
+var NVL_WON = false
+var goToLvl = 2;
 
 // vida
 var flag_treeLifes = true;
@@ -54,7 +55,7 @@ function main()
 function init(ctx) {
 
 	loadSprites(ctx);
-	loadSprites_NVL_Boss(ctx);
+	loadSprites_NVL_1(ctx);
 	console.log("OK");
 
 	window.addEventListener("keydown", keydownHandler);
@@ -166,12 +167,48 @@ function animLoop(ctx, spArray, bulletsArray)
 	if (NVL_WON == true) {
 		// mudar de nivel
 		NVL_WON = false;
-		NVL_1 = false;
-		NVL_2 = true;
-		console.log("ganhou");
 
-		// wait 2 sec..
-		setTimeout(function() { loadSprites_NVL_2(ctx); }, 2000);
+
+		if (goToLvl == 2) {
+			NVL_1 = false;
+			NVL_2 = false;
+			NVL_3 = true;
+			NVL_Boss = false;
+			console.log("ganhou");
+
+			loadSprites_NVL_3(ctx);
+			goToLvl+=2;
+/*
+			// wait 2 sec..
+			setTimeout(function() {
+				loadSprites_NVL_3(ctx);
+				goToLvl+=2;
+			}, 2000);*/
+		}/*
+		else if (goToLvl == 3) {
+			NVL_1 = false;
+			NVL_2 = false;
+			NVL_3 = true;
+			NVL_Boss = false;
+
+			setTimeout(function() {
+				loadSprites_NVL_3(ctx);
+				goToLvl++;
+			}, 2000);
+		}*/
+		else if (goToLvl == 4) {
+			NVL_1 = false;
+			NVL_2 = false;
+			NVL_3 = false;
+			NVL_Boss = true;
+			loadSprites_NVL_Boss(ctx);
+			goToLvl++;
+/*
+			setTimeout(function() {
+				loadSprites_NVL_Boss(ctx);
+				goToLvl++;
+			}, 2000);*/
+		}
 	}
 
 	else if (GAME_OVER == false) {
@@ -245,22 +282,6 @@ function moveShip(ctx, spArray) {
     	}
     }
 }
-
-
-function changeColorDamage(ctx, spArray, i) {
-	//var sp = new Ship(spArray[i].x, spArray[i].y, spArray[i].width, spArray[i].height, 3, true, imageRepository.shipEnemyDamaged);
-	spArray[i].changeImg(imageRepository.shipEnemyDamaged);
-	// substituir no array
-	spArray.splice(i, 1, spArray[i]);
-}
-
-// muda de cor a nave quando embate missel
-function changeColor(ctx, spArray, i) {
-	spArray[i].changeImg(imageRepository.shipEnemy);
-	// substituir no array
-	spArray.splice(i, 1, spArray[i]);
-}
-
 
 //resedenho, actualizações, ...
 function render(ctx, spArray, bulletsArray, reqID, dt)

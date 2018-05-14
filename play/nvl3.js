@@ -5,29 +5,25 @@
 	window.addEventListener("load", main);
 }());
 
-
+var arrayEnemyShips=[];
 var flag = true;
 var numEnemyShips = 8;
 var xlimitIni=1000, xLimitEnd=0;
 var goLeft=false;
 var conta=0;
 var flagAtualiza=true;
+var timeBetweenShotsFromEnemy=2000;
+var flagNextWave=false;
 
 function loadSprites_NVL_3(ctx) {
 
-	NVL_1 = false;
- 	NVL_2 = false;
-	NVL_3 = true;
+	spawnWave(ctx, arrayEnemyShips);
 
+}
+
+function spawnWave(ctx, arrayEnemyShips) {
 	var cw = ctx.canvas.width;
 	var ch = ctx.canvas.height;
-
-/*
-	var nw = imageRepository.shipEnemy.naturalWidth;
-	var nh = imageRepository.shipEnemy.naturalHeight;
-	var sp = new ShipEnemy(0, 0, nw, nh, 3, true, imageRepository.shipEnemy, 1000, "mau");
-	spArray[nLoad] = sp;
-	nLoad++;*/
 
 	var nw = imageRepository.shipEnemy.naturalWidth;
 	var nh = imageRepository.shipEnemy.naturalHeight;
@@ -59,47 +55,21 @@ function loadSprites_NVL_3(ctx) {
 		}
 
 		var sp = new ShipEnemy(x, y, nw, nh, 3, true, imageRepository.shipEnemy, 1000, "dispara");
-		spArray[nLoad] = sp;
-		nLoad++;
+		arrayEnemyShips.push(sp);
 		countShips++;
-
-
 	}
-	/*
-		var nw = imageRepository.explosion.naturalWidth/2;
-		var nh = imageRepository.explosion.naturalHeight/2;
-		var sp = new Ship(100, 100, nw, nh, 3, true, imageRepository.explosion, 1000, "njnj");
-		spArray[nLoad] = sp;*/
-		//nLoad++;
 }
 
 
 function draw_NVL_3(ctx, spArray) {
-
-	var dim = spArray.length;
-	var ship = spArray[2];
-
-	//getMaxWidthLeft(ctx, spArray);
-				for (let j=0; j<spArray.length; j++) {
-					if (spArray[j].name == "dispara")
-						moveEnemyShips(ctx, spArray[j]);
-				}
-
+	var ship = searchSprite(spArray, "bom");
 
 	for (let i=0; i<spArray.length; i++) {
 		if (spArray[i].alive == true) {
 
-			if (spArray[i].name == "mau") {
-				spArray[i].moveShip(spArray[i].x, spArray[i].y, ship.x, ship.y);
-				console.log("encontrou");
-			}
-			else if (spArray[i].name == "bom") {
+			if (spArray[i].name == "bom") {
 				drawBullets(ctx, spArray[i].bulletsArray);
 				moveBullets(ctx, spArray[i].bulletsArray);
-			}
-			else if (spArray[i].name == "dispara") {
-				drawBullets(ctx, spArray[i].bulletsArray);
-				moveBulletsEnemy(ctx, spArray[i].bulletsArray);
 			}
 			spArray[i].draw(ctx);
 		}
@@ -108,72 +78,85 @@ function draw_NVL_3(ctx, spArray) {
 		else if (spArray[i].alive == false) {
 			console.log("[i] spArray Elements: "+dim);
 			spArray.splice(i,1);
-			dim = spArray.length;
 			console.log("[f] spArray Elements: "+dim);
 		}
 	}
-	if (flag == true) {
-		setTimeout(function() { shootFromEnemy(ctx);
-								flag = true;		 }, 2000);
-		flag = false;
+
+	if (flagNextWave == false) {
+		for (let i=arrayEnemyShips.length-1; i>=0; i--) {
+			if (arrayEnemyShips[i].alive == true) {
+				moveEnemyShips(ctx, arrayEnemyShips[i]);
+				moveBulletsEnemy(ctx, arrayEnemyShips[i].bulletsArray);
+				drawBullets(ctx, arrayEnemyShips[i].bulletsArray);
+				arrayEnemyShips[i].draw(ctx);
+			}
+			else {
+				if (arrayEnemyShips.length <= 1)
+					flagNextWave=true;
+				arrayEnemyShips.splice(i,1);
+			}
+		}
+
+		if (flag == true) {
+			setTimeout(function() {
+				shootFromEnemy(ctx, arrayEnemyShips);
+				flag = true;
+			}, timeBetweenShotsFromEnemy);
+
+			flag = false;
+		}
+	}
+	else {
+		// spawn outra wave
+		if (flagNextWave == true && numEnemyShips > 4) {
+			numEnemyShips-=4;
+			timeBetweenShotsFromEnemy-=500;
+			spawnWave(ctx, arrayEnemyShips);
+			flagNextWave=false;
+		}
+		else {
+			console.log("nextlevel");
+			NVL_WON = true;
+		}
 	}
 }
 
 
 function VerifyCollision_NVL_3(ctx, spArray) {
-	for (let i=0; i<spArray.length; i++) {
-		for (let j=i+1; j<spArray.length; j++) {
-			//console.log(spArray[i].name+ " , "+spArray[j].name)
-			//console.log(spArray[i].getType()+ " , "+spArray[j].getType())
-			//console.log("--------");
+	for (let i=0; i<arrayEnemyShips.length; i++) {
+			var enemyShip = arrayEnemyShips[i];
+			var ourShip = searchSprite(spArray, "bom");
 
-			if ((spArray[j].name == "dispara" && spArray[i].name == "bom") || (spArray[i].name == "dispara" && spArray[j].name == "bom")) {
-				var enemyShip;
-				var ourShip;
-				if (spArray[i].name == "dispara")
-					enemyShip = spArray[i];
-				else
-					enemyShip = spArray[j];
+			// interseção entre naves
+			if (ourShip.verifyIntersect(enemyShip) == true) {
+				GAME_OVER = true;
+				console.log("toca")
+			}
+			// interseção das balas com nave "mau"
+			// se houver balas e for diferente da nave que disparou
+			if (ourShip.bulletsArray.length != 0) {
+				for (let k=0; k<ourShip.bulletsArray.length; k++) {
+					if (ourShip.bulletsArray[k].verifyIntersect(enemyShip) == true) {
+						// "matar" bullet
+						ourShip.bulletsArray[k].alive = false;
 
-				if (spArray[i].name == "bom")
-					ourShip = spArray[i];
-				else
-					ourShip = spArray[j];
+						enemyShip.img = imageRepository.explosion;
 
-
-				// interseção entre naves
-				if (ourShip.verifyIntersect(enemyShip) == true) {
-					GAME_OVER = true;
-					console.log("toca")
-				}
-
-				// interseção das balas com nave "mau"
-				// se houver balas e for diferente da nave que disparou
-				if (ourShip.bulletsArray.length != 0) {
-					for (let k=0; k<ourShip.bulletsArray.length; k++) {
-						if (ourShip.bulletsArray[k].verifyIntersect(enemyShip) == true) {
-							// "matar" bullet
-							ourShip.bulletsArray[k].alive = false;
-
-							enemyShip.img = imageRepository.explosion;
-							setTimeout(function() { spArray[j].alive = false;
-														}, 50);
-
-							console.log("puummm e pshhhhhhh ourShip");
-						}
+						setTimeout(function() {
+							arrayEnemyShips[i].alive = false;
+						}, 25);
 					}
 				}
+			}
+			// interseção das balas com nave "bom"
+			// se houver balas e for diferente da nave que disparou
+			if (enemyShip.bulletsArray.length != 0) {
+				for (let k=0; k<enemyShip.bulletsArray.length; k++) {
+					if (enemyShip.bulletsArray[k].verifyIntersect(ourShip) == true) {
+						// "matar" bullet
+						enemyShip.bulletsArray[k].alive = false;
 
-				// interseção das balas com nave "bom"
-				// se houver balas e for diferente da nave que disparou
-				if (enemyShip.bulletsArray.length != 0) {
-					for (let k=0; k<enemyShip.bulletsArray.length; k++) {
-						if (enemyShip.bulletsArray[k].verifyIntersect(ourShip) == true) {
-							// "matar" bullet
-							enemyShip.bulletsArray[k].alive = false;
-							console.log("puummm e pshhhhhhh enemyShip");
-						}
-					}
+						updateShipLife(spArray);
 				}
 			}
 		}
@@ -219,9 +202,6 @@ function moveEnemyShips(ctx, ship) {
 		}
 		else
 			ship.x = ship.x - 2;
-
-			//console.log("xlimitIni: "+xlimitIni);
-			//console.log("xLimitEnd: "+xLimitEnd);
 	}
 }
 
@@ -239,16 +219,12 @@ function getMaxWidthLeft(ctx, spArray) {
 }
 
 
-function shootFromEnemy(ctx) {
+function shootFromEnemy(ctx, arrayEnemyShips) {
 
-	var enemy = searchSprite(spArray, "dispara");
+	var enemy = searchSprite(arrayEnemyShips, "dispara");
 
-	for (let i=0; i<spArray.length; i++) {
-		if (spArray[i].name == "dispara") {
-			shoot(ctx, spArray, bulletsArray, spArray[i], "bullet", 5);
-
-		}
-
+	for (let i=0; i<arrayEnemyShips.length; i++) {
+		shoot(ctx, arrayEnemyShips, bulletsArray, arrayEnemyShips[i], "bullet", 5);
 	}
 }
 
