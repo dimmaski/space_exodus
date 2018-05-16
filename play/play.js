@@ -187,7 +187,7 @@ function restartGame(ev, ctx, spArray) {
 		document.location.reload();
 	}
 	else if (ev.keyCode == 27) {
-		var url = "../main/startpage.html";
+		var url = "../lvl_select/lvl_select.html";
 		document.location.href = url;
 		document.location.reload();
 	}
