@@ -5,6 +5,7 @@
 
 p {
     font-family: retro;
+    font-size: 35px;
 }
 
 #game {
@@ -13,7 +14,6 @@ p {
   width: 800px;
   height: 600px;
   background-image: url('../resources/menu_inicial/background_new.jpg');
-  margin: auto;
 }
 
 #logo {
@@ -25,7 +25,7 @@ p {
 }
 
 a {
-    text-decoration: none; 
+    text-decoration: none;
      background-color: none;
     color:white;
 
@@ -39,13 +39,10 @@ nav {
 	margin-left: auto;
 	top: 43%;
  	left: 31%;
-  font-size: 38px;
   color: white;
   line-height: 0.6;
   font-weight: 400;
   opacity: 0.91;
-
- 
   text-align: center;
 
 }
@@ -56,7 +53,7 @@ button:hover {
 
 }
 
-#soundbutton{
+#sound{
     padding: 25px 25px;
     background-image: url("../resources/menu_inicial/sound2.png");
     background-color: Transparent;

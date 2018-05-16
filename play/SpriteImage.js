@@ -177,16 +177,7 @@ class Ship extends Sprite
 			this.flagLifeZero = true;
 
 		}
-		//else if (this.flagLifeZero == true)
-			//alert("Game Over");
 
-
-		/*
-		else if (dmg <= 200)
-			this.objLife.img = newImg2;
-		else
-			this.objLife.alive = false;*/
-		// GAME OVER;
 	}
 
 	changeShieldState(time) {
