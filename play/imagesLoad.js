@@ -36,8 +36,17 @@ var imageRepository = new function() {
 
 	this.shield_star = new Image();
 	this.shield = new Image();
-	this.meteroid = new Image();
 	this.explosion = new Image();
+
+
+	this.meteroid = new Image();
+	this.meteroid_big = new Image();
+	this.meteroid_small = new Image();
+	this.rocks1 = new Image();
+	this.rocks2 = new Image();
+	this.rocks3 = new Image();
+	this.rocks4 = new Image();
+	this.rocks5 = new Image();
 
 	this.boss = new Image();
 	this.fireball1 = new Image();
@@ -77,8 +86,16 @@ var imageRepository = new function() {
 
 	this.shield_star.src = "../resources/boosts/shield_star.png";
 	this.shield.src = "../resources/boosts/shield.png";
-	this.meteroid.src = "../resources/meteroids/meteroid.png";
 	this.explosion.src = "../resources/bullets/explosion.gif";
+
+	this.meteroid.src = "../resources/meteroids/meteroid.png";
+	this.meteroid_big.src = "../resources/meteroids/meteroid_big.png";
+	this.meteroid_small.src = "../resources/meteroids/meteroid_small.png";
+	this.rocks1.src = "../resources/meteroids/rocks1.png";
+	this.rocks2.src = "../resources/meteroids/rocks2.png";
+	this.rocks3.src = "../resources/meteroids/rocks3.png";
+	this.rocks4.src = "../resources/meteroids/rocks4.png";
+	this.rocks5.src = "../resources/meteroids/rocks5.png";
 
 	this.boss.src = "../resources/ships/final_boss.png";
 	this.fireball1.src = "../resources/bullets/fireball1.png";

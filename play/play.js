@@ -103,6 +103,8 @@ function init(ctx) {
 
 		// reset nave
 		ship.changeImg(imageRepository.shipDown);
+		ship.width = imageRepository.shipDown.naturalWidth;
+		ship.height = imageRepository.shipDown.naturalHeight;
 	}
 
 	animLoop(ctx, spArray, bulletsArray);
@@ -257,6 +259,8 @@ function moveShip(ctx, spArray) {
 		//sp.x -= sp.speed;
 		if (sp.x >= 0) {
 			sp.changeImg(imageRepository.shipLeft);
+			sp.width = imageRepository.shipLeft.naturalWidth;
+			sp.height = imageRepository.shipLeft.naturalHeight;
 	     	sp.moveLeft();
 		}
 	}
@@ -264,6 +268,8 @@ function moveShip(ctx, spArray) {
     	//sp.x += sp.speed;
     	if (sp.x + sp.width < ctx.canvas.width) {
     		sp.changeImg(imageRepository.shipRight);
+    		sp.width = imageRepository.shipRight.naturalWidth;
+			sp.height = imageRepository.shipRight.naturalHeight;
 	     	sp.moveRight();
     	}
     }
@@ -271,6 +277,8 @@ function moveShip(ctx, spArray) {
     	//sp.y -= sp.speed;
     	if (sp.y >= 0) {
     		sp.changeImg(imageRepository.shipUp);
+    		sp.width = imageRepository.shipUp.naturalWidth;
+			sp.height = imageRepository.shipUp.naturalHeight;
 	     	sp.moveUp();
     	}
     }
@@ -278,6 +286,8 @@ function moveShip(ctx, spArray) {
     	//sp.y += sp.speed;
     	if (sp.y + sp.height < ctx.canvas.height) {
     		sp.changeImg(imageRepository.shipDown);
+    		sp.width = imageRepository.shipDown.naturalWidth;
+			sp.height = imageRepository.shipDown.naturalHeight;
 	     	sp.moveDown();
     	}
     }

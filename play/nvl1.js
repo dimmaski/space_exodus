@@ -89,13 +89,20 @@ function VerifyCollision_NVL_1(ctx, spArray) {
 	}
 }
 
-function drawMeteroids(ctx, meteroidArray) {
+function randomMeteroid() {
+	var array = [imageRepository.meteroid_small, imageRepository.meteroid_big, imageRepository.rocks1, imageRepository.rocks2, imageRepository.rocks3, imageRepository.rocks4, imageRepository.rocks5];
+	var random_met = Math.floor(Math.random()*7);
 
-		var nw = imageRepository.meteroid.naturalWidth;
-		var nh = imageRepository.meteroid.naturalHeight;
+	return array[random_met];
+}
+
+function drawMeteroids(ctx, meteroidArray) {
+	var meteroid = randomMeteroid();
+	var nw = meteroid.naturalWidth;
+	var nh = meteroid.naturalHeight;
 
 		// SE CHEGAR AOS 100 CURRENT_METEROIDS ACABA ESTE NIVEL
-		if (countMeteroidsPassed == 10) {
+		if (countMeteroidsPassed == 100) {
 			NVL_WON = true;
 		}
 
@@ -134,7 +141,7 @@ function drawMeteroids(ctx, meteroidArray) {
 
 			}
 
-			setTimeout(function() 	{	var sp = new Meteroid(Math.floor(Math.random() * 700 + 100), -Math.floor(Math.random()*10 + imageRepository.meteroid.naturalHeight), nw, nh, true, imageRepository.meteroid, "meteroid");
+			setTimeout(function() 	{	var sp = new Meteroid(Math.floor(Math.random() * 700 + 100), -Math.floor(Math.random()*10 + nh), nw, nh, true, meteroid, "meteroid");
 										meteroidArray.push(sp);
 									}, time+CURRENT_METEROIDS*time);
 
