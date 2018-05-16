@@ -69,10 +69,12 @@ function updateShipLife(spArray,ship) {
 		}, 1000);
 
 		if(player_1_threelifes==true){
+			setTimeout(function() {
+				player_1_twolifes = true;
+			}, 1000);
 			player_1_threelifes=false;
 			var sp = searchSprite(spArray, "vida1");
 			sp.resizeToLife2(imageRepository.life2);
-			player_1_twolifes=true;
 			}
 		else if(player_1_twolifes==true){
 			player_1_twolifes=false;
