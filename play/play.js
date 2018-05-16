@@ -41,11 +41,19 @@ var flagCURRENT_METEROIDS = true;
 var NUM_METEROIDS = 12;
 var CURRENT_METEROIDS = 0;
 var meteroidArray = [];
+<<<<<<< HEAD
+
+=======
+>>>>>>> 5b32f2347cac4cfa773a8f5b19334b87e9b12f8b
 
 
 function init(ctx, nivel) {
 
 	loadSprites(ctx);
+<<<<<<< HEAD
+	loadSprites_NVL_1(ctx);
+	console.log("OK");
+=======
 
 	switch(nivel) {
 		case 2:
@@ -55,6 +63,7 @@ function init(ctx, nivel) {
 			loadSprites_NVL_3(ctx);
 			break;
 	}
+>>>>>>> 5b32f2347cac4cfa773a8f5b19334b87e9b12f8b
 
 	window.addEventListener("keydown", keydownHandler);
 	window.addEventListener("keyup", keyupHandler);
@@ -280,6 +289,11 @@ function render(ctx, spArray, bulletsArray, reqID, nivel)
 		draw_NVL_1(ctx, spArray);
 
 		drawMeteroids(ctx, meteroidArray);
+<<<<<<< HEAD
+
+	}
+=======
+>>>>>>> 5b32f2347cac4cfa773a8f5b19334b87e9b12f8b
 
 	}
 

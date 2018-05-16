@@ -13,7 +13,10 @@ function main()
 
 }
 
+<<<<<<< HEAD
+=======
 
+>>>>>>> 5b32f2347cac4cfa773a8f5b19334b87e9b12f8b
 function draw_NVL_1(ctx, spArray)
 {
 
@@ -32,6 +35,42 @@ function draw_NVL_1(ctx, spArray)
 	ctx.textAlign = "left";
 	var str = "Score: " + countMeteroidsPassed;
 	ctx.fillText(str, 0+7, 0+15);
+<<<<<<< HEAD
+}
+
+function updateShipLife(spArray) {
+	// tira 1 vida
+	if (flag_treeLifes == true) {
+		// esperar 1 seg até tirar outra vida
+		setTimeout(function() {
+			flag_twoLifes = true;
+		}, 150);
+
+		flag_treeLifes = false;
+		// update imagem
+		var sp = searchSprite(spArray, "vida");
+		sp.resizeToLife2(imageRepository.life2);
+	}
+
+	// tira 1 vida
+	else if (flag_twoLifes == true) {
+		// esperar 1 seg até tirar outra vida
+		setTimeout(function() {
+			flag_oneLife = true;
+		}, 150);
+
+		flag_twoLifes = false;
+		// update imagem
+		var sp = searchSprite(spArray, "vida");
+		sp.resizeToLife1(imageRepository.life1);
+	}
+
+	// game over
+	if (flag_oneLife == true) {
+		GAME_OVER = true;
+	}
+=======
+>>>>>>> 5b32f2347cac4cfa773a8f5b19334b87e9b12f8b
 }
 
 function VerifyCollision_NVL_1(ctx, spArray) {
@@ -42,8 +81,11 @@ function VerifyCollision_NVL_1(ctx, spArray) {
 		}
 	}
 
+<<<<<<< HEAD
+=======
 }
 
+>>>>>>> 5b32f2347cac4cfa773a8f5b19334b87e9b12f8b
 function pickRandomMeteroid() {
 	return imageRepository.AsteroidsImgArray[Math.floor(Math.random()*7)];
 }
