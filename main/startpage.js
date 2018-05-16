@@ -25,6 +25,38 @@ function main()
     else if (ev.keyCode == 40 || ev.keyCode == 83)
       option = ++option % 6;
 
+    else if(ev.keyCode == 13) {
+      switch(option) {
+
+        // falta adicionar links para as páginas
+        
+        case 0:
+
+            break;
+        case 1:
+
+            break;
+        case 2:
+
+            break;
+        case 3:
+
+            break;
+        case 4:
+
+            break;
+        case 5:
+
+            break;
+
+      }
+
+
+
+
+
+    }
+
 
     switch(option) {
       case 0:
