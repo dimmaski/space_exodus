@@ -13,6 +13,10 @@ class Sprite
 		this.imageData = this.getImageData(img);
 	}
 
+	distanceTo(object) {
+		return Math.sqrt( Math.pow((this.x - object.x),2) + Math.pow((this.y - object.y),2));
+	}
+
 	setPosition() {
 		this.y = 500;
 		this.x = 400;
@@ -173,16 +177,7 @@ class Ship extends Sprite
 			this.flagLifeZero = true;
 
 		}
-		//else if (this.flagLifeZero == true)
-			//alert("Game Over");
 
-
-		/*
-		else if (dmg <= 200)
-			this.objLife.img = newImg2;
-		else
-			this.objLife.alive = false;*/
-		// GAME OVER;
 	}
 
 	changeShieldState(time) {

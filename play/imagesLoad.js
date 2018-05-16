@@ -3,6 +3,7 @@
 // repositorios para desenhar imagens com sprites
 var imageRepository = new function() {
 
+
 	this.shipDown = new Image();
 	this.shipUp = new Image();
 	this.shipLeft = new Image();
@@ -102,5 +103,6 @@ var imageRepository = new function() {
 	this.fireball2.src = "../resources/bullets/fireball2.png";
 	this.fireball3.src = "../resources/bullets/fireball3.png";
 
+	this.AsteroidsImgArray = [this.meteroid_small, this.meteroid_big, this.rocks1, this.rocks2, this.rocks3, this.rocks4, this.rocks5];
 
 }

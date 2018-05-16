@@ -5,175 +5,109 @@
 	window.addEventListener("load", main);
 }());
 
-function loadSprites_NVL_1(ctx) {
+function main()
+{
+	var canvas = document.getElementById("canvas");
+	var ctx = canvas.getContext("2d");
+	init(ctx, 1);
 
-	NVL_1 = true;
- 	NVL_2 = false;
-	NVL_3 = false;
-
-	var cw = ctx.canvas.width;
-	var ch = ctx.canvas.height;
 }
 
 
-//desenhar sprites
 function draw_NVL_1(ctx, spArray)
 {
-	var dim = spArray.length;
 
-	for (let i = 0; i < dim; i++)
+	for (let i = 0; i < spArray.length; i++)
 	{
-		// so desenha sprites vivos...
-		if (spArray[i].alive == true) {
+		if (spArray[i].alive) {
 			spArray[i].draw(ctx);
 		}
-		if (spArray[i].alive == false) {
-			console.log("[i] spArray Elements: "+dim);
+		if (!spArray[i].alive) {
 			spArray.splice(i,1);
-			dim = spArray.length;
-			console.log("[f] spArray Elements: "+dim);
 		}
 	}
 
-	// desenha SCORE
 	ctx.font = "15px retro"
 	ctx.fillStyle = "white";
 	ctx.textAlign = "left";
 	var str = "Score: " + countMeteroidsPassed;
-	ctx.fillText(str, 0+5, 0+15);
-}
-
-function updateShipLife(spArray) {
-	// tira 1 vida
-	if (flag_treeLifes == true) {
-		// esperar 1 seg até tirar outra vida
-		setTimeout(function() {
-			flag_twoLifes = true;
-		}, 1000);
-
-		flag_treeLifes = false;
-		// update imagem
-		var sp = searchSprite(spArray, "vida");
-		sp.resizeToLife2(imageRepository.life2);
-	}
-
-	// tira 1 vida
-	else if (flag_twoLifes == true) {
-		// esperar 1 seg até tirar outra vida
-		setTimeout(function() {
-			flag_oneLife = true;
-			}, 1000);
-
-		flag_twoLifes = false;
-		// update imagem
-		var sp = searchSprite(spArray, "vida");
-		sp.resizeToLife1(imageRepository.life1);
-	}
-
-	// game over
-	if (flag_oneLife == true) {
-		GAME_OVER = true;
-	}
+	ctx.fillText(str, 0+7, 0+15);
 }
 
 function VerifyCollision_NVL_1(ctx, spArray) {
-	for (let i=0; i<spArray.length; i++) {
-		// colisoes só para a nave
-		if (spArray[i].getType() == "ship") {
-			for (let j=0; j<meteroidArray.length; j++) {
-				if (spArray[i].verifyIntersect(meteroidArray[j]) == true) {
-					updateShipLife(spArray);
-				}
-			}
+
+	for (let j = 0; j < meteroidArray.length; j++) {
+		if (ship.verifyIntersect(meteroidArray[j])) {
+			updateShipLife(spArray);
 		}
 	}
+
 }
 
-function randomMeteroid() {
-	var array = [imageRepository.meteroid_small, imageRepository.meteroid_big, imageRepository.rocks1, imageRepository.rocks2, imageRepository.rocks3, imageRepository.rocks4, imageRepository.rocks5];
-	var random_met = Math.floor(Math.random()*7);
-
-	return array[random_met];
+function pickRandomMeteroid() {
+	return imageRepository.AsteroidsImgArray[Math.floor(Math.random()*7)];
 }
 
 function drawMeteroids(ctx, meteroidArray) {
-	var meteroid = randomMeteroid();
+
+	var meteroid = pickRandomMeteroid();
 	var nw = meteroid.naturalWidth;
 	var nh = meteroid.naturalHeight;
 
-		// SE CHEGAR AOS 1000 CURRENT_METEROIDS ACABA ESTE NIVEL
-		if(flagCountMeteroidsPassed) {
-			flagCountMeteroidsPassed = false;
-			setTimeout(function() {
-				flagCountMeteroidsPassed = true;
-				countMeteroidsPassedSpeed += 0.1;
-			}, 5000);
+	if(flagCountMeteroidsPassed) {
+		flagCountMeteroidsPassed = false;
+		setTimeout(function() {
+			flagCountMeteroidsPassed = true;
+			countMeteroidsPassedSpeed += 0.1;
+		}, 5000);
+	}
 
-		}
+	if (countMeteroidsPassed == 500) {
+		NVL_WON = true;
+	}
 
-
-		if (countMeteroidsPassed == 500) {
-			NVL_WON = true;
-		}
-
-		var time = 500;
-		if (CURRENT_METEROIDS <= NUM_METEROIDS) {
-			// aumentar meteroids, tempo de spawn...
-
-			if (countMeteroidsPassed <= 100) {
-
-				if (flag_RISE == true) {
-					NUM_METEROIDS += 7;
-					flag_RISE = false;
-				}
-
-			} else if (countMeteroidsPassed <= 200) {
-
-				if (flag_RISE == false) {
-					flag_RISE = true;
-					NUM_METEROIDS += 7;
-				}
-
-			} else if (countMeteroidsPassed <= 300) {
-
-				if (flag_RISE == true) {
-					NUM_METEROIDS += 7;
-					flag_RISE = false;
-				}
-
-			} else {
-
-				if (flag_RISE == false) {
-					flag_RISE = true;
-					NUM_METEROIDS += 7;
-				}
-
-			}
-
-			setTimeout(function() 	{	var sp = new Meteroid(Math.floor(Math.random() * 800), -Math.floor(Math.random()*10 + imageRepository.meteroid.naturalHeight), nw, nh, true, imageRepository.meteroid, "meteroid");
+	if (CURRENT_METEROIDS <= NUM_METEROIDS && flagCURRENT_METEROIDS) {
+			flagCURRENT_METEROIDS = false;
+			setTimeout(function() 	{	var sp = new Meteroid(Math.floor(Math.random() * ctx.canvas.width),
+				 -Math.floor(Math.random()*10 + nh), nw, nh, true, meteroid, "meteroid");
 										meteroidArray.push(sp);
-									}, time+CURRENT_METEROIDS*time);
+									}, 500 + CURRENT_METEROIDS * 500);
+				setTimeout(function() 	{
+					flagCURRENT_METEROIDS = true;
+					CURRENT_METEROIDS++;
+				}, 500 + CURRENT_METEROIDS * 500);
 
-			CURRENT_METEROIDS++;
-		}
+	}
 
-	for (let i=meteroidArray.length-1; i>=0; i--) {
+	for (let i = meteroidArray.length - 1; i >= 0; i--) {
 
 		if (meteroidArray[i].y >= ctx.canvas.height) {
 
-			// SCORE
 			countMeteroidsPassed++;
-			// ----------------------
-
 			// coloca-o novamente em cima
-			meteroidArray[i].x = Math.floor(Math.random() * 800);
-			meteroidArray[i].y = -Math.floor(Math.random()*10 + meteroidArray[i].height);
+			do {
+				meteroidArray[i].x = Math.floor(Math.random() * 800);
+				meteroidArray[i].y = -Math.floor(Math.random()*10 + meteroidArray[i].height);
+			} while(overlapedAsteroid(meteroidArray, meteroidArray[i]));
+
 
 		} else {
 			meteroidArray[i].draw(ctx);
 			meteroidArray[i].y += 3 + countMeteroidsPassedSpeed;
-			console.log(countMeteroidsPassedSpeed)
 		}
 
 	}
+}
+
+function overlapedAsteroid(asteroidArray, asteroid) {
+
+		var overlaped = false
+		for(let ast = 0; ast < asteroidArray.length; ast++) {
+			if(asteroidArray[ast] !== asteroid) {
+				if(asteroidArray[ast].distanceTo(asteroid) < 50) {
+					overlaped = true;
+				}
+			}
+		}
+		return overlaped;
 }

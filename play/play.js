@@ -1,9 +1,6 @@
 "use strict";
 
-(function()
-{
-	window.addEventListener("load", main);
-}());
+var ship;
 
 var spArray = [];
 var nLoad = 0;
@@ -21,9 +18,6 @@ var bulletsArray = [];
 var SIZE_POOL = 20;
 var countBullets = 0;
 
-var NUM_METEROIDS = 8;
-var CURRENT_METEROIDS = 0;
-var meteroidArray = [];
 
 // niveis
 var NVL_1 = true;
@@ -39,33 +33,35 @@ var flag_treeLifes = true;
 var flag_twoLifes = false;
 var flag_oneLife = false;
 
-// [SCORE]
+// LEVEL 1
 var countMeteroidsPassed = 0;
 var flagCountMeteroidsPassed = true;
 var countMeteroidsPassedSpeed = 0;
-var flag_RISE = true;
+var flagCURRENT_METEROIDS = true;
+var NUM_METEROIDS = 12;
+var CURRENT_METEROIDS = 0;
+var meteroidArray = [];
 
 
-function main()
-{
-	var canvas = document.getElementById("canvas");
-	var ctx = canvas.getContext("2d");
-	init(ctx);  //carregar todos os componentes
-
-}
-
-function init(ctx) {
+function init(ctx, nivel) {
 
 	loadSprites(ctx);
-	loadSprites_NVL_Boss(ctx);
-	console.log("OK");
+
+	switch(nivel) {
+		case 2:
+			loadSprites_NVL_2(ctx);
+			break;
+		case 3:
+			loadSprites_NVL_3(ctx);
+			break;
+	}
 
 	window.addEventListener("keydown", keydownHandler);
 	window.addEventListener("keyup", keyupHandler);
 
-	var ship = searchSprite(spArray, "bom");
 
 	function keydownHandler(ev) {
+
 		if (ev.keyCode == 37 || ev.keyCode == 65)
 			LEFT = true;
 		else if (ev.keyCode == 39 || ev.keyCode == 68)
@@ -75,17 +71,15 @@ function init(ctx) {
 		else if (ev.keyCode == 40 || ev.keyCode == 83)
 			DOWN = true;
 		else if (ev.keyCode == 32) {
-			// espaço de tempo entre tiros
-			if (flag_space == true) {
+			if (flag_space) {
 				flag_space = false;
 				shoot(ctx, spArray, bulletsArray, ship, "bullet", 3);
 				setTimeout(function(){ flag_space = true; }, 500);
 			}
 		}
 		else if (ev.keyCode == 77) {
-			console.log("dispara missil");
-			// espaço de tempo entre tiros
-			if (flag_missile == true) {
+
+			if (flag_missile) {
 				flag_missile = false;
 				shoot(ctx, spArray, bulletsArray, ship, "missile", 3);
 				setTimeout(function(){ flag_missile = true; }, 500);
@@ -107,13 +101,13 @@ function init(ctx) {
 		ship.changeImg(imageRepository.shipDown);
 		ship.width = imageRepository.shipDown.naturalWidth;
 		ship.height = imageRepository.shipDown.naturalHeight;
+
 	}
 
-	animLoop(ctx, spArray, bulletsArray);
+	animLoop(ctx, spArray, bulletsArray, nivel);
 }
 
 function loadSprites(ctx) {
-	// carregar sprites
 
 	var cw = ctx.canvas.width;
 	var ch = ctx.canvas.height;
@@ -137,20 +131,14 @@ function loadSprites(ctx) {
 
 	var nw = imageRepository.shipDown.naturalWidth;
 	var nh = imageRepository.shipDown.naturalHeight;
-	var ship = new Ship(cw/2, ch-ch/6, nw, nh, 4, true, imageRepository.shipDown, life, shield, 1000, "bom");
+	ship = new Ship(cw/2, ch-ch/6, nw, nh, 4, true, imageRepository.shipDown, life, shield, 1000, "bom");
 	spArray[nLoad] = ship;
 	nLoad++;
 
 }
 
-
-//apagar sprites
-function clear(ctx, spArray)
-{
-	var dim = spArray.length;
-
-	for (let i = 0; i < dim; i++)
-	{
+function clear(ctx, spArray) {
+	for (let i = 0; i < spArray.length; i++) {
 		spArray[i].clear(ctx);
 	}
 }
@@ -159,70 +147,25 @@ function clear(ctx, spArray)
 //--- controlo da animação: coração da aplicação!!!
 //-------------------------------------------------------------
 var auxDebug = 0;  //eliminar
-function animLoop(ctx, spArray, bulletsArray)
-{
+function animLoop(ctx, spArray, bulletsArray, nivel) {
 
 	var al = function(time)
 	{
-		animLoop(ctx, spArray, bulletsArray);
+		animLoop(ctx, spArray, bulletsArray, nivel);
 	}
 	var reqID = window.requestAnimationFrame(al);
 
-	if (NVL_WON == true) {
-		// mudar de nivel
-		NVL_WON = false;
 
-
-		if (goToLvl == 2) {
-			NVL_1 = false;
-			NVL_2 = false;
-			NVL_3 = true;
-			NVL_Boss = false;
-			console.log("ganhou");
-			searchSprite(spArray, "bom").setPosition();
-
-			loadSprites_NVL_3(ctx);
-			goToLvl+=2;
-
-		}/*
-		else if (goToLvl == 3) {
-			NVL_1 = false;
-			NVL_2 = false;
-			NVL_3 = true;
-			NVL_Boss = false;
-
-			setTimeout(function() {
-				loadSprites_NVL_3(ctx);
-				goToLvl++;
-			}, 2000);
-		}*/
-		else if (goToLvl == 4) {
-			NVL_1 = false;
-			NVL_2 = false;
-			NVL_3 = false;
-			NVL_Boss = true;
-			loadSprites_NVL_Boss(ctx);
-			goToLvl++;
-/*
-			setTimeout(function() {
-				loadSprites_NVL_Boss(ctx);
-				goToLvl++;
-			}, 2000);*/
-		}
+	if (!GAME_OVER) {
+		render(ctx, spArray, bulletsArray, reqID, nivel);
 	}
 
-	else if (GAME_OVER == false) {
-		render(ctx, spArray, bulletsArray, reqID);
-	}
-	// game over
-	else if (GAME_OVER == true) {
+	else if (GAME_OVER) {
 
 		ctx.font = "20px retro";
 		ctx.fillStyle = "White";
 		ctx.textAlign = "center";
 		ctx.fillText("GAME OVER", ctx.canvas.width/2, ctx.canvas.height/2);
-
-		ctx.font= "20px retro";
 		ctx.fillText("[ENTER] to restart", ctx.canvas.width/2, ctx.canvas.height/2+30);
 		ctx.fillText("[ESC] back to menu", ctx.canvas.width/2, ctx.canvas.height/2+60);
 
@@ -236,8 +179,7 @@ function animLoop(ctx, spArray, bulletsArray)
 }
 
 function restartGame(ev, ctx, spArray) {
-	console.log(ev.keyCode);
-	// reinicia jogo
+
 	if (ev.keyCode == 13) {
 		document.location.reload();
 	}
@@ -248,54 +190,81 @@ function restartGame(ev, ctx, spArray) {
 	}
 }
 
-function moveShip(ctx, spArray) {
-	var sp = spArray[2];
-	//console.log(sp);
+function moveShip(ctx, shipArray) {
 
 	if (LEFT) {
-		//sp.x -= sp.speed;
-		if (sp.x >= 0) {
-			sp.changeImg(imageRepository.shipLeft);
-			sp.width = imageRepository.shipLeft.naturalWidth;
-			sp.height = imageRepository.shipLeft.naturalHeight;
-	     	sp.moveLeft();
+		if (ship.x >= 0) {
+			ship.changeImg(imageRepository.shipLeft);
+			ship.width = imageRepository.shipLeft.naturalWidth;
+			ship.height = imageRepository.shipLeft.naturalHeight;
+	    ship.moveLeft();
 		}
 	}
     if (RIGHT) {
-    	//sp.x += sp.speed;
-    	if (sp.x + sp.width < ctx.canvas.width) {
-    		sp.changeImg(imageRepository.shipRight);
-    		sp.width = imageRepository.shipRight.naturalWidth;
-			sp.height = imageRepository.shipRight.naturalHeight;
-	     	sp.moveRight();
+    	if (ship.x + ship.width < ctx.canvas.width) {
+    		ship.changeImg(imageRepository.shipRight);
+    		ship.width = imageRepository.shipRight.naturalWidth;
+			ship.height = imageRepository.shipRight.naturalHeight;
+	     	ship.moveRight();
     	}
     }
     if (UP) {
-    	//sp.y -= sp.speed;
-    	if (sp.y >= 0) {
-    		sp.changeImg(imageRepository.shipUp);
-    		sp.width = imageRepository.shipUp.naturalWidth;
-			sp.height = imageRepository.shipUp.naturalHeight;
-	     	sp.moveUp();
+    	if (ship.y >= 0) {
+    		ship.changeImg(imageRepository.shipUp);
+    		ship.width = imageRepository.shipUp.naturalWidth;
+			  ship.height = imageRepository.shipUp.naturalHeight;
+	     	ship.moveUp();
     	}
     }
     if (DOWN) {
-    	//sp.y += sp.speed;
-    	if (sp.y + sp.height < ctx.canvas.height) {
-    		sp.changeImg(imageRepository.shipDown);
-    		sp.width = imageRepository.shipDown.naturalWidth;
-			sp.height = imageRepository.shipDown.naturalHeight;
-	     	sp.moveDown();
+    	if (ship.y + ship.height < ctx.canvas.height) {
+    		ship.changeImg(imageRepository.shipDown);
+    		ship.width = imageRepository.shipDown.naturalWidth;
+			  ship.height = imageRepository.shipDown.naturalHeight;
+	     	ship.moveDown();
     	}
     }
 }
 
-function render(ctx, spArray, bulletsArray, reqID, dt)
+function updateShipLife(spArray) {
+	// tira 1 vida
+	if (flag_treeLifes == true) {
+		// esperar 1 seg até tirar outra vida
+		setTimeout(function() {
+			flag_twoLifes = true;
+		}, 150);
+
+		flag_treeLifes = false;
+		// update imagem
+		var sp = searchSprite(spArray, "vida");
+		sp.resizeToLife2(imageRepository.life2);
+	}
+
+	// tira 1 vida
+	else if (flag_twoLifes == true) {
+		// esperar 1 seg até tirar outra vida
+		setTimeout(function() {
+			flag_oneLife = true;
+		}, 150);
+
+		flag_twoLifes = false;
+		// update imagem
+		var sp = searchSprite(spArray, "vida");
+		sp.resizeToLife1(imageRepository.life1);
+	}
+
+	// game over
+	if (flag_oneLife == true) {
+		GAME_OVER = true;
+	}
+}
+
+function render(ctx, spArray, bulletsArray, reqID, nivel)
 {
 	var cw = ctx.canvas.width;
 	var ch = ctx.canvas.height;
 
-	if (NVL_1 == true) {
+	if (nivel == 1) {
 
 		// move nave
 		moveShip(ctx, spArray);
@@ -308,23 +277,17 @@ function render(ctx, spArray, bulletsArray, reqID, dt)
 		//move background
 		backgroundMoving(ctx, spArray);
 
-		draw_NVL_1(ctx, spArray)
+		draw_NVL_1(ctx, spArray);
 
 		drawMeteroids(ctx, meteroidArray);
+
 	}
 
-	else if (NVL_2 == true) {
+	else if (nivel == 2) {
 
-
-		// move nave
 		moveShip(ctx, spArray);
-		// gere balas
-		moveBullets(ctx, bulletsArray);
 
-		//moveMeteroids(ctx, meteroidArray);
-
-		// verifica colisao
-		VerifyCollision_NVL_2(ctx, spArray, bulletsArray);
+		VerifyCollision_NVL_2(ctx, spArray);
 
 		//apagar canvas
 		ctx.clearRect(0, 0, cw, ch);
@@ -332,14 +295,16 @@ function render(ctx, spArray, bulletsArray, reqID, dt)
 		backgroundMoving(ctx, spArray);
 
 		draw_NVL_2(ctx, spArray);
-
-		drawBullets(ctx, bulletsArray);
 	}
 
-	else if (NVL_3 == true) {
+	else if (nivel == 3) {
+				// movenave
 		moveShip(ctx, spArray);
+		// gere balas
+		moveBullets(ctx, bulletsArray);
 
-		VerifyCollision_NVL_3(ctx, spArray);
+		// verifica colisao
+		VerifyCollision_NVL_3(ctx, spArray, bulletsArray);
 
 		//apagar canvas
 		ctx.clearRect(0, 0, cw, ch);
@@ -347,22 +312,6 @@ function render(ctx, spArray, bulletsArray, reqID, dt)
 		backgroundMoving(ctx, spArray);
 
 		draw_NVL_3(ctx, spArray);
-	}
-	else if (NVL_Boss == true) {
-				// move nave
-		moveShip(ctx, spArray);
-		// gere balas
-		moveBullets(ctx, bulletsArray);
-
-		// verifica colisao
-		VerifyCollision_NVL_Boss(ctx, spArray, bulletsArray);
-
-		//apagar canvas
-		ctx.clearRect(0, 0, cw, ch);
-		//move background
-		backgroundMoving(ctx, spArray);
-
-		draw_NVL_Boss(ctx, spArray);
 
 		drawBullets(ctx, bulletsArray);
 	}
@@ -400,7 +349,7 @@ function moveBullets(ctx, bulletsArray) {
 				// retirar do array
 				pool.splice(i, 1);
 				countBullets--;
-				console.log("retirou...");
+
 			}
 			else {
 				pool[i].y -= pool[i].speed;
