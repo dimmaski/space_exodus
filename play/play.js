@@ -175,15 +175,11 @@ function animLoop(ctx, spArray, bulletsArray)
 			NVL_3 = true;
 			NVL_Boss = false;
 			console.log("ganhou");
+			searchSprite(spArray, "bom").setPosition();
 
 			loadSprites_NVL_3(ctx);
 			goToLvl+=2;
-/*
-			// wait 2 sec..
-			setTimeout(function() {
-				loadSprites_NVL_3(ctx);
-				goToLvl+=2;
-			}, 2000);*/
+
 		}/*
 		else if (goToLvl == 3) {
 			NVL_1 = false;
@@ -298,6 +294,7 @@ function render(ctx, spArray, bulletsArray, reqID, dt)
 
 		//apagar canvas
 		ctx.clearRect(0, 0, cw, ch);
+
 		//move background
 		backgroundMoving(ctx, spArray);
 
@@ -307,6 +304,8 @@ function render(ctx, spArray, bulletsArray, reqID, dt)
 	}
 
 	else if (NVL_2 == true) {
+
+
 		// move nave
 		moveShip(ctx, spArray);
 		// gere balas
