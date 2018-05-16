@@ -222,7 +222,7 @@ function VerifyCollision_NVL_3(ctx, spArray) {
 /*
                                 for (let i=0; i<spArray.length; i++)
                                     console.log(spArray[i].name)
-                                spawnBoosts(0, 600, 200, 600, "shield", 1000);*//
+                                spawnBoosts(0, 600, 200, 600, "shield", 1000);*/
                             }
                         }
                     }
