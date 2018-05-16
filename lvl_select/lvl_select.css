@@ -1,0 +1,129 @@
+@font-face {
+    font-family: retro;
+    src: url(PressStart2P.ttf) format("truetype");
+}
+
+p {
+    font-family: retro;
+}
+
+#game {
+  background: no-repeat;
+  position: relative;
+  width: 800px;
+  height: 600px;
+  background-image: url('../resources/backgrounds/bg_title.jpg');
+}
+
+img1 {
+  background: no-repeat;
+  position: relative;
+  width: 60%;
+  height: 60%;
+
+}
+
+a {
+    text-decoration: none;
+    background-color: none;
+    color:white;
+
+}
+
+nav {
+  visibility: visible;
+  display: block;
+	margin-right: auto;
+	margin-left: auto;
+  font-size: 20px;
+  color: white;
+  line-height: 0.6;
+  font-weight: 400;
+  opacity: 0.91;
+  text-align: center;
+}
+
+div1 {
+  position: absolute;
+  top: 47%;
+  left: 15%;
+
+}
+
+div2 {
+  position: absolute;
+  top: 47%;
+  left: 67%;
+}
+
+div3 {
+  position: absolute;
+  top: 90%;
+  left: 62%;
+}
+
+div4 {
+  position: absolute;
+  top: 92%;
+  left: 2%;
+}
+
+div5 {
+  position: absolute;
+  top: 93%;
+  left: 88%;
+}
+
+div1_img {
+  position: absolute;
+  top: 14%;
+  left: 5%;
+  width: 35%;
+  height: 35%;
+  background-image: url('../resources/backgrounds/nvl1.jpg');
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+div2_img {
+  position: absolute;
+  top: 14%;
+  left: 55%;
+  width: 35%;
+  height: 35%;
+  background-image: url('../resources/backgrounds/nvl2.jpg');
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+div3_img {
+  position: absolute;
+  top: 57%;
+  left: 55%;
+  width: 35%;
+  height: 35%;
+  background-image: url('../resources/backgrounds/nvl_boss.jpg');
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+
+
+button:hover {
+  font-size: 30%;
+  transform: scale(1.1);
+
+}
+
+#soundbutton{
+    padding: 25px 25px;
+    background-image: url("../resources/menu_inicial/sound2.png");
+    background-color: Transparent;
+    position: relative;
+    background-repeat: no-repeat;
+    border: none;
+    display: block;
+    left: 93%;
+    top: 88%;
+
+}
