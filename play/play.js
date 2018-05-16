@@ -212,14 +212,13 @@ function animLoop(ctx, spArray, bulletsArray)
 	}
 	// game over
 	else if (GAME_OVER == true) {
-		ctx.font = "40px Comic Sans MS"
-		ctx.fillStyle = "red";
+
+		ctx.font = "20px retro";
+		ctx.fillStyle = "White";
 		ctx.textAlign = "center";
 		ctx.fillText("GAME OVER", ctx.canvas.width/2, ctx.canvas.height/2);
 
-		ctx.font = "20px Comic Sans MS"
-		//ctx.fillStyle = "red";
-		//ctx.textAlign = "center";
+		ctx.font= "20px retro";
 		ctx.fillText("[ENTER] to restart", ctx.canvas.width/2, ctx.canvas.height/2+30);
 		ctx.fillText("[ESC] back to menu", ctx.canvas.width/2, ctx.canvas.height/2+60);
 

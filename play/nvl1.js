@@ -36,7 +36,7 @@ function draw_NVL_1(ctx, spArray)
 	}
 
 	// desenha SCORE
-	ctx.font = "15px Comic Sans MS"
+	ctx.font = "15px retro"
 	ctx.fillStyle = "white";
 	ctx.textAlign = "left";
 	var str = "Score: " + countMeteroidsPassed;
@@ -154,7 +154,7 @@ function drawMeteroids(ctx, meteroidArray) {
 
 		} else {
 			meteroidArray[i].draw(ctx);
-			meteroidArray[i].y += 4;
+			meteroidArray[i].y += 2;
 		}
 
 	}
