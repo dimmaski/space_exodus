@@ -4,27 +4,29 @@
 	<title>Space Exodus</title>
 	<meta charset = "utf-8">
 	<link rel="stylesheet" type="text/css" href="space_exodus.css">
+	<script type="text/javascript" src="startpage.js" defer="true"></script>
 </head>
 
 <body>
+
  	<div id = "game">
+	<!--
 		<audio controls autoplay hidden>
 			<source src="../resources/sounds/menu.mp3" type="audio/mpeg">
 			Your browser does not support the audio element.
 		</audio>
+	-->
+		<button id="sound"></button>
+
 		<nav>
-			<a href="../play/play.html"></button><p>Play</p></a>
-			<a href="../history/history.html"><p>History</p></button></a>
-			<a href="../credits/credits.html"><p>Controls</p></button></a>
-			<a href="../controls/controls.html"><p>Credits</p></button></a>
-			<p>Exit</p></button>
+			<a href="../play/nvl1.html"></button><p id="play">Play</p></a>
+			<a href="../history/history.html"><p id="history">History</p></button></a>
+			<a href="../credits/credits.html"><p id="controls">Controls</p></button></a>
+			<a href="../controls/controls.html"><p id="credits">Credits</p></button></a>
+			<p id="exit">Exit</p></button>
 		</nav>
 
-		<button id = "soundbutton"></button>
-	</div>
 
-	<script>
-		document.getElementById("soundbutton").innerHTML = "My First JavaScript";
-	</script>
+	</div>
 
 </body>

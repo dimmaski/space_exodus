@@ -5,7 +5,7 @@
 
 p {
     font-family: retro;
-    font-size: 38px;
+    font-size: 35px;
 }
 
 #game {
@@ -53,7 +53,7 @@ button:hover {
 
 }
 
-#soundbutton{
+#sound{
     padding: 25px 25px;
     background-image: url("../resources/menu_inicial/sound2.png");
     background-color: Transparent;
