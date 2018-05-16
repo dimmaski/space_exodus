@@ -13,6 +13,11 @@ class Sprite
 		this.imageData = this.getImageData(img);
 	}
 
+	setPosition() {
+		this.y = 500;
+		this.x = 400;
+	}
+
 	getImageData(img){
 			var canvasnova = document.createElement("canvas");
 			canvasnova.width = this.width;

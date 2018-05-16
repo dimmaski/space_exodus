@@ -177,15 +177,11 @@ function animLoop(ctx, spArray, bulletsArray)
 			NVL_3 = true;
 			NVL_Boss = false;
 			console.log("ganhou");
+			searchSprite(spArray, "bom").setPosition();
 
 			loadSprites_NVL_3(ctx);
 			goToLvl+=2;
-/*
-			// wait 2 sec..
-			setTimeout(function() {
-				loadSprites_NVL_3(ctx);
-				goToLvl+=2;
-			}, 2000);*/
+
 		}/*
 		else if (goToLvl == 3) {
 			NVL_1 = false;
@@ -218,14 +214,13 @@ function animLoop(ctx, spArray, bulletsArray)
 	}
 	// game over
 	else if (GAME_OVER == true) {
-		ctx.font = "40px Comic Sans MS"
-		ctx.fillStyle = "red";
+
+		ctx.font = "20px retro";
+		ctx.fillStyle = "White";
 		ctx.textAlign = "center";
 		ctx.fillText("GAME OVER", ctx.canvas.width/2, ctx.canvas.height/2);
 
-		ctx.font = "20px Comic Sans MS"
-		//ctx.fillStyle = "red";
-		//ctx.textAlign = "center";
+		ctx.font= "20px retro";
 		ctx.fillText("[ENTER] to restart", ctx.canvas.width/2, ctx.canvas.height/2+30);
 		ctx.fillText("[ESC] back to menu", ctx.canvas.width/2, ctx.canvas.height/2+60);
 
@@ -308,6 +303,7 @@ function render(ctx, spArray, bulletsArray, reqID, dt)
 
 		//apagar canvas
 		ctx.clearRect(0, 0, cw, ch);
+
 		//move background
 		backgroundMoving(ctx, spArray);
 
@@ -317,6 +313,8 @@ function render(ctx, spArray, bulletsArray, reqID, dt)
 	}
 
 	else if (NVL_2 == true) {
+
+
 		// move nave
 		moveShip(ctx, spArray);
 		// gere balas
