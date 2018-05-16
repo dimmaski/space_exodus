@@ -106,6 +106,7 @@ function playScript(string, time, ctx, hero, villain, backgroud) {
 		interrupt = false;
 
 	}
+}
 
 
 

@@ -89,10 +89,17 @@ function VerifyCollision_NVL_1(ctx, spArray) {
 	}
 }
 
-function drawMeteroids(ctx, meteroidArray) {
+function randomMeteroid() {
+	var array = [imageRepository.meteroid_small, imageRepository.meteroid_big, imageRepository.rocks1, imageRepository.rocks2, imageRepository.rocks3, imageRepository.rocks4, imageRepository.rocks5];
+	var random_met = Math.floor(Math.random()*7);
 
-		var nw = imageRepository.meteroid.naturalWidth;
-		var nh = imageRepository.meteroid.naturalHeight;
+	return array[random_met];
+}
+
+function drawMeteroids(ctx, meteroidArray) {
+	var meteroid = randomMeteroid();
+	var nw = meteroid.naturalWidth;
+	var nh = meteroid.naturalHeight;
 
 		// SE CHEGAR AOS 1000 CURRENT_METEROIDS ACABA ESTE NIVEL
 		if(flagCountMeteroidsPassed) {
@@ -101,6 +108,7 @@ function drawMeteroids(ctx, meteroidArray) {
 				flagCountMeteroidsPassed = true;
 				countMeteroidsPassedSpeed += 0.1;
 			}, 5000);
+
 		}
 
 
