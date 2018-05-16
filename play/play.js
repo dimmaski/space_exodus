@@ -6,7 +6,7 @@
 }());
 
 var spArray = [];
-var nLoad=0;
+var nLoad = 0;
 
 var LEFT = false;
 var RIGHT = false;
@@ -21,9 +21,9 @@ var bulletsArray = [];
 var SIZE_POOL = 20;
 var countBullets = 0;
 
-var NUM_METEROIDS=8;
-var CURRENT_METEROIDS=0;
-var meteroidArray=[];
+var NUM_METEROIDS = 8;
+var CURRENT_METEROIDS = 0;
+var meteroidArray = [];
 
 // niveis
 var NVL_1 = true;
@@ -40,7 +40,9 @@ var flag_twoLifes = false;
 var flag_oneLife = false;
 
 // [SCORE]
-var countMeteroidsPassed=0;
+var countMeteroidsPassed = 0;
+var flagCountMeteroidsPassed = true;
+var countMeteroidsPassedSpeed = 0;
 var flag_RISE = true;
 
 
@@ -278,7 +280,6 @@ function moveShip(ctx, spArray) {
     }
 }
 
-//resedenho, actualizações, ...
 function render(ctx, spArray, bulletsArray, reqID, dt)
 {
 	var cw = ctx.canvas.width;

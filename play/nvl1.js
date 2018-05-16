@@ -94,31 +94,39 @@ function drawMeteroids(ctx, meteroidArray) {
 		var nw = imageRepository.meteroid.naturalWidth;
 		var nh = imageRepository.meteroid.naturalHeight;
 
-		// SE CHEGAR AOS 100 CURRENT_METEROIDS ACABA ESTE NIVEL
-		if (countMeteroidsPassed == 10) {
-			NVL_WON = true;
+		// SE CHEGAR AOS 1000 CURRENT_METEROIDS ACABA ESTE NIVEL
+		if(flagCountMeteroidsPassed) {
+			flagCountMeteroidsPassed = false;
+			setTimeout(function() {
+				flagCountMeteroidsPassed = true;
+				countMeteroidsPassedSpeed += 0.1;
+			}, 5000);
 		}
 
+
+		if (countMeteroidsPassed == 500) {
+			NVL_WON = true;
+		}
 
 		var time = 500;
 		if (CURRENT_METEROIDS <= NUM_METEROIDS) {
 			// aumentar meteroids, tempo de spawn...
 
-			if (countMeteroidsPassed <= 25) {
+			if (countMeteroidsPassed <= 100) {
 
 				if (flag_RISE == true) {
 					NUM_METEROIDS += 7;
 					flag_RISE = false;
 				}
 
-			} else if (countMeteroidsPassed <= 50) {
+			} else if (countMeteroidsPassed <= 200) {
 
 				if (flag_RISE == false) {
 					flag_RISE = true;
 					NUM_METEROIDS += 7;
 				}
 
-			} else if (countMeteroidsPassed <= 75) {
+			} else if (countMeteroidsPassed <= 300) {
 
 				if (flag_RISE == true) {
 					NUM_METEROIDS += 7;
@@ -134,7 +142,7 @@ function drawMeteroids(ctx, meteroidArray) {
 
 			}
 
-			setTimeout(function() 	{	var sp = new Meteroid(Math.floor(Math.random() * 700 + 100), -Math.floor(Math.random()*10 + imageRepository.meteroid.naturalHeight), nw, nh, true, imageRepository.meteroid, "meteroid");
+			setTimeout(function() 	{	var sp = new Meteroid(Math.floor(Math.random() * 800), -Math.floor(Math.random()*10 + imageRepository.meteroid.naturalHeight), nw, nh, true, imageRepository.meteroid, "meteroid");
 										meteroidArray.push(sp);
 									}, time+CURRENT_METEROIDS*time);
 
@@ -147,14 +155,16 @@ function drawMeteroids(ctx, meteroidArray) {
 
 			// SCORE
 			countMeteroidsPassed++;
+			// ----------------------
 
 			// coloca-o novamente em cima
-			meteroidArray[i].x = Math.floor(Math.random() * 700 + 100);
+			meteroidArray[i].x = Math.floor(Math.random() * 800);
 			meteroidArray[i].y = -Math.floor(Math.random()*10 + meteroidArray[i].height);
 
 		} else {
 			meteroidArray[i].draw(ctx);
-			meteroidArray[i].y += 2;
+			meteroidArray[i].y += 3 + countMeteroidsPassedSpeed;
+			console.log(countMeteroidsPassedSpeed)
 		}
 
 	}
