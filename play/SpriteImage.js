@@ -13,6 +13,10 @@ class Sprite
 		this.imageData = this.getImageData(img);
 	}
 
+	distanceTo(object) {
+		return Math.sqrt( Math.pow((this.x - object.x),2) + Math.pow((this.y - object.y),2));
+	}
+
 	setPosition() {
 		this.y = 500;
 		this.x = 400;

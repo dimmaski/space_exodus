@@ -21,9 +21,6 @@ var bulletsArray = [];
 var SIZE_POOL = 20;
 var countBullets = 0;
 
-var NUM_METEROIDS = 8;
-var CURRENT_METEROIDS = 0;
-var meteroidArray = [];
 
 // niveis
 var NVL_1 = true;
@@ -39,11 +36,14 @@ var flag_treeLifes = true;
 var flag_twoLifes = false;
 var flag_oneLife = false;
 
-// [SCORE]
+// LEVEL 1
 var countMeteroidsPassed = 0;
 var flagCountMeteroidsPassed = true;
 var countMeteroidsPassedSpeed = 0;
-var flag_RISE = true;
+var flagCURRENT_METEROIDS = true;
+var NUM_METEROIDS = 12;
+var CURRENT_METEROIDS = 0;
+var meteroidArray = [];
 
 
 function main()
@@ -57,7 +57,7 @@ function main()
 function init(ctx) {
 
 	loadSprites(ctx);
-	loadSprites_NVL_Boss(ctx);
+	loadSprites_NVL_1(ctx);
 	console.log("OK");
 
 	window.addEventListener("keydown", keydownHandler);
@@ -308,9 +308,10 @@ function render(ctx, spArray, bulletsArray, reqID, dt)
 		//move background
 		backgroundMoving(ctx, spArray);
 
-		draw_NVL_1(ctx, spArray)
+		draw_NVL_1(ctx, spArray);
 
 		drawMeteroids(ctx, meteroidArray);
+
 	}
 
 	else if (NVL_2 == true) {

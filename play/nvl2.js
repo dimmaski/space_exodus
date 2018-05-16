@@ -5,127 +5,250 @@
 	window.addEventListener("load", main);
 }());
 
-
+var arrayEnemyShips=[];
+var flag = true;
+var numEnemyShips = 8;
+var xlimitIni=1000, xLimitEnd=0;
+var goLeft=false;
+var conta=0;
+var flagAtualiza=true;
+var timeBetweenShotsFromEnemy=2000;
+var flagNextWave=false;
 
 function loadSprites_NVL_2(ctx) {
 
-	NVL_1 = false;
- 	NVL_2 = true;
-	NVL_3 = false;
+	spawnWave(ctx, arrayEnemyShips);
 
+}
+
+function spawnWave(ctx, arrayEnemyShips) {
 	var cw = ctx.canvas.width;
 	var ch = ctx.canvas.height;
 
 	var nw = imageRepository.shipEnemy.naturalWidth;
 	var nh = imageRepository.shipEnemy.naturalHeight;
-	var sp = new ShipEnemy(cw/2, 200, nw, nh, 3, true, imageRepository.shipEnemy, 1000, "mau");
-	spArray[nLoad] = sp;
-	nLoad++;
+	var x=10, y=10, xIni=10, yIni=10, shipsHorizontalLimit=3;
+	var changeRow=false, changeColumn=false;
+	var countShips=0;
 
-	var nw = imageRepository.shield_star.naturalWidth;
-	var nh = imageRepository.shield_star.naturalHeight;
-	var sp = new Boost(300, 300, nw, nh, true, imageRepository.shield_star, "shield_star");
-	spArray[nLoad] = sp;
-	nLoad++;
+
+	for (let i=0; i<numEnemyShips; i++) {
+		// limite horizontal de naves
+		if (countShips > shipsHorizontalLimit) {
+			changeColumn = true;
+			changeRow = true;
+			countShips = 0;
+		}
+
+		if (changeRow == false) {
+			x += nw+xIni;
+
+		}
+
+		if (changeColumn == true) {
+			y += nh+yIni;
+			// reset X
+			x = 2*xIni+nw;
+
+			changeColumn = false;
+			changeRow = false;
+		}
+
+		var sp = new ShipEnemy(x, y, nw, nh, 3, true, imageRepository.shipEnemy, 1000, "dispara");
+		arrayEnemyShips.push(sp);
+		countShips++;
+	}
 }
 
 
-function draw_NVL_2(ctx, spArray) 
-{	
-	var dim = spArray.length;
+function draw_NVL_2(ctx, spArray) {
+	var ship = searchSprite(spArray, "bom");
 
-	for (let i = 0; i < dim; i++)
-	{
-		// so desenha sprites vivos...
+	for (let i=0; i<spArray.length; i++) {
 		if (spArray[i].alive == true) {
+
+			if (spArray[i].name == "bom") {
+				drawBullets(ctx, spArray[i].bulletsArray);
+				moveBullets(ctx, spArray[i].bulletsArray);
+			}
 			spArray[i].draw(ctx);
+		}
 
-			if (spArray[i].getType() == "ship") {
 
-				if (spArray[i].getDamageLenght() != 0) {
-					for (let j=0; j<spArray[i].getDamageLenght(); j++) {
+		else if (spArray[i].alive == false) {
+			console.log("[i] spArray Elements: "+dim);
+			spArray.splice(i,1);
+			console.log("[f] spArray Elements: "+dim);
+		}
+	}
 
-						if (spArray[i].damage[j].alive == true)
-							spArray[i].damage[j].drawDamage(ctx);
-						else
-							spArray[i].damage.splice(j, 1);
-					}
-				}
-				else if (spArray[i].shield == true)	{
-					spArray[i].objShield.draw(ctx);
-					spArray[i].objShield.followCoor(spArray[i].x, spArray[i].y);
-				}	
+	if (flagNextWave == false) {
+		for (let i=arrayEnemyShips.length-1; i>=0; i--) {
+			if (arrayEnemyShips[i].alive == true) {
+				moveEnemyShips(ctx, arrayEnemyShips[i]);
+				moveBulletsEnemy(ctx, arrayEnemyShips[i].bulletsArray);
+				drawBullets(ctx, arrayEnemyShips[i].bulletsArray);
+				arrayEnemyShips[i].draw(ctx);
+			}
+			else {
+				if (arrayEnemyShips.length <= 1)
+					flagNextWave=true;
+				arrayEnemyShips.splice(i,1);
 			}
 		}
-		if (spArray[i].alive == false) {
-				console.log("[i] spArray Elements: "+dim);
-				spArray.splice(i,1);
-				dim = spArray.length;
-				console.log("[f] spArray Elements: "+dim);
+
+		if (flag == true) {
+			setTimeout(function() {
+				shootFromEnemy(ctx, arrayEnemyShips);
+				flag = true;
+			}, timeBetweenShotsFromEnemy);
+
+			flag = false;
+		}
+	}
+	else {
+		// spawn outra wave
+		if (flagNextWave == true && numEnemyShips > 4) {
+			numEnemyShips-=4;
+			timeBetweenShotsFromEnemy-=500;
+			spawnWave(ctx, arrayEnemyShips);
+			flagNextWave=false;
+		}
+		else {
+			console.log("nextlevel");
+			NVL_WON = true;
 		}
 	}
 }
 
 
-// colisoes
-function VerifyCollision_NVL_2(ctx, spArray, bulletsArray) {
+function VerifyCollision_NVL_2(ctx, spArray) {
+	for (let i=0; i<arrayEnemyShips.length; i++) {
+			var enemyShip = arrayEnemyShips[i];
+			var ourShip = searchSprite(spArray, "bom");
 
-	// percorrer figura e ve bounding box
-	for (let i=0; i<spArray.length; i++) {
-		// colisoes só para a nave	
-		if (spArray[i].getType() == "ship") {
-			for (let j=i+1; j<spArray.length; j++) {	
-				if (spArray[i].verifyIntersect(spArray[j]) == true) {
-					// verifica interseção com boosts
-					// se acerta na estrela
-					if (spArray[j].getType() == "boost") {
-						if (spArray[j].name == "shield_star" && spArray[i].shield == false) {
-							// ativa shield
-							spArray[i].changeShieldState(2000);
-							// muda flag de duração do shield
-							setTimeout(function(){ spArray[i].shield = false; }, spArray[i].shieldDuration);
-							// remove
-							spArray[j].alive = false;
-						}
-					}
-					else if (spArray[i].shield == false) {
-						console.log("^^_^^");
-						// tira vida
-						if (spArray[i].name == "bom") {
-							var dmg = 80;
-							spArray[i].life -= dmg;
-							spArray[i].updateLife(dmg, imageRepository.life2, imageRepository.life1);
-						}
-					}
-				}
+			// interseção entre naves
+			if (ourShip.verifyIntersect(enemyShip) == true) {
+				GAME_OVER = true;
+				console.log("toca")
 			}
-		}	
-		if (spArray[i].getType() != "background" && spArray[i].getType() != "backgroundObject") {
-			// se houver balas e for diferente da nave que disparou	
-			if (bulletsArray.length != 0 && spArray[i].img.id == "shipEnemy") {
-				for (let k=0; k<bulletsArray.length; k++) {
-					if (bulletsArray[k].verifyIntersect(spArray[i]) == true) {
+			// interseção das balas com nave "mau"
+			// se houver balas e for diferente da nave que disparou
+			if (ourShip.bulletsArray.length != 0) {
+				for (let k=0; k<ourShip.bulletsArray.length; k++) {
+					if (ourShip.bulletsArray[k].verifyIntersect(enemyShip) == true) {
 						// "matar" bullet
-						bulletsArray[k].alive = false;
-						console.log("puummm e pshhhhhhh");
+						ourShip.bulletsArray[k].alive = false;
 
-						if (bulletsArray[k].damage < spArray[i].life) {
-							// >> funcoes a fazer para quando ocorre colisao
-							changeColorDamage(ctx, spArray, i);
-							// muda de cor apos 0.5seg e se a vida tirada for menor que a vida atual da nave
-							setTimeout(changeColor, 500, ctx, spArray, i); 
-						}
+						enemyShip.img = imageRepository.explosion;
 
-						// --- DANO ---
-						// balas que acertaram na nave
-						// passar info para esse objeto
-						spArray[i].damage.push(new Damage(spArray[i].x, spArray[i].y, spArray[i].width, spArray[i].height, bulletsArray[k].damage));	
-
-						// retirar dano
-						spArray[i].RemoveLife(bulletsArray[k].damage);							
+						setTimeout(function() {
+							arrayEnemyShips[i].alive = false;
+						}, 25);
 					}
 				}
 			}
-		}	
+			// interseção das balas com nave "bom"
+			// se houver balas e for diferente da nave que disparou
+			if (enemyShip.bulletsArray.length != 0) {
+				for (let k=0; k<enemyShip.bulletsArray.length; k++) {
+					if (enemyShip.bulletsArray[k].verifyIntersect(ourShip) == true) {
+						// "matar" bullet
+						enemyShip.bulletsArray[k].alive = false;
+
+						updateShipLife(spArray);
+				}
+			}
+		}
+	}
+}
+
+
+function moveEnemyShips(ctx, ship) {
+
+	// direita
+	if (goLeft==false) {
+	// atualiza se lado esquerdo antigo for maior que o atual
+		if (xlimitIni < ship.x) {
+			xlimitIni = ship.x;
+		}
+
+		if (xLimitEnd < (ship.x + ship.width)) {
+			xLimitEnd = ship.x + ship.width;
+		}
+
+		if (xLimitEnd >= ctx.canvas.width) {
+			goLeft = true;
+			xlimitIni=1000;
+			xLimitEnd=0;
+			console.log("STOPPPPPP")
+		}
+		else
+			ship.x = ship.x + 2;
+	}
+
+	// esquerda
+	else {
+		if (xlimitIni > ship.x) {
+			xlimitIni = ship.x;
+		}
+
+		if (xLimitEnd > (ship.x + ship.width)) {
+			xLimitEnd = ship.x + ship.width;
+		}
+		if (xlimitIni <= 0) {
+			goLeft = false;
+			console.log("STOPPPPPP2")
+		}
+		else
+			ship.x = ship.x - 2;
+	}
+}
+
+function getMaxWidthLeft(ctx, spArray) {
+	var max=0;
+
+	for (let i=0; i<spArray.length; i++) {
+		if (spArray[i].name=="dispara") {
+			if (spArray[i].x+spArray[i].width > max) {
+				max = spArray[i].x+spArray[i].width;
+				console.log(max);
+			}
+		}
+	}
+}
+
+
+function shootFromEnemy(ctx, arrayEnemyShips) {
+
+	var enemy = searchSprite(arrayEnemyShips, "dispara");
+
+	for (let i=0; i<arrayEnemyShips.length; i++) {
+		shoot(ctx, arrayEnemyShips, bulletsArray, arrayEnemyShips[i], "bullet", 5);
+	}
+}
+
+function moveBulletsEnemy(ctx, bulletsArray) {
+	//console.log("ok");
+	var pool = bulletsArray;
+	//console.log(pool);
+	for (var i = 0; i < pool.length; i++) {
+		//console.log(pool[i].y);
+		if (pool[i].y <= 600) {
+			if (pool[i].alive == false) {
+				// retirar do array
+				pool.splice(i, 1);
+				countBullets--;
+				console.log("retirou...");
+			}
+			else {
+				pool[i].y += pool[i].speed;
+			}
+		}
+		else {
+			// retirar do array
+			pool.splice(i, 1);
+			countBullets--;
+		}
 	}
 }
