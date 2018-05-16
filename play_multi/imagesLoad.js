@@ -7,6 +7,12 @@ var imageRepository = new function() {
 	this.shipUp = new Image();
 	this.shipLeft = new Image();
 	this.shipRight = new Image();
+
+	this.player2ship = new Image();
+	this.player2shipleft = new Image();
+	this.player2shipright = new Image();
+	this.player2shipdown = new Image();
+
 	this.shipEnemy = new Image();
 	this.shipEnemyDamaged = new Image();
 	this.shipKamikaze = new Image();
@@ -46,6 +52,12 @@ var imageRepository = new function() {
 
 
 	// -- SRC --
+
+	this.player2ship.src = "../resources/ships/player2.png";
+	this.player2shipleft.src = "../resources/ships/player2LEFT.png";
+	this.player2shipright.src = "../resources/ships/player2RIGHT.png";
+	this.player2shipdown.src = "../resources/ships/player2UP.png";
+
 	this.shipDown.src = "../resources/ships/shipDown.png";
 	this.shipUp.src = "../resources/ships/shipUp.png";
 	this.shipLeft.src = "../resources/ships/shipLeft.png";

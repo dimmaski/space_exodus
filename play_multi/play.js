@@ -54,9 +54,8 @@ function main()
 }
 
 function init(ctx) {
-
 	loadSprites(ctx);
-	console.log("OK");
+
 
 
 	window.addEventListener("keydown", keydownHandler);
@@ -120,7 +119,7 @@ function init(ctx) {
 
 		// reset nave
 		ship_player1.changeImg(imageRepository.shipDown);
-		ship_player2.changeImg(imageRepository.ship5);
+		ship_player2.changeImg(imageRepository.player2ship);
 	}
 
 	animLoop(ctx, spArray, bulletsArray);
@@ -162,11 +161,13 @@ function loadSprites(ctx) {
 	nLoad++;
 
 
-	var nw = imageRepository.ship5.naturalWidth;
-	var nh = imageRepository.ship5.naturalHeight;
-	var ship = new Ship(cw/2, ch/10, nw, nh, 4, true, imageRepository.ship5, life, shield, 1000, "player2");
+	var nw = imageRepository.player2ship.naturalWidth;
+	var nh = imageRepository.player2ship.naturalHeight;
+	var ship = new Ship(cw/2, ch/10, nw, nh, 4, true, imageRepository.player2ship, life, shield, 1000, "player2");
+	console.log("cheguei aqui");
 	spArray[nLoad] = ship;
 	nLoad++;
+
 
 }
 
@@ -250,14 +251,14 @@ function moveShip(ctx, spArray) {
 	if (LEFT_PLAYER2) {
 		//sp.x -= sp.speed;
 		if (sp_2.x >= 0) {
-			sp_2.changeImg(imageRepository.shipLeft);
+			sp_2.changeImg(imageRepository.player2shipright);
 				sp_2.moveLeft();
 		}
 	}
 	if (RIGHT_PLAYER2) {
 		//sp.x += sp.speed;
 		if (sp_2.x + sp_2.width < ctx.canvas.width) {
-			sp_2.changeImg(imageRepository.shipRight);
+			sp_2.changeImg(imageRepository.player2shipleft);
 			sp_2.moveRight();
 		}
 	}
@@ -265,15 +266,15 @@ function moveShip(ctx, spArray) {
 	if (UP_PLAYER2) {
 		//sp.y -= sp.speed;
 		if (sp_2.y >= 0) {
-			sp_2.changeImg(imageRepository.shipUp);
+			sp_2.changeImg(imageRepository.player2ship);
 			sp_2.moveUp();
 		}
 	}
 
 	if (DOWN_PLAYER2) {
 		//sp.y += sp.speed;
-		if (sp_2.y + sp_2.height < ctx.canvas.height) {
-			sp_2.changeImg(imageRepository.shipDown);
+		if (sp_2.y + sp_2.height < ctx.canvas.height && sp_2.y<=200) {
+			sp_2.changeImg(imageRepository.player2shipdown);
 			sp_2.moveDown();
 		}
 	}
@@ -297,7 +298,7 @@ function moveShip(ctx, spArray) {
     }
     if (UP_PLAYER1) {
     	//sp.y -= sp.speed;
-    	if (sp_1.y >= 0) {
+    	if (sp_1.y >= 0 && sp_1.y>=400) {
     		sp_1.changeImg(imageRepository.shipUp);
 	     	sp_1.moveUp();
     	}
