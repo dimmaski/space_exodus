@@ -55,7 +55,7 @@ function main()
 function init(ctx) {
 
 	loadSprites(ctx);
-	loadSprites_NVL_1(ctx);
+	loadSprites_NVL_Boss(ctx);
 	console.log("OK");
 
 	window.addEventListener("keydown", keydownHandler);
