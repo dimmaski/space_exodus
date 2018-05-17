@@ -28,22 +28,25 @@ function main()
     else if(ev.keyCode == 13) {
       switch(option) {
 
-        // falta adicionar links para as páginas
-
         case 0:
-
+						window.removeEventListener("keypress", keydownHandler);
+						window.location.href = "../play/nvl1.html";
             break;
         case 1:
-
+						window.removeEventListener("keypress", keydownHandler);
+						window.location.href = "../play/nvl2.html";
             break;
         case 2:
-
+						window.removeEventListener("keypress", keydownHandler);
+						window.location.href = "../play/nvl3.html";
             break;
         case 3:
-
+						window.removeEventListener("keypress", keydownHandler);
+						// falta o som manos
             break;
         case 4:
-
+						window.removeEventListener("keypress", keydownHandler);
+						window.location.href = "../main/startpage.html";
             break;
 
 
