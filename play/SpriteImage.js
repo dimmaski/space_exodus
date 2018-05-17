@@ -194,6 +194,7 @@ class Ship extends Sprite
 	getType() {
 		return "ship";
 	}
+
 	changeImg(newImg) {
 		this.img = newImg;
 	}

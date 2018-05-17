@@ -2,7 +2,11 @@
 
 // repositorios para desenhar imagens com sprites
 var imageRepository = new function() {
+<<<<<<< HEAD
 
+=======
+	
+>>>>>>> 17c5b2a554e304c26d3817b9e8772950e4943a06
 	this.shipDown = new Image();
 	this.shipUp = new Image();
 	this.shipLeft = new Image();
