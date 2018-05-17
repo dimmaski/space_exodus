@@ -8,13 +8,15 @@
 var flag_tocou_1=false;
 var flag_tocou_2=false;
 
-var player_1_threelifes = true;
-var player_1_twolifes = false;
-var player_1_onelifes = false;
+var player_1_lifes=3;
+var player_2_lifes=3;
 
-var player_2_threelifes = true;
-var player_2_twolifes = false;
-var player_2_onelifes = false;
+var numLifesSetTimeOut = 250;
+
+var lifesFlag = true;
+var lifesFlag2 = true;
+
+
 var flagExplosion=0;
 
 function loadSprites_NVL_1(ctx) {
@@ -61,49 +63,62 @@ function draw_NVL(ctx, spArray)
 
 
 function updateShipLife(spArray,ship) {
-	console.log(player_1_twolifes);
-
 	if(ship.name=="player1"){
-		setTimeout(function() {
-			flag_tocou_1 = false;
-		}, 1000);
+		if(player_1_lifes==3 && lifesFlag==true){
+			player_1_lifes--;
+			lifesFlag = false;
 
-		if(player_1_threelifes==true){
 			setTimeout(function() {
-				player_1_twolifes = true;
-			}, 1000);
-			player_1_threelifes=false;
-			var sp = searchSprite(spArray, "vida1");
-			sp.resizeToLife2(imageRepository.life2);
+					lifesFlag = true;
+			}, numLifesSetTimeOut);
+			var img=imageRepository.life2;
+			ship.objLife.width =img.naturalWidth;
+			ship.objLife.changeImg(img);
 			}
-		else if(player_1_twolifes==true){
-			player_1_twolifes=false;
-			var sp = searchSprite(spArray, "vida1");
-			sp.resizeToLife2(imageRepository.life1);
-			player_1_onelifes=true;
-		}else if(player_1_onelifes==true){
+		else if(player_1_lifes==2 && lifesFlag==true){
+			player_1_lifes--;
+			lifesFlag = false;
+
+			setTimeout(function() {
+					lifesFlag = true;
+			}, numLifesSetTimeOut);
+
+			var img=imageRepository.life1;
+			ship.objLife.width =img.naturalWidth;
+			ship.objLife.changeImg(img);
+		}else if(player_1_lifes==1){
 					flagExplosion=1;
 		}
 	}
 
 	if(ship.name=="player2"){
-		setTimeout(function() {
-			flag_tocou_2 = false;
-		}, 1000);
+		if(player_2_lifes==3 && lifesFlag2==true){
+			player_2_lifes--;
+			lifesFlag2 = false;
 
+			setTimeout(function() {
+					lifesFlag2 = true;
+			}, numLifesSetTimeOut);
 
-		if(player_2_threelifes==true){
-			player_2_threelifes=false;
-			var sp = searchSprite(spArray, "vida2");
-			sp.resizeToLife2(imageRepository.life2);
-			player_2_twolifes=true;
+			console.log("cheguei aqui");
+			console.log(ship);
+			var img=imageRepository.life2;
+			ship.objLife.width =img.naturalWidth;
+			ship.objLife.changeImg(img);
 			}
-		else if(player_2_twolifes==true){
-			player_2_twolifes=false;
-			var sp = searchSprite(spArray, "vida2");
-			sp.resizeToLife2(imageRepository.life1);
-			player_2_onelifes=true;
-		}else if(player_2_onelifes==true){
+			else if(player_2_lifes==2 && lifesFlag2==true){
+			player_2_lifes--;
+			lifesFlag2 = false;
+
+			setTimeout(function() {
+					lifesFlag2 = true;
+			}, numLifesSetTimeOut);
+
+			var img=imageRepository.life1;
+			ship.objLife.width =img.naturalWidth;
+			ship.objLife.changeImg(img);
+			}
+			else if(player_2_lifes==1 && lifesFlag2==true){
 				flagExplosion=2;
 		}
 	}
@@ -144,6 +159,9 @@ var arraybulletsplayer2=player2_ship.bulletsArray;
 for(let i=0;i<arraybulletsplayer1.length;i++){
 	if(arraybulletsplayer1[i].verifyIntersect(player2_ship) && flag_tocou_2==false){
 		flag_tocou_2=true;
+		setTimeout(function() {
+			flag_tocou_2 = false;
+		}, 1000);
 		updateShipLife(spArray,player2_ship);
 	}
 }
@@ -151,6 +169,9 @@ for(let i=0;i<arraybulletsplayer1.length;i++){
 for(let i=0;i<arraybulletsplayer2.length;i++){
 	if(arraybulletsplayer2[i].verifyIntersect(player1_ship)&& flag_tocou_1==false){
 		flag_tocou_1=true;
+		setTimeout(function() {
+			flag_tocou_1 = false;
+		}, 1000);
 		updateShipLife(spArray,player1_ship);
 	}
 }
