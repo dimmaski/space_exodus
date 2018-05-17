@@ -4,6 +4,13 @@ var flagBoost = false;
 var flagDrawSpeedUp = false;
 var flagDrawShield = false;
 var countBlinks = 0;
+var countMeteroidsPassed = 0;
+var flagCountMeteroidsPassed = true;
+var countMeteroidsPassedSpeed = 0;
+var flagCURRENT_METEROIDS = true;
+var NUM_METEROIDS = 12;
+var CURRENT_METEROIDS = 0;
+var meteroidArray = [];
 
 
 (function()
@@ -53,43 +60,18 @@ function draw_NVL_1(ctx, spArray)
 	}
 
 	// SPAWN DOS BOOTS (ALTERAR)
-	spawnBoostsTime(0, 500, 0, 500, "shield", 2000, 3000);
+	// 2 segundos
+	//spawnBoostsTime(0, 500, 0, 500, "shield", 2000, 3000);
 
+<<<<<<< HEAD
+	// 2 segundos
+	spawnBoostsTime(0, 500, 0, 500, "life", 2000, 3000);
+
+	// 2 segundos
+	//spawnBoostsTime(0, 500, 0, 500, "tresoure", 2000, 3000);
+=======
 	spawnBoostsTime(0, 500, 0, 500, "tresoure", 2000, 3000);
-
-}
-
-function updateShipLife(spArray) {
-	// tira 1 vida
-	if (flag_treeLifes == true) {
-		// esperar 1 seg até tirar outra vida
-		setTimeout(function() {
-			flag_twoLifes = true;
-		}, 150);
-
-		flag_treeLifes = false;
-		// update imagem
-		var sp = searchSprite(spArray, "vida");
-		sp.resizeToLife2(imageRepository.life2);
-	}
-
-	// tira 1 vida
-	else if (flag_twoLifes == true) {
-		// esperar 1 seg até tirar outra vida
-		setTimeout(function() {
-			flag_oneLife = true;
-		}, 150);
-
-		flag_twoLifes = false;
-		// update imagem
-		var sp = searchSprite(spArray, "vida");
-		sp.resizeToLife1(imageRepository.life1);
-	}
-
-	// game over
-	if (flag_oneLife == true) {
-		GAME_OVER = true;
-	}
+>>>>>>> ab7f88602806a4049e3f1fcbd29909be31fa25f7
 
 }
 
@@ -108,9 +90,23 @@ function VerifyCollision_NVL_1(ctx, spArray) {
 
 		for (let i = 0; i<spArray.length; i++) {
 			if (spArray[i].name == "life") {
-				if (ship.verifyIntersect(spArray[i])) {
+				if (ship.verifyIntersect(spArray[i]) && numLifes < 3) {
+					console.log("vida123123213")
 					flagBoost = true;
 					// dar vida se nao tiver as 3
+					if (numLifes == 2) {
+						numLifes++;
+						var img = imageRepository.life3;
+						ship.objLife.width = img.naturalWidth;
+						ship.objLife.changeImg(img);
+					}
+					else {
+						numLifes++;
+						var img = imageRepository.life2;
+						ship.objLife.width = img.naturalWidth;
+						ship.objLife.changeImg(img);
+					}
+
 					setTimeout(function() {
 						flagBoost = false;
 					}, 3000);

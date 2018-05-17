@@ -1,7 +1,7 @@
 "use strict";
 
+// GLOBAL
 var ship;
-
 var spArray = [];
 var nLoad = 0;
 
@@ -19,33 +19,13 @@ var SIZE_POOL = 20;
 var countBullets = 0;
 
 
-// niveis
-var NVL_1 = true;
-var NVL_2 = false;
-var NVL_3 = false;
-var NVL_Boss = false;
 var GAME_OVER = false;
 var NVL_WON = false
-var goToLvl = 2;
 
-// vida
-var flag_treeLifes = true;
-var flag_twoLifes = false;
-var flag_oneLife = false;
-
-
+// Controlo de vidas
 var numLifes = 3;
-var numLifesSetTimeOut = 250;
+var numLifesSetTimeOut = 500;
 var lifesFlag = true;
-
-// LEVEL 1
-var countMeteroidsPassed = 0;
-var flagCountMeteroidsPassed = true;
-var countMeteroidsPassedSpeed = 0;
-var flagCURRENT_METEROIDS = true;
-var NUM_METEROIDS = 12;
-var CURRENT_METEROIDS = 0;
-var meteroidArray = [];
 
 var flagSpawnLife = true;
 var flagSpawnShield = true;
@@ -55,7 +35,6 @@ var flagSpawnTresoure = true;
 function init(ctx, nivel) {
 
 	loadSprites(ctx);
-
 
 	switch(nivel) {
 		case 2:
@@ -69,7 +48,6 @@ function init(ctx, nivel) {
 
 	window.addEventListener("keydown", keydownHandler);
 	window.addEventListener("keyup", keyupHandler);
-
 
 	function keydownHandler(ev) {
 
@@ -243,37 +221,35 @@ function moveShip(ctx, shipArray) {
 function updateShipLife() {
 
 	if (lifesFlag == true && numLifes == 3) {
-
 		numLifes--;
+
 		lifesFlag = false;
 		setTimeout(function() {
 			lifesFlag = true;
 		}, numLifesSetTimeOut);
 
+		var img = imageRepository.life2;
+		ship.objLife.width = img.naturalWidth;
+		ship.objLife.changeImg(img);
 
-		ship.objLife.width -= 1/3 * ship.objLife.width;
 	}
 
 	else if (lifesFlag == true && numLifes == 2) {
-
 		numLifes--;
 		lifesFlag = false;
 		setTimeout(function() {
 			lifesFlag = true;
 		}, numLifesSetTimeOut);
 
-		ship.objLife.width -= 1/2 * ship.objLife.width;
+		var img = imageRepository.life1;
+		ship.objLife.width = img.naturalWidth;
+		ship.objLife.changeImg(img);
 	}
 
 	if (lifesFlag == true && numLifes == 1) {
 		numLifes--;
 		GAME_OVER = true;
 	}
-}
-
-function updateShipLife(spArray) {
-
-
 }
 
 function render(ctx, spArray, bulletsArray, reqID, nivel)
@@ -414,8 +390,8 @@ function spawnBoostsTime(xIni, xFim, yIni, yFim, type, time, timeAlive) {
 function spawnBoosts(xIni, xFim, yIni, yFim, type, timeAlive) {
 	if (type == "life") {
 		var img = imageRepository.life1;
-		var nh = img.life1.naturalHeight;
-		var nw = img.life1.naturalWidth;
+		var nh = img.naturalHeight;
+		var nw = img.naturalWidth;
 	}
 	else if (type == "shield") {
 		var img = imageRepository.shield_star;
