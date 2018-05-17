@@ -33,6 +33,11 @@ var flag_treeLifes = true;
 var flag_twoLifes = false;
 var flag_oneLife = false;
 
+
+var numLifes = 3;
+var numLifesSetTimeOut = 250;
+var lifesFlag = true;
+
 // LEVEL 1
 var countMeteroidsPassed = 0;
 var flagCountMeteroidsPassed = true;
@@ -235,37 +240,40 @@ function moveShip(ctx, shipArray) {
     }
 }
 
-function updateShipLife(spArray) {
-	// tira 1 vida
-	if (flag_treeLifes == true) {
-		// esperar 1 seg até tirar outra vida
-		setTimeout(function() {
-			flag_twoLifes = true;
-		}, 150);
+function updateShipLife() {
 
-		flag_treeLifes = false;
-		// update imagem
-		var sp = searchSprite(spArray, "vida");
-		sp.resizeToLife2(imageRepository.life2);
+	if (lifesFlag == true && numLifes == 3) {
+
+		numLifes--;
+		lifesFlag = false;
+		setTimeout(function() {
+			lifesFlag = true;
+		}, numLifesSetTimeOut);
+
+
+		ship.objLife.width -= 1/3 * ship.objLife.width;
 	}
 
-	// tira 1 vida
-	else if (flag_twoLifes == true) {
-		// esperar 1 seg até tirar outra vida
-		setTimeout(function() {
-			flag_oneLife = true;
-		}, 150);
+	else if (lifesFlag == true && numLifes == 2) {
 
-		flag_twoLifes = false;
-		// update imagem
-		var sp = searchSprite(spArray, "vida");
-		sp.resizeToLife1(imageRepository.life1);
+		numLifes--;
+		lifesFlag = false;
+		setTimeout(function() {
+			lifesFlag = true;
+		}, numLifesSetTimeOut);
+
+		ship.objLife.width -= 1/2 * ship.objLife.width;
 	}
 
-	// game over
-	if (flag_oneLife == true) {
+	if (lifesFlag == true && numLifes == 1) {
+		numLifes--;
 		GAME_OVER = true;
 	}
+}
+
+function updateShipLife(spArray) {
+
+
 }
 
 function render(ctx, spArray, bulletsArray, reqID, nivel)
