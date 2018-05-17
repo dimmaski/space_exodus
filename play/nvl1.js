@@ -70,40 +70,6 @@ function draw_NVL_1(ctx, spArray)
 
 }
 
-function updateShipLife(spArray) {
-	// tira 1 vida
-	if (flag_treeLifes == true) {
-		// esperar 1 seg até tirar outra vida
-		setTimeout(function() {
-			flag_twoLifes = true;
-		}, 150);
-
-		flag_treeLifes = false;
-		// update imagem
-		var sp = searchSprite(spArray, "vida");
-		sp.resizeToLife2(imageRepository.life2);
-	}
-
-	// tira 1 vida
-	else if (flag_twoLifes == true) {
-		// esperar 1 seg até tirar outra vida
-		setTimeout(function() {
-			flag_oneLife = true;
-		}, 150);
-
-		flag_twoLifes = false;
-		// update imagem
-		var sp = searchSprite(spArray, "vida");
-		sp.resizeToLife1(imageRepository.life1);
-	}
-
-	// game over
-	if (flag_oneLife == true) {
-		GAME_OVER = true;
-	}
-
-}
-
 function VerifyCollision_NVL_1(ctx, spArray) {
 
 	for (let j = 0; j < meteroidArray.length; j++) {

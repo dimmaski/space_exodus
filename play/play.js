@@ -27,14 +27,7 @@ var numLifes = 3;
 var numLifesSetTimeOut = 250;
 var lifesFlag = true;
 
-// LEVEL 1
-var countMeteroidsPassed = 0;
-var flagCountMeteroidsPassed = true;
-var countMeteroidsPassedSpeed = 0;
-var flagCURRENT_METEROIDS = true;
-var NUM_METEROIDS = 12;
-var CURRENT_METEROIDS = 0;
-var meteroidArray = [];
+
 
 var flagSpawnLife = true;
 var flagSpawnShield = true;
