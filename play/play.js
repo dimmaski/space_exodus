@@ -24,7 +24,7 @@ var NVL_WON = false
 
 // Controlo de vidas
 var numLifes = 3;
-var numLifesSetTimeOut = 250;
+var numLifesSetTimeOut = 500;
 var lifesFlag = true;
 
 
@@ -223,14 +223,17 @@ function moveShip(ctx, shipArray) {
 function updateShipLife() {
 
 	if (lifesFlag == true && numLifes == 3) {
-
-		numLifes--;
 		lifesFlag = false;
+		numLifes--;
+
 		setTimeout(function() {
 			lifesFlag = true;
 		}, numLifesSetTimeOut);
 
-		ship.objLife.width -= 1/3 * ship.objLife.width;
+		var img = imageRepository.life2;
+		ship.objLife.width = img.naturalWidth;
+		ship.objLife.changeImg(img);
+
 	}
 
 	else if (lifesFlag == true && numLifes == 2) {
@@ -241,7 +244,9 @@ function updateShipLife() {
 			lifesFlag = true;
 		}, numLifesSetTimeOut);
 
-		ship.objLife.width -= 1/2 * ship.objLife.width;
+		var img = imageRepository.life1;
+		ship.objLife.width = img.naturalWidth;
+		ship.objLife.changeImg(img);
 	}
 
 	if (lifesFlag == true && numLifes == 1) {
@@ -388,8 +393,8 @@ function spawnBoostsTime(xIni, xFim, yIni, yFim, type, time, timeAlive) {
 function spawnBoosts(xIni, xFim, yIni, yFim, type, timeAlive) {
 	if (type == "life") {
 		var img = imageRepository.life1;
-		var nh = img.life1.naturalHeight;
-		var nw = img.life1.naturalWidth;
+		var nh = img.naturalHeight;
+		var nw = img.naturalWidth;
 	}
 	else if (type == "shield") {
 		var img = imageRepository.shield_star;
