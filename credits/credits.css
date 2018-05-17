@@ -1,9 +1,7 @@
-#creditos {
+#credits {
   background: no-repeat;
   position: relative;
   width: 800px;
   height: 600px;
-  background-image: url('../resources/creditos/creditos_final.jpg');
-  margin: auto;
-
+  background-image: url('../resources/credits/creditos_final_new.jpg');
 }

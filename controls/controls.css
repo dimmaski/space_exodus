@@ -1,0 +1,8 @@
+#controls {
+
+  background: no-repeat;
+  position: relative;
+  width: 800px;
+  height: 600px;
+  background-image: url('../resources/controls/controls.jpg');
+}
