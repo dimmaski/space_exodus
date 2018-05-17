@@ -1,7 +1,5 @@
 "use strict";
 
-
-// NIVEL 1
 var flagBoost = false;
 var flagDrawSpeedUp = false;
 var flagDrawShield = false;
@@ -65,11 +63,15 @@ function draw_NVL_1(ctx, spArray)
 	// 2 segundos
 	//spawnBoostsTime(0, 500, 0, 500, "shield", 2000, 3000);
 
+<<<<<<< HEAD
 	// 2 segundos
 	spawnBoostsTime(0, 500, 0, 500, "life", 2000, 3000);
 
 	// 2 segundos
 	//spawnBoostsTime(0, 500, 0, 500, "tresoure", 2000, 3000);
+=======
+	spawnBoostsTime(0, 500, 0, 500, "tresoure", 2000, 3000);
+>>>>>>> ab7f88602806a4049e3f1fcbd29909be31fa25f7
 
 }
 
@@ -146,7 +148,7 @@ function VerifyCollision_NVL_1(ctx, spArray) {
 }
 
 function blink(flag) {
-
+	console.log("blink???")
 	if (countBlinks == 0) {
 		flag = false;
 		countBlinks++;

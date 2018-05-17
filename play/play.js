@@ -27,8 +27,6 @@ var numLifes = 3;
 var numLifesSetTimeOut = 500;
 var lifesFlag = true;
 
-
-
 var flagSpawnLife = true;
 var flagSpawnShield = true;
 var flagSpawnTresoure = true;
