@@ -117,7 +117,7 @@ var soundRepository = new function() {
 	this.shootSound2 = new Audio('../resources/sounds/shoot2.wav');
 	this.hitSound = new Audio('../resources/sounds/hit.wav');
 	this.lvlUpSound = new Audio('../resources/sounds/passarnivel.wav');
-
+	this.audio = new Audio('../resources/sounds/navigatemenu.wav');
 	this.shootSoundArray = [this.shootSound1, this.shootSound2];
 
 }

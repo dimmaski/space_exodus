@@ -63,18 +63,23 @@ function init(ctx, nivel) {
 			selectOption = true;
 		}
 
-
 		if (ev.keyCode == 37 || ev.keyCode == 65)
 			LEFT = true;
 		else if (ev.keyCode == 39 || ev.keyCode == 68)
 			RIGHT = true;
 		else if (ev.keyCode == 38 || ev.keyCode == 87)
 			UP = true;
-		else if (ev.keyCode == 40 || ev.keyCode == 83 || (PAUSED && ev.keyCode == 40 && ev.keyCode == 83)) {
+		else if (ev.keyCode == 40 || ev.keyCode == 83){
+			DOWN = true;
+		}
+
+		if(PAUSED && ev.keyCode == 40 || ev.keyCode == 83 && PAUSED){
+			
 			DOWN = true;
 			pausedOption = ++pausedOption % 2;
-		}
-		else if (ev.keyCode == 32) {
+			soundRepository.audio.play();
+
+		} else if (ev.keyCode == 32) {
 			if (flag_space) {
 				flag_space = false;
 				shoot(ctx, spArray, bulletsArray, ship, "bullet", 3);
