@@ -223,9 +223,9 @@ function moveShip(ctx, shipArray) {
 function updateShipLife() {
 
 	if (lifesFlag == true && numLifes == 3) {
-		lifesFlag = false;
 		numLifes--;
 
+		lifesFlag = false;
 		setTimeout(function() {
 			lifesFlag = true;
 		}, numLifesSetTimeOut);
@@ -237,7 +237,6 @@ function updateShipLife() {
 	}
 
 	else if (lifesFlag == true && numLifes == 2) {
-
 		numLifes--;
 		lifesFlag = false;
 		setTimeout(function() {
