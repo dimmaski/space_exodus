@@ -57,21 +57,19 @@ function draw_NVL_1(ctx, spArray)
 	} else if (flagDrawShield == true) {
 		ctx.font = "20px retro"
 		ctx.fillText("SHIELD", ctx.canvas.width/2-40, 40);
+
+		//
 	}
 
 	// SPAWN DOS BOOTS (ALTERAR)
 	// 2 segundos
-	//spawnBoostsTime(0, 500, 0, 500, "shield", 2000, 3000);
-
-<<<<<<< HEAD
-	// 2 segundos
-	spawnBoostsTime(0, 500, 0, 500, "life", 2000, 3000);
+	spawnBoostsTime(0, 500, 0, 500, "shield", 30000, 3000);
 
 	// 2 segundos
-	//spawnBoostsTime(0, 500, 0, 500, "tresoure", 2000, 3000);
-=======
-	spawnBoostsTime(0, 500, 0, 500, "tresoure", 2000, 3000);
->>>>>>> ab7f88602806a4049e3f1fcbd29909be31fa25f7
+	spawnBoostsTime(0, 500, 0, 500, "life", 60000, 3000);
+
+	// 2 segundos
+	spawnBoostsTime(0, 500, 0, 500, "tresoure", 15000, 3000);
 
 }
 

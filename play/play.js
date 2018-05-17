@@ -18,7 +18,7 @@ var bulletsArray = [];
 var SIZE_POOL = 20;
 var countBullets = 0;
 
-
+var PAUSE = false;
 var GAME_OVER = false;
 var NVL_WON = false
 
@@ -149,7 +149,11 @@ function animLoop(ctx, spArray, bulletsArray, nivel) {
 
 
 	if (!GAME_OVER) {
-		render(ctx, spArray, bulletsArray, reqID, nivel);
+
+		if (PAUSE)
+			render_pause();
+		else
+			render(ctx, spArray, bulletsArray, reqID, nivel);
 	}
 
 	else if (GAME_OVER) {
@@ -168,6 +172,10 @@ function animLoop(ctx, spArray, bulletsArray, nivel) {
 		}
 		window.addEventListener("keypress", rr);
 	}
+}
+
+function render_pause() {
+
 }
 
 function restartGame(ev, ctx, spArray) {
