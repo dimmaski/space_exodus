@@ -110,3 +110,15 @@ var imageRepository = new function() {
 	this.AsteroidsImgArray = [this.meteroid_small, this.meteroid_big, this.rocks1, this.rocks2, this.rocks3, this.rocks4, this.rocks5];
 
 }
+
+var soundRepository = new function() {
+
+	this.explosionSound = new Audio('../resources/sounds/explosao.wav');
+	this.shootSound1 = new Audio('../resources/sounds/shoot.wav');
+	this.shootSound2 = new Audio('../resources/sounds/shoot2.wav');
+	this.hitSound = new Audio('../resources/sounds/hit.wav');
+	this.lvlUpSound = new Audio('../resources/sounds/passarnivel.wav');
+
+	this.shootSoundArray = [this.shootSound1, this.shootSound2];
+
+}

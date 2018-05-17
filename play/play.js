@@ -428,15 +428,23 @@ function spawnBoosts(xIni, xFim, yIni, yFim, type, timeAlive) {
 	}, timeAlive);
 }
 
+function pickRandomMeteroid() {
+	return imageRepository.AsteroidsImgArray[Math.floor(Math.random()*7)];
+}
+
+function pickRandomShootSound() {
+	return soundRepository.shootSoundArray[Math.floor(Math.random()*2)];
+}
 
 function shoot(ctx, spArray, bulletsArray, ship, type, speed) {
 	var size = SIZE_POOL;
-
 	var getShipX = ship.x;
 	var getShipY = ship.y;
 	var getShipWidth = ship.width;
 	var getShipHeigth = ship.height;
 	// array com diferentes bullets
+
+	pickRandomShootSound().play();
 
 	if (type == "bullet") {
 		if (countBullets != size) {

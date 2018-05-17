@@ -131,12 +131,13 @@ function VerifyCollision_NVL_2(ctx, spArray) {
 	for (let i = 0; i < arrayEnemyShips.length; i++) {
 		let enemyShip = arrayEnemyShips[i];
 		if (ship.verifyIntersect(enemyShip)) {
+			soundRepository.hitSound.play();
 			GAME_OVER = true;
 		}
 
 		for (let k = 0; k < ship.bulletsArray.length; k++) {
 			if (ship.bulletsArray[k].verifyIntersect(enemyShip)) {
-
+				soundRepository.hitSound.play();
 				ship.bulletsArray[k].alive = false;
 				enemyShip.img = imageRepository.explosion;
 
@@ -148,7 +149,7 @@ function VerifyCollision_NVL_2(ctx, spArray) {
 
 		for (let k = 0; k < enemyShip.bulletsArray.length; k++) {
 			if (enemyShip.bulletsArray[k].verifyIntersect(ship)) {
-
+				soundRepository.hitSound.play();
 				enemyShip.bulletsArray[k].alive = false;
 				updateShipLife(spArray);
 			}

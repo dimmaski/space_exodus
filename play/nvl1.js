@@ -98,6 +98,7 @@ function VerifyCollision_NVL_1(ctx, spArray) {
 	for (let j = 0; j < meteroidArray.length; j++) {
 		// se nao tiver shield
 		if (ship.verifyIntersect(meteroidArray[j]) && ship.shield == false) {
+			soundRepository.hitSound.play();
 			updateShipLife(spArray);
 		}
 	}
@@ -138,7 +139,7 @@ function VerifyCollision_NVL_1(ctx, spArray) {
 					spArray[i].img = imageRepository.chestOpen;
 					ship.speed += 3;
 					blink(flagDrawSpeedUp);
-					
+
 					setTimeout(function() {
 						ship.speed -= 3;
 						flagBoost = false;
@@ -164,10 +165,6 @@ function blink(flag) {
 			blink();
 		}, 500);
 	}
-}
-
-function pickRandomMeteroid() {
-	return imageRepository.AsteroidsImgArray[Math.floor(Math.random()*7)];
 }
 
 function drawMeteroids(ctx, meteroidArray) {
