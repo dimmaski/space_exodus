@@ -35,14 +35,7 @@ var countBullets = 0;
 var GAME_OVER = false;
 var NVL_WON = false;
 
-// vida
-var flag_treeLifes_player1 = true;
-var flag_twoLifes_player1 = false;
-var flag_oneLife_player1 = false;
 
-var flag_threeLifes_player2=true;
-var flag_twoLifes_player2=false;
-var flag_oneLife_player2=false;
 
 
 function main()
@@ -144,19 +137,19 @@ function loadSprites(ctx) {
 
 	var nw = imageRepository.life3.naturalWidth;
 	var nh = imageRepository.life3.naturalHeight;
-	var life = new BackgroundObject(8, ch/100, nw, nh, true, imageRepository.life3, "vida2");
+	var life = new BackgroundObject(8, ch/100, nw, nh, true, imageRepository.life3, "vida1");
 	spArray[nLoad] = life;
 	nLoad++;
 
 	var nw = imageRepository.life3.naturalWidth;
 	var nh = imageRepository.life3.naturalHeight;
-	var life = new BackgroundObject(8, ch-nh-8, nw, nh, true, imageRepository.life3, "vida1");
-	spArray[nLoad] = life;
+	var life2 = new BackgroundObject(8, ch-nh-8, nw, nh, true, imageRepository.life3, "vida2");
+	spArray[nLoad] = life2;
 	nLoad++;
 
 	var nw = imageRepository.shipDown.naturalWidth;
 	var nh = imageRepository.shipDown.naturalHeight;
-	var ship = new Ship(cw/2, ch-ch/6, nw, nh, 4, true, imageRepository.shipDown, life, shield, 1000, "player1");
+	var ship = new Ship(cw/2, ch-ch/6, nw, nh, 4, true, imageRepository.shipDown, life2, shield, 1000, "player1");
 	spArray[nLoad] = ship;
 	nLoad++;
 
@@ -164,7 +157,6 @@ function loadSprites(ctx) {
 	var nw = imageRepository.player2ship.naturalWidth;
 	var nh = imageRepository.player2ship.naturalHeight;
 	var ship = new Ship(cw/2, ch/10, nw, nh, 4, true, imageRepository.player2ship, life, shield, 1000, "player2");
-	console.log("cheguei aqui");
 	spArray[nLoad] = ship;
 	nLoad++;
 
