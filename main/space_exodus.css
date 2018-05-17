@@ -1,6 +1,6 @@
 @font-face {
     font-family: retro;
-    src: url(PressStart2P.ttf) format("truetype");
+    src: url('../font/PressStart2P.ttf') format("truetype");
 }
 
 p {
