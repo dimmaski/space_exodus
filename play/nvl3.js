@@ -191,7 +191,6 @@ function VerifyCollision_NVL_3(ctx, spArray) {
             enemyShip = arrayEnemyShips[j];
 
             if (ourShip.verifyIntersect(enemyShip)) {
-                soundRepository.hitSound.play();
                 updateShipLife(spArray);
             }
 
@@ -200,7 +199,7 @@ function VerifyCollision_NVL_3(ctx, spArray) {
             if (ourShip.bulletsArray.length != 0) {
                 for (let k=0; k<ourShip.bulletsArray.length; k++) {
                     if (ourShip.bulletsArray[k].verifyIntersect(enemyShip) == true) {
-                        soundRepository.hitSound.play();
+
                         ourShip.bulletsArray[k].alive = false;
 
                         var dmg = Math.floor((Math.random()*maxDmg)+minDmg);
