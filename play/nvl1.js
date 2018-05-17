@@ -1,5 +1,11 @@
 "use strict";
 
+var flagBoost = false;
+var flagDrawSpeedUp = false;
+var flagDrawShield = false;
+var countBlinks = 0;
+
+
 (function()
 {
 	window.addEventListener("load", main);
@@ -26,11 +32,30 @@ function draw_NVL_1(ctx, spArray)
 		}
 	}
 
+	if (ship.shield == true) {
+		// dar shield
+		ship.objShield.draw(ctx);
+		ship.objShield.followCoor(ship.x, ship.y);
+	}
+
 	ctx.font = "15px retro"
 	ctx.fillStyle = "white";
 	ctx.textAlign = "left";
 	var str = "Score: " + countMeteroidsPassed;
 	ctx.fillText(str, 0+7, 0+15);
+
+	if (flagDrawSpeedUp == true) {
+		ctx.font = "20px retro"
+		ctx.fillText("SPEED UP", ctx.canvas.width/2-40, 40);
+	} else if (flagDrawShield == true) {
+		ctx.font = "20px retro"
+		ctx.fillText("SHIELD", ctx.canvas.width/2-40, 40);
+	}
+
+	// SPAWN DOS BOOTS (ALTERAR)
+	spawnBoostsTime(0, 500, 0, 500, "shield", 2000, 3000);
+
+	spawnBoostsTime(0, 500, 0, 500, "tresoure", 2000, 3000);
 
 }
 
@@ -71,9 +96,73 @@ function updateShipLife(spArray) {
 function VerifyCollision_NVL_1(ctx, spArray) {
 
 	for (let j = 0; j < meteroidArray.length; j++) {
-		if (ship.verifyIntersect(meteroidArray[j])) {
+		// se nao tiver shield
+		if (ship.verifyIntersect(meteroidArray[j]) && ship.shield == false) {
 			updateShipLife(spArray);
 		}
+	}
+
+	// so pode ter 1 boost de cada vez
+	if (flagBoost == false) {
+
+		for (let i = 0; i<spArray.length; i++) {
+			if (spArray[i].name == "life") {
+				if (ship.verifyIntersect(spArray[i])) {
+					flagBoost = true;
+					// dar vida se nao tiver as 3
+					setTimeout(function() {
+						flagBoost = false;
+					}, 3000);
+				}
+			}
+			else if (spArray[i].name == "shield") {
+				if (ship.verifyIntersect(spArray[i])) {
+					// ativa shield
+					ship.changeShieldState(3000);
+					flagBoost = true;
+					flagDrawShield = true;
+					blink(flagDrawShield);
+
+					setTimeout(function() {
+						ship.shield = false;
+						flagBoost = false;
+						flagDrawShield = false;
+					}, 3000);
+				}
+			}
+			else if (spArray[i].name == "tresoure") {
+				if (ship.verifyIntersect(spArray[i])) {
+					flagBoost = true;
+					// dar bonus, por exemplo +velocidade
+					flagDrawSpeedUp = true;
+					spArray[i].img = imageRepository.chestOpen;
+					ship.speed += 3;
+					blink(flagDrawSpeedUp);
+					
+					setTimeout(function() {
+						ship.speed -= 3;
+						flagBoost = false;
+						flagDrawSpeedUp = false;
+					}, 3000);
+				}
+			}
+		}
+	}
+}
+
+function blink(flag) {
+	console.log("blink???")
+	if (countBlinks == 0) {
+		flag = false;
+		countBlinks++;
+	} else {
+		countBlinks=0;
+		flag = true;
+	}
+	if (flag == true) {
+		setTimeout(function() {
+			blink();
+		}, 500);
 	}
 }
 
@@ -101,10 +190,13 @@ function drawMeteroids(ctx, meteroidArray) {
 
 	if (CURRENT_METEROIDS <= NUM_METEROIDS && flagCURRENT_METEROIDS) {
 			flagCURRENT_METEROIDS = false;
-			setTimeout(function() 	{	var sp = new Meteroid(Math.floor(Math.random() * ctx.canvas.width),
-				 -Math.floor(Math.random()*10 + nh), nw, nh, true, meteroid, "meteroid");
-										meteroidArray.push(sp);
-									}, 500 + CURRENT_METEROIDS * 500);
+			setTimeout(function() 	{
+					var sp = new Meteroid(Math.floor(Math.random() * ctx.canvas.width),
+					-Math.floor(Math.random()*10 + nh), nw, nh, true, meteroid, "meteroid");
+					meteroidArray.push(sp);
+
+				}, 500 + CURRENT_METEROIDS * 500);
+
 				setTimeout(function() 	{
 					flagCURRENT_METEROIDS = true;
 					CURRENT_METEROIDS++;

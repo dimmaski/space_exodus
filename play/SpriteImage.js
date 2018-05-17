@@ -327,6 +327,7 @@ class BackgroundObject extends Sprite
 	}
 
 	followCoor(x, y) {
+		console.log("follow");
 		this.x = x;
 		this.y = y;
 	}

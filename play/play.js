@@ -42,6 +42,9 @@ var NUM_METEROIDS = 12;
 var CURRENT_METEROIDS = 0;
 var meteroidArray = [];
 
+var flagSpawnLife = true;
+var flagSpawnShield = true;
+var flagSpawnTresoure = true;
 
 
 function init(ctx, nivel) {
@@ -137,6 +140,9 @@ function loadSprites(ctx) {
 	ship = new Ship(cw/2, ch-ch/6, nw, nh, 4, true, imageRepository.shipDown, life, shield, 1000, "bom");
 	spArray[nLoad] = ship;
 	nLoad++;
+
+
+
 
 }
 
@@ -366,6 +372,62 @@ function moveBullets(ctx, bulletsArray) {
 		}
 	}
 }
+
+function spawnBoostsTime(xIni, xFim, yIni, yFim, type, time, timeAlive) {
+	if (type == "life") {
+		if (flagSpawnLife == true) {
+			flagSpawnLife = false;
+			setTimeout(function() {
+				spawnBoosts(xIni, xFim, yIni, yFim, type, timeAlive);
+				flagSpawnLife = true;
+			}, time);
+		}
+	}
+	else if (type == "shield") {
+		if (flagSpawnShield == true) {
+			flagSpawnShield = false;
+			setTimeout(function() {
+				spawnBoosts(xIni, xFim, yIni, yFim, type, timeAlive);
+				flagSpawnShield = true;
+			}, time);
+		}
+	}
+	else if (type == "tresoure") {
+		if (flagSpawnTresoure == true) {
+			flagSpawnTresoure = false;
+			setTimeout(function() {
+				spawnBoosts(xIni, xFim, yIni, yFim, type, timeAlive);
+				flagSpawnTresoure = true;
+			}, time);
+		}
+	}
+}
+
+function spawnBoosts(xIni, xFim, yIni, yFim, type, timeAlive) {
+	if (type == "life") {
+		var img = imageRepository.life1;
+		var nh = img.life1.naturalHeight;
+		var nw = img.life1.naturalWidth;
+	}
+	else if (type == "shield") {
+		var img = imageRepository.shield_star;
+		var nh = img.naturalHeight;
+		var nw = img.naturalWidth;
+	}
+	else if (type == "tresoure") {
+		var img = imageRepository.chestClose;
+		var nh = img.naturalHeight;
+		var nw = img.naturalWidth;
+	}
+
+	var boost = new Boost(Math.floor((Math.random()*xFim)+xIni), Math.floor((Math.random()*yFim)+yIni), nw, nh, true, img, type);
+	spArray.push(boost);
+
+	setTimeout(function() {
+		boost.alive = false;
+	}, timeAlive);
+}
+
 
 function shoot(ctx, spArray, bulletsArray, ship, type, speed) {
 	var size = SIZE_POOL;

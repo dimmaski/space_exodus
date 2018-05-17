@@ -35,6 +35,8 @@ var imageRepository = new function() {
 	this.boss_life_bar = new Image();
 	this.ship_life_bar = new Image();
 
+	this.chestOpen = new Image();
+	this.chestClose = new Image();
 	this.shield_star = new Image();
 	this.shield = new Image();
 	this.explosion = new Image();
@@ -85,6 +87,8 @@ var imageRepository = new function() {
 	this.boss_life_bar.src = "../resources/life/boss_life_bar.png";
 	this.ship_life_bar.src = "../resources/life/ship_life_bar.png";
 
+	this.chestOpen.src = "../resources/boosts/chestOpen.png";
+	this.chestClose.src = "../resources/boosts/chestClose.png";
 	this.shield_star.src = "../resources/boosts/shield_star.png";
 	this.shield.src = "../resources/boosts/shield.png";
 	this.explosion.src = "../resources/bullets/explosion.gif";
