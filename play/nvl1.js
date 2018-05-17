@@ -63,15 +63,14 @@ function draw_NVL_1(ctx, spArray)
 	// 2 segundos
 	//spawnBoostsTime(0, 500, 0, 500, "shield", 2000, 3000);
 
-<<<<<<< HEAD
 	// 2 segundos
 	spawnBoostsTime(0, 500, 0, 500, "life", 2000, 3000);
 
 	// 2 segundos
 	//spawnBoostsTime(0, 500, 0, 500, "tresoure", 2000, 3000);
-=======
+
 	spawnBoostsTime(0, 500, 0, 500, "tresoure", 2000, 3000);
->>>>>>> ab7f88602806a4049e3f1fcbd29909be31fa25f7
+
 
 }
 
