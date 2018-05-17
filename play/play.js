@@ -1,7 +1,7 @@
 "use strict";
 
+// GLOBAL
 var ship;
-
 var spArray = [];
 var nLoad = 0;
 
@@ -19,21 +19,10 @@ var SIZE_POOL = 20;
 var countBullets = 0;
 
 
-// niveis
-var NVL_1 = true;
-var NVL_2 = false;
-var NVL_3 = false;
-var NVL_Boss = false;
 var GAME_OVER = false;
 var NVL_WON = false
-var goToLvl = 2;
 
-// vida
-var flag_treeLifes = true;
-var flag_twoLifes = false;
-var flag_oneLife = false;
-
-
+// Controlo de vidas
 var numLifes = 3;
 var numLifesSetTimeOut = 250;
 var lifesFlag = true;
@@ -56,7 +45,6 @@ function init(ctx, nivel) {
 
 	loadSprites(ctx);
 
-
 	switch(nivel) {
 		case 2:
 			loadSprites_NVL_2(ctx);
@@ -69,7 +57,6 @@ function init(ctx, nivel) {
 
 	window.addEventListener("keydown", keydownHandler);
 	window.addEventListener("keyup", keyupHandler);
-
 
 	function keydownHandler(ev) {
 
@@ -250,7 +237,6 @@ function updateShipLife() {
 			lifesFlag = true;
 		}, numLifesSetTimeOut);
 
-
 		ship.objLife.width -= 1/3 * ship.objLife.width;
 	}
 
@@ -269,11 +255,6 @@ function updateShipLife() {
 		numLifes--;
 		GAME_OVER = true;
 	}
-}
-
-function updateShipLife(spArray) {
-
-
 }
 
 function render(ctx, spArray, bulletsArray, reqID, nivel)
