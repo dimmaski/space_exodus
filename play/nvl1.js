@@ -61,9 +61,17 @@ function draw_NVL_1(ctx, spArray)
 
 	// SPAWN DOS BOOTS (ALTERAR)
 	// 2 segundos
-	spawnBoostsTime(0, 500, 0, 500, "shield", 2000, 3000);
+	//spawnBoostsTime(0, 500, 0, 500, "shield", 2000, 3000);
 
+<<<<<<< HEAD
+	// 2 segundos
+	spawnBoostsTime(0, 500, 0, 500, "life", 2000, 3000);
+
+	// 2 segundos
+	//spawnBoostsTime(0, 500, 0, 500, "tresoure", 2000, 3000);
+=======
 	spawnBoostsTime(0, 500, 0, 500, "tresoure", 2000, 3000);
+>>>>>>> ab7f88602806a4049e3f1fcbd29909be31fa25f7
 
 }
 
@@ -83,15 +91,20 @@ function VerifyCollision_NVL_1(ctx, spArray) {
 		for (let i = 0; i<spArray.length; i++) {
 			if (spArray[i].name == "life") {
 				if (ship.verifyIntersect(spArray[i]) && numLifes < 3) {
+					console.log("vida123123213")
 					flagBoost = true;
 					// dar vida se nao tiver as 3
-					numLifes++;
-
 					if (numLifes == 2) {
-						ship.objLife.width += ship.objLife.width/3;
+						numLifes++;
+						var img = imageRepository.life3;
+						ship.objLife.width = img.naturalWidth;
+						ship.objLife.changeImg(img);
 					}
 					else {
-						ship.objLife.width += ship.objLife.width/2;
+						numLifes++;
+						var img = imageRepository.life2;
+						ship.objLife.width = img.naturalWidth;
+						ship.objLife.changeImg(img);
 					}
 
 					setTimeout(function() {
