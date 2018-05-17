@@ -8,8 +8,9 @@
 function main()
 {
   var option = -1;  // 5
+	var audio = new Audio('../resources/sounds/navigatemenu.wav');
   var keydownHandler = function(ev) {
-
+		audio.play();
     if (ev.keyCode == 38 || ev.keyCode == 87) {
       if(option == 4) {
         option--;
