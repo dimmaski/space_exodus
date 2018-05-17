@@ -64,6 +64,8 @@ function draw_NVL_1(ctx, spArray)
 	// SPAWN DOS BOOTS (ALTERAR)
 	spawnBoostsTime(0, 500, 0, 500, "shield", 2000, 3000);
 
+	spawnBoostsTime(0, 500, 0, 500, "life", 2000, 3000);
+
 	spawnBoostsTime(0, 500, 0, 500, "tresoure", 2000, 3000);
 
 }
