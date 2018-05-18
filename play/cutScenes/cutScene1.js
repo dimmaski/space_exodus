@@ -16,7 +16,7 @@ var swapped = 0;
 
 function main() {
 
-	var script = [" I will take the crystal back with me . . ."," I'll take it back to here it belongs . . .", " To do that i need to cross 500 miles of the Asteroid Barrier  . . ."," I can do this! . . .", " No you won't! It's known that no one escapes mars . . .", " You can't cross the Asteroid Barrier. . ."];
+	var script = [" I will take the crystal back with me . . ."," I'll take it back to where it belongs . . .", " To do that i need to cross 500 miles of the Asteroid Barrier  . . ."," I can do this! . . .", " No you won't! It's known that no one escapes mars . . .", " You can't cross the Asteroid Barrier. . ."];
 	var backgroud, hero, villain, box;
 	var canvas = document.getElementById("canvas");
 	var ctx = canvas.getContext("2d");
