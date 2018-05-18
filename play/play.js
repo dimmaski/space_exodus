@@ -24,7 +24,7 @@ var pausedOption = 0;
 var selectOption = false;
 var PAUSED = false;
 var GAME_OVER = false;
-var NVL_WON = false
+var NVL_WON = false;
 
 // Controlo de vidas
 var numLifes = 3;
@@ -72,11 +72,11 @@ function init(ctx, nivel) {
 
 	function keydownHandler(ev) {
 
-		if(ev.keyCode == 27 && !PAUSED) {
+		if(ev.keyCode == 27 && !PAUSED && !NVL_WON) {
 			soundRepository.gameSound.pause();
 			PAUSED = true;
 			musicOn = false;
-		} else if(ev.keyCode == 27 && PAUSED) {
+		} else if(ev.keyCode == 27 && PAUSED && !NVL_WON) {
 			PAUSED = false;
 			musicOn = true;
 			soundRepository.gameSound.play();
@@ -191,7 +191,38 @@ function animLoop(ctx, spArray, bulletsArray, nivel) {
 
 	if (!GAME_OVER) {
 		if(!PAUSED) {
-			render(ctx, spArray, bulletsArray, reqID, nivel);
+
+			if(NVL_WON) {
+
+				if(lvl != 3) {
+
+					ctx.font = "20px retro";
+					ctx.fillStyle = "White";
+					ctx.textAlign = "center";
+					ctx.fillText("LVL WON!", ctx.canvas.width/2, ctx.canvas.height/2);
+					ctx.fillText("[ENTER] to restart", ctx.canvas.width/2, ctx.canvas.height/2+30);
+					ctx.fillText("[ESC] back to menu", ctx.canvas.width/2, ctx.canvas.height/2+60);
+
+			} else if (lvl == 3) {
+				ctx.font = "20px retro";
+				ctx.fillStyle = "White";
+				ctx.textAlign = "center";
+				ctx.fillText("LVL WON!", ctx.canvas.width/2, ctx.canvas.height/2);
+				ctx.fillText("[ENTER] to continue", ctx.canvas.width/2, ctx.canvas.height/2+30);
+				ctx.fillText("[ESC] back to menu", ctx.canvas.width/2, ctx.canvas.height/2+60);
+
+			}
+
+				var nvlW = function(ev)
+				{
+					restartGame(ev, ctx, spArray);
+					window.removeEventListener("keypress", nvlW);
+				}
+				window.addEventListener("keypress", nvlW);
+
+			} else {
+				render(ctx, spArray, bulletsArray, reqID, nivel);
+			}
 		} else {
 
 			ctx.font = "40px retro";
@@ -223,9 +254,8 @@ function animLoop(ctx, spArray, bulletsArray, nivel) {
 
 
 		}
-	}
 
-	else if (GAME_OVER) {
+	} else if (GAME_OVER) {
 
 		ctx.font = "20px retro";
 		ctx.fillStyle = "White";
@@ -238,6 +268,7 @@ function animLoop(ctx, spArray, bulletsArray, nivel) {
 		{
 			restartGame(ev, ctx, spArray);
 			window.removeEventListener("keypress", rr);
+
 		}
 		window.addEventListener("keypress", rr);
 	}
@@ -247,8 +278,13 @@ function animLoop(ctx, spArray, bulletsArray, nivel) {
 function restartGame(ev, ctx, spArray) {
 
 	if (ev.keyCode == 13) {
-		//document.location.reload();
-		window.location.href = "../play/nvl1.html";
+
+		if(lvl == 1)
+			window.location.href = "../play/nvl1.html";
+		else if(lvl == 2)
+			window.location.href = "../play/nvl2.html";
+		else if(lvl == 3)
+			window.location.href = "../play/cutScenes/cutSceneFinal.html";
 	}
 	else if (ev.keyCode == 27) {
 		window.location.href = "../lvl_select/level_select.html";

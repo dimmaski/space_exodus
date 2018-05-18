@@ -60,10 +60,17 @@ function main()
 						window.location.href = "../play_multi/play.html";
             break;
         case 2:
+<<<<<<< HEAD
 						window.location.href = "../controls/controls.html";
             break;
         case 3:
 					window.location.href = "../credits/credits.html";
+=======
+						window.location.href = "../credits/credits.html";
+            break;
+        case 3:
+						window.location.href = "../controls/controls.html";
+>>>>>>> d4e2bcf9800363847fae90c2a6a7293e96b4cc23
             break;
         case 4:
 					window.close();

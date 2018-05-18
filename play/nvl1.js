@@ -81,8 +81,8 @@ function drawMeteroids(ctx, meteroidArray) {
 		}, 5000);
 	}
 
-	if (countMeteroidsPassed == 500) {
-		NVL_WON = true;
+	if (countMeteroidsPassed == 10) {
+		 NVL_WON = true;
 	}
 
 	if (CURRENT_METEROIDS <= NUM_METEROIDS && flagCURRENT_METEROIDS) {

@@ -308,6 +308,7 @@ function bossColision(ctx, spArray) {
                             displayShipsKilled=false;
 
                             // ACABOU O JOGO
+                            NVL_WON = true;
 
                         }
                         else {
