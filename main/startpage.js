@@ -12,7 +12,7 @@ function main()
   var option = -1;  // 6 - max
 	var audio = new Audio('../resources/sounds/navigatemenu.wav');
 	var music = new Audio('../resources/sounds/menu_music.mp3');
-
+	var soundBtn = document.getElementById("sound");
 
 
 	// se vier de outra página para aqui...
@@ -118,8 +118,6 @@ function main()
           break;
 
     }
-
-
 	}
 
 	var mousedownHandler = function(ev) {
@@ -131,7 +129,19 @@ function main()
 			window.removeEventListener("mousedown", mousedownHandler);
 	}
 
+	var soundButton = function(ev) {
+		if (soundStatus) {
+			music.pause();
+			soundStatus = false;
+		}
+		else {
+			music.play();
+			soundStatus = true;
+		}
+	}
+
 	window.addEventListener("keypress", keydownHandler);
 	window.addEventListener("mousedown", mousedownHandler);
+	soundBtn.addEventListener("click", soundButton);
 
 }
