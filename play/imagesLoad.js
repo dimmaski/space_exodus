@@ -126,6 +126,7 @@ var soundRepository = new function() {
 	this.hitSound = new Audio('../resources/sounds/hit.wav');
 	this.lvlUpSound = new Audio('../resources/sounds/passarnivel.wav');
 	this.audio = new Audio('../resources/sounds/navigatemenu.wav');
+	this.gameSound = new Audio('../resources/sounds/spaceDiscoMusic.mp3');
 	this.shootSoundArray = [this.shootSound1, this.shootSound2];
 
 }
