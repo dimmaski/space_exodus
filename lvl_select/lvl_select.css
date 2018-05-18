@@ -7,6 +7,10 @@ p {
     font-family: retro;
 }
 
+p:hover {
+  transform: scale(1.5);
+}
+
 #game {
   background: no-repeat;
   position: relative;
@@ -105,14 +109,6 @@ div3_img {
   background-image: url('../resources/backgrounds/nvl_boss.jpg');
   background-repeat: no-repeat;
   background-size: contain;
-}
-
-
-
-button:hover {
-  font-size: 30%;
-  transform: scale(1.5);
-
 }
 
 #soundbutton{

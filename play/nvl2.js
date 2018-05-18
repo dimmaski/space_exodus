@@ -138,7 +138,6 @@ function draw_NVL_2(ctx, spArray) {
 			flagNextWave=false;
 		}
 		else {
-			console.log("nextlevel");
 			NVL_WON = true;
 		}
 	}
