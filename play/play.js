@@ -247,12 +247,11 @@ function animLoop(ctx, spArray, bulletsArray, nivel) {
 function restartGame(ev, ctx, spArray) {
 
 	if (ev.keyCode == 13) {
-		document.location.reload();
+		//document.location.reload();
+		window.location.href = "../play/nvl1.html";
 	}
 	else if (ev.keyCode == 27) {
-		var url = "../lvl_select/lvl_select.html";
-		document.location.href = url;
-		document.location.reload();
+		window.location.href = "../lvl_select/level_select.html";
 	}
 }
 
@@ -411,7 +410,7 @@ function render(ctx, spArray, bulletsArray, reqID, nivel)
 		ctx.fillText("SHIELD", ctx.canvas.width/2-50, 40);
 	}
 
-	if (flagDrawShield)
+	if (flagDrawShield || flagDrawSpeedUp)
 		updateShieldBar();
 }
 
@@ -637,8 +636,7 @@ function verifyColision_Boosts(ctx) {
 				let img = imageRepository.shield_duration;
 				let nw = img.naturalWidth;
 				let nh = img.naturalHeight;
-				let boost_bar = new Boost(ctx.canvas.width/2-50, 50, nw+nw*(2/3), nh, true, img, "shield_bar");
-				spArray.push(boost_bar);
+				spArray.push(new Boost(ctx.canvas.width/2-50, 50, nw+nw*(2/3), nh, true, img, "shield_bar"));
 
 				setTimeout(function() {
 					ship.shield = false;
@@ -660,12 +658,20 @@ function verifyColision_Boosts(ctx) {
 					flagDrawSpeedUp = true;
 					spArray[i].img = imageRepository.chestOpen;
 					ship.speed += 3;
-					blink();
+					let img = imageRepository.shield_duration;
+					let nw = img.naturalWidth;
+					let nh = img.naturalHeight;
+					spArray.push(new Boost(ctx.canvas.width/2-50, 50, nw+nw*(2/3), nh, true, img, "shield_bar"));
+
 
 					setTimeout(function() {
+						ship.shield = false;
 						ship.speed -= 3;
 						flagBoost = false;
 						flagDrawSpeedUp = false;
+
+						let delete_boost_bar = searchSprite(spArray, "shield_bar");
+						delete_boost_bar.alive = false;
 					}, 3000);
 				}
 				else if (lvl == 2) {
@@ -681,7 +687,6 @@ function verifyColision_Boosts(ctx) {
 						spArray[i].img = imageRepository.chestOpenMissile;
 						currentMissileNvl2++;
 					}
-
 
 					setTimeout(function() {
 						flagBoost = false;
