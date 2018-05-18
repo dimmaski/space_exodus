@@ -5,11 +5,14 @@
 	window.addEventListener("load", main);
 }());
 
+var soundStatus=true;
+
 function main()
 {
   var option = -1;  // 5
 	var audio = new Audio('../resources/sounds/navigatemenu.wav');
 	var music = new Audio('../resources/sounds/menu_music.mp3');
+	var soundBtn = document.getElementById("soundbutton");
 
 	var musicCurrentTime = sessionStorage.getItem("musicCurrentTime");
 	music.currentTime = musicCurrentTime;
@@ -54,8 +57,14 @@ function main()
 						window.location.href = "../play/cutScenes/cutScene3.html";
             break;
         case 3:
-						window.removeEventListener("keypress", keydownHandler);
-						// falta o som manos
+						if (soundStatus) {
+							music.pause();
+							soundStatus = false;
+						}
+						else {
+							music.play();
+							soundStatus = true;
+						}
             break;
         case 4:
 						window.removeEventListener("keypress", keydownHandler);
@@ -107,7 +116,19 @@ function main()
 			window.removeEventListener("mousedown", mousedownHandler);
 	}
 
+	var soundButton = function(ev) {
+		if (soundStatus) {
+			music.pause();
+			soundStatus = false;
+		}
+		else {
+			music.play();
+			soundStatus = true;
+		}
+	}
+
 	window.addEventListener("keypress", keydownHandler);
 	window.addEventListener("mousedown", mousedownHandler);
+	soundBtn.addEventListener("click", soundButton);
 
 }
