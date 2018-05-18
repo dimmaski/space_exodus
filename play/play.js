@@ -4,6 +4,7 @@
 var ship;
 var spArray = [];
 var nLoad = 0;
+var lvl;
 
 var LEFT = false;
 var RIGHT = false;
@@ -42,6 +43,8 @@ var countBlinks = 0;
 
 
 function init(ctx, nivel) {
+
+	lvl = nivel;
 
 	loadSprites(ctx);
 
@@ -150,9 +153,6 @@ function loadSprites(ctx) {
 	ship = new Ship(cw/2, ch-ch/6, nw, nh, 4, true, imageRepository.shipDown, life, shield, 1000, "bom");
 	spArray[nLoad] = ship;
 	nLoad++;
-
-
-
 
 }
 
@@ -379,12 +379,12 @@ function render(ctx, spArray, bulletsArray, reqID, nivel)
 		ctx.fillStyle = "white";
 		ctx.textAlign = "left";
 		ctx.font = "20px retro"
-		ctx.fillText("SPEED UP", ctx.canvas.width/2-40, 40);
+		ctx.fillText("SPEED UP", ctx.canvas.width/2-50, 40);
 	} else if (flagDrawShield == true) {
 		ctx.fillStyle = "white";
 		ctx.textAlign = "left";
 		ctx.font = "20px retro"
-		ctx.fillText("SHIELD", ctx.canvas.width/2-40, 40);
+		ctx.fillText("SHIELD", ctx.canvas.width/2-50, 40);
 	}
 
 	if (flagDrawShield)
@@ -514,23 +514,32 @@ function shoot(ctx, spArray, bulletsArray, ship, type, speed) {
 	var getShipHeigth = ship.height;
 	// array com diferentes bullets
 
-	pickRandomShootSound().play();
+
 
 	if (type == "bullet") {
-		if (countBullets != size) {
+		if ((countBullets < size && lvl != 2) || (lvl == 2 && currentBulletsNvl2 > 0 && ship.name == "bom") || (lvl == 2 && ship.name == "dispara")) {
 			var colorBullets = [imageRepository.bullet, imageRepository.bullet_blue, imageRepository.bullet_red, imageRepository.bullet_yellow];
 			var randomBullet = colorBullets[Math.floor(Math.random()*4)];
 			var sp = new Bullet(getShipX+getShipWidth/2, getShipY, randomBullet.naturalWidth, randomBullet.naturalHeight, speed, true, randomBullet);
 			ship.bulletsArray.push(sp);
+
+			if (lvl == 2 && ship.name == "bom")
+				currentBulletsNvl2--;
 		}
+		else
+			return;
 	}
 	else if (type == "missile") {
-		if (countBullets != size) {
+		if (currentMissileNvl2 > 0) {
 			var nw = imageRepository.missile.naturalWidth;
 			var nh = imageRepository.missile.naturalHeight;
-			var sp = new Bullet(getShipX+getShipWidth/2, getShipY, nw, nh, speed, true, imageRepository.missile, "missile");
+			var sp = new Bullet(getShipX+getShipWidth/2, getShipY, nw, nh, speed*2, true, imageRepository.missile, "missile");
 			ship.bulletsArray.push(sp);
+
+			currentMissileNvl2--;
 		}
+		else
+			return;
 	}
 	else if (type == "fireball") {
 		var arrayFireballs = [imageRepository.fireball1, imageRepository.fireball2, imageRepository.fireball3];
@@ -539,6 +548,7 @@ function shoot(ctx, spArray, bulletsArray, ship, type, speed) {
 		ship.bulletsArray.push(sp);
 	}
 
+	pickRandomShootSound().play();
 	// só se for disparado pela ship
 	if (ship.name == "bom")
 		countBullets++;
@@ -601,7 +611,7 @@ function verifyColision_Boosts(ctx) {
 				let img = imageRepository.shield_duration;
 				let nw = img.naturalWidth;
 				let nh = img.naturalHeight;
-				let boost_bar = new Boost(ctx.canvas.width/2-40, 50, nw+nw*(2/3), nh, true, img, "shield_bar");
+				let boost_bar = new Boost(ctx.canvas.width/2-50, 50, nw+nw*(2/3), nh, true, img, "shield_bar");
 				spArray.push(boost_bar);
 
 				setTimeout(function() {
@@ -619,16 +629,38 @@ function verifyColision_Boosts(ctx) {
 			if (ship.verifyIntersect(spArray[i])) {
 				flagBoost = true;
 				// dar bonus, por exemplo +velocidade
-				flagDrawSpeedUp = true;
-				spArray[i].img = imageRepository.chestOpen;
-				ship.speed += 3;
-				blink();
 
-				setTimeout(function() {
-					ship.speed -= 3;
-					flagBoost = false;
-					flagDrawSpeedUp = false;
-				}, 3000);
+				if (lvl == 1) {
+					flagDrawSpeedUp = true;
+					spArray[i].img = imageRepository.chestOpen;
+					ship.speed += 3;
+					blink();
+
+					setTimeout(function() {
+						ship.speed -= 3;
+						flagBoost = false;
+						flagDrawSpeedUp = false;
+					}, 3000);
+				}
+				else if (lvl == 2) {
+
+
+					// escolher entre bullets e missil
+					let random01= Math.floor(Math.random()*2);
+					if (random01 == 0) {
+						spArray[i].img = imageRepository.chestOpenLaser;
+						currentBulletsNvl2 += Math.floor(Math.random()*maxBulletsRandom) + minBulletsRandom;
+					}
+					else {
+						spArray[i].img = imageRepository.chestOpenMissile;
+						currentMissileNvl2++;
+					}
+
+
+					setTimeout(function() {
+						flagBoost = false;
+					}, 3000);
+				}
 			}
 		}
 	}

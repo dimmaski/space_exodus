@@ -44,7 +44,7 @@ function draw_NVL_1(ctx, spArray)
 	// x segundos
 	spawnBoostsTime(50, 750, 80, 550, "shield", 3000, 3000, true);
 	// x segundos
-	spawnBoostsTime(50, 750, 80, 550, "life", 3000, 3000, true);
+	spawnBoostsTime(50, 750, 80, 550, "life", 1000, 3000, true);
 	// x segundos
 	spawnBoostsTime(50, 750, 80, 550, "tresoure", 3000, 3000, true);
 

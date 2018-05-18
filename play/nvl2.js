@@ -16,6 +16,11 @@ var conta=0;
 var flagAtualiza=true;
 var timeBetweenShotsFromEnemy=2000;
 var flagNextWave=false;
+var maxBulletsRandom=5;
+var minBulletsRandom=1;
+
+var currentBulletsNvl2 = 10;
+var currentMissileNvl2 = 0;
 
 function main()
 {
@@ -27,6 +32,14 @@ function main()
 
 
 function loadSprites_NVL_2(ctx) {
+
+	var nw = imageRepository.laser.naturalWidth;
+	var nh = imageRepository.laser.naturalHeight;
+	spArray.push(new BackgroundObject(640, 560, nw, nh, true, imageRepository.laser, "current_bullets"));
+
+	var nw = imageRepository.missile.naturalWidth;
+	var nh = imageRepository.missile.naturalHeight;
+	spArray.push(new BackgroundObject(735, 560, nw, nh, true, imageRepository.missile, "current_bullets"));
 
 	spawnWave(ctx, arrayEnemyShips);
 
@@ -73,8 +86,6 @@ function spawnWave(ctx, arrayEnemyShips) {
 function draw_NVL_2(ctx, spArray) {
 	var ship = searchSprite(spArray, "bom");
 
-	console.log("balas "+countBullets);
-
 	for (let i=0; i<spArray.length; i++) {
 		if (spArray[i].alive == true) {
 
@@ -118,7 +129,11 @@ function draw_NVL_2(ctx, spArray) {
 
 			numEnemyShips-=4;
 			timeBetweenShotsFromEnemy-=500;
-			flagShotSpeed+=5;
+			flagShotSpeed+=3;
+
+			maxBulletsRandom+=1;
+			minBulletsRandom+=2;
+
 			spawnWave(ctx, arrayEnemyShips);
 			flagNextWave=false;
 		}
@@ -129,14 +144,19 @@ function draw_NVL_2(ctx, spArray) {
 	}
 
 	// SPAWN DOS BOOTS (ALTERAR)
-	// 2 segundos
-	spawnBoostsTime(5, 750, 200, 550, "shield", 3000, 3000, true);
 
-	// 2 segundos
-	spawnBoostsTime(5, 750, 200, 550, "life", 3000, 3000, true);
+	spawnBoostsTime(5, 750, 200, 500, "shield", 3000, 3000, true);
 
-	// 2 segundos
-	spawnBoostsTime(5, 750, 200, 550, "tresoure", 3000, 3000, true);
+	spawnBoostsTime(5, 750, 200, 500, "life", 3000, 3000, true);
+
+	spawnBoostsTime(5, 750, 200, 500, "tresoure", 1000, 5000, true);
+
+	// draw current bullets
+	ctx.font = "20px retro";
+	ctx.fillStyle = "White";
+	ctx.textAlign = "center";
+	ctx.fillText("x"+currentBulletsNvl2, 690, 585);
+	ctx.fillText("x"+currentMissileNvl2, 768, 585);
 
 }
 
@@ -164,7 +184,7 @@ function VerifyCollision_NVL_2(ctx, spArray) {
 		}
 
 		for (let k = 0; k < enemyShip.bulletsArray.length; k++) {
-			if (enemyShip.bulletsArray[k].verifyIntersect(ship)) {
+			if (enemyShip.bulletsArray[k].verifyIntersect(ship) && ship.shield == false) {
 				soundRepository.hitSound.play();
 				enemyShip.bulletsArray[k].alive = false;
 				updateShipLife(spArray);

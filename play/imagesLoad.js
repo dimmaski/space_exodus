@@ -37,6 +37,9 @@ var imageRepository = new function() {
 
 	this.chestOpen = new Image();
 	this.chestClose = new Image();
+	this.chestOpenLaser = new Image();
+	this.chestOpenMissile = new Image();
+	this.laser = new Image();
 	this.shield_star = new Image();
 	this.shield = new Image();
 	this.explosion = new Image();
@@ -90,6 +93,9 @@ var imageRepository = new function() {
 
 	this.chestOpen.src = "../resources/boosts/chestOpen.png";
 	this.chestClose.src = "../resources/boosts/chestClose.png";
+	this.chestOpenLaser.src = "../resources/boosts/chestOpenLaser.png";
+	this.chestOpenMissile.src = "../resources/boosts/chestOpenMissile.png";
+	this.laser.src = "../resources/boosts/laser.png";
 	this.shield_star.src = "../resources/boosts/shield_star.png";
 	this.shield.src = "../resources/boosts/shield.png";
 	this.explosion.src = "../resources/bullets/explosion.gif";
