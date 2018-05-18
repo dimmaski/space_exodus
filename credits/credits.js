@@ -10,23 +10,14 @@ var soundStatus=true;
 function main()
 {
   var option = -1;  // 6 - max
-	var audio = new Audio('../resources/sounds/navigatemenu.wav');
 	var music = new Audio('../resources/sounds/menu_music.mp3');
-
-
 
 	// se vier de outra página para aqui...
 	var musicCurrentTime = sessionStorage.getItem("musicCurrentTime");
-	if (musicCurrentTime != null) {
-		music.currentTime = musicCurrentTime;
-		console.log(musicCurrentTime);
-		music.loop = true;
-		music.play();
-	}
-
+	music.currentTime = musicCurrentTime;
 	music.loop = true;
 	music.play();
-
+/*
   var keydownHandler = function(ev) {
 
 		audio.play();
@@ -60,17 +51,10 @@ function main()
 						window.location.href = "../play_multi/play.html";
             break;
         case 2:
-<<<<<<< HEAD
 						window.location.href = "../controls/controls.html";
             break;
         case 3:
 					window.location.href = "../credits/credits.html";
-=======
-						window.location.href = "../credits/credits.html";
-            break;
-        case 3:
-						window.location.href = "../controls/controls.html";
->>>>>>> d4e2bcf9800363847fae90c2a6a7293e96b4cc23
             break;
         case 4:
 					window.close();
@@ -126,14 +110,14 @@ function main()
 
     }
 
-
 	}
+	*/
 
 	var mousedownHandler = function(ev) {
 
 		sessionStorage.setItem("musicCurrentTime", music.currentTime);
 		console.log(music.currentTime)
-
+		
 		if (option == 0 || option == 1)
 			window.removeEventListener("mousedown", mousedownHandler);
 	}
