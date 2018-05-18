@@ -53,6 +53,8 @@ function draw_NVL(ctx, spArray)
 			dim = spArray.length;
 			console.log("[f] spArray Elements: "+dim);
 		}
+		spawnBoostsTime(50, 750, 80, 550, "life", 3000, 3000, true);
+
 	}
 
 	if (flagExplosion == 1 || flagExplosion == 2) {
@@ -156,6 +158,8 @@ var player2_ship = searchSprite(spArray,"player2");
 
 var arraybulletsplayer1=player1_ship.bulletsArray;
 var arraybulletsplayer2=player2_ship.bulletsArray;
+
+		verifyColision_Boosts(ctx);
 
 for(let i=0;i<arraybulletsplayer1.length;i++){
 	if(arraybulletsplayer1[i].verifyIntersect(player2_ship) && flag_tocou_2==false){

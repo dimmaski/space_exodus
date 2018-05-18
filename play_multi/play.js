@@ -15,6 +15,8 @@ var RIGHT_PLAYER1 = false;
 var UP_PLAYER1 = false;
 var DOWN_PLAYER1 = false;
 
+var flagBoost = false;
+
 var LEFT_PLAYER2 = false;
 var RIGHT_PLAYER2 = false;
 var UP_PLAYER2=false;
@@ -40,6 +42,7 @@ var PAUSED = false;
 
 var pausedOption = 0;
 var selectOption = false;
+var flagSpawnLife = true;
 
 
 function main()
@@ -257,12 +260,12 @@ function animLoop(ctx, spArray, bulletsArray)
 
 		}
 	}else{
-		ctx.font = "40px Comic Sans MS"
-		ctx.fillStyle = "red";
+		ctx.font = "40px retro"
+		ctx.fillStyle = "White";
 		ctx.textAlign = "center";
 		ctx.fillText("GAME OVER", ctx.canvas.width/2, ctx.canvas.height/2);
 
-		ctx.font = "20px Comic Sans MS"
+		ctx.font = "20px retro"
 		//ctx.fillStyle = "red";
 		//ctx.textAlign = "center";
 		ctx.fillText("[ENTER] to restart", ctx.canvas.width/2, ctx.canvas.height/2+30);
@@ -358,6 +361,94 @@ function moveShip(ctx, spArray) {
 	    	}
 	    }
 		}
+}
+
+function spawnBoostsTime(xIni, xFim, yIni, yFim, type, time, timeAlive, random) {
+
+	if (random) {
+		time = Math.floor(Math.random() * time) + 4000;
+	}
+
+	if (type == "life") {
+		if (flagSpawnLife == true) {
+			flagSpawnLife = false;
+			setTimeout(function() {
+				spawnBoosts(xIni, xFim, yIni, yFim, type, timeAlive);
+				flagSpawnLife = true;
+			}, time);
+		}
+	}
+}
+
+function spawnBoosts(xIni, xFim, yIni, yFim, type, timeAlive) {
+	if (type == "life") {
+		var img = imageRepository.life1;
+		var nh = img.naturalHeight;
+		var nw = img.naturalWidth;
+	}
+	var boost = new Boost(Math.floor((Math.random()*xFim)+xIni), Math.floor((Math.random()*yFim)+yIni), nw, nh, true, img, type);
+	spArray.push(boost);
+
+	setTimeout(function() {
+		boost.alive = false;
+	}, timeAlive);
+}
+
+function verifyColision_Boosts(ctx) {
+	var ship1=searchSprite(spArray,"player1");
+	var ship2=searchSprite(spArray,"player2");
+
+	for (let i = 0; i<spArray.length; i++) {
+		if (spArray[i].name == "life") {
+			if (ship1.verifyIntersect(spArray[i]) && player_1_lifes < 3) {
+				spArray[i].alive = false;
+				flagBoost = true;
+				// dar vida se nao tiver as 3
+				if (player_1_lifes== 2) {
+					player_1_lifes++;
+					var img = imageRepository.life3;
+					ship1.objLife.width = img.naturalWidth;
+					ship1.objLife.changeImg(img);
+				}
+				else {
+					player_1_lifes++;
+					var img = imageRepository.life2;
+					ship1.objLife.width = img.naturalWidth;
+					ship1.objLife.changeImg(img);
+				}
+
+				setTimeout(function() {
+					flagBoost = false;
+				}, 3000);
+			}
+		}
+	}
+
+	for (let i = 0; i<spArray.length; i++) {
+		if (spArray[i].name == "life") {
+			if (ship2.verifyIntersect(spArray[i]) && player_2_lifes < 3) {
+				spArray[i].alive = false;
+				flagBoost = true;
+				// dar vida se nao tiver as 3
+				if (player_2_lifes== 2) {
+					player_2_lifes++;
+					var img = imageRepository.life3;
+					ship2.objLife.width = img.naturalWidth;
+					ship2.objLife.changeImg(img);
+				}
+				else {
+					player_2_lifes++;
+					var img = imageRepository.life2;
+					ship2.objLife.width = img.naturalWidth;
+					ship2.objLife.changeImg(img);
+				}
+
+				setTimeout(function() {
+					flagBoost = false;
+				}, 3000);
+			}
+		}
+	}
 }
 
 
