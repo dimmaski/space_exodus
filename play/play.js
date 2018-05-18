@@ -5,6 +5,7 @@ var ship;
 var spArray = [];
 var nLoad = 0;
 var lvl;
+var musicOn;
 
 var LEFT = false;
 var RIGHT = false;
@@ -57,6 +58,14 @@ function init(ctx, nivel) {
 			break;
 	}
 
+	soundRepository.gameSound.play();
+	setTimeout(function() {
+		musicOn = false;
+	}, 257000);
+
+	musicOn = true;
+
+
 
 	window.addEventListener("keydown", keydownHandler);
 	window.addEventListener("keyup", keyupHandler);
@@ -64,9 +73,13 @@ function init(ctx, nivel) {
 	function keydownHandler(ev) {
 
 		if(ev.keyCode == 27 && !PAUSED) {
+			soundRepository.gameSound.pause();
 			PAUSED = true;
+			musicOn = false;
 		} else if(ev.keyCode == 27 && PAUSED) {
 			PAUSED = false;
+			musicOn = true;
+			soundRepository.gameSound.play();
 		}
 
 		if(ev.keyCode == 13 && PAUSED) {
@@ -90,6 +103,7 @@ function init(ctx, nivel) {
 			soundRepository.audio.play();
 
 		} else if (ev.keyCode == 32) {
+
 			if (flag_space) {
 				flag_space = false;
 				shoot(ctx, spArray, bulletsArray, ship, "bullet", 3);
@@ -316,6 +330,16 @@ function render(ctx, spArray, bulletsArray, reqID, nivel)
 {
 	var cw = ctx.canvas.width;
 	var ch = ctx.canvas.height;
+
+	if(!musicOn)  {
+		soundRepository.gameSound.play();
+		setTimeout(function() {
+			musicOn = false;
+		}, 257000);
+
+		musicOn = true;
+
+	}
 
 	if (nivel == 1) {
 
@@ -548,7 +572,9 @@ function shoot(ctx, spArray, bulletsArray, ship, type, speed) {
 		ship.bulletsArray.push(sp);
 	}
 
-	pickRandomShootSound().play();
+	if(lvl != 1)
+		pickRandomShootSound().play();
+
 	// só se for disparado pela ship
 	if (ship.name == "bom")
 		countBullets++;
