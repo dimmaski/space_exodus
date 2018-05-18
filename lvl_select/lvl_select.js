@@ -62,11 +62,9 @@ function main()
 						window.location.href = "../main/startpage.html";
             break;
 
-
       }
 
     }
-
 
     switch(option) {
       case 0:
