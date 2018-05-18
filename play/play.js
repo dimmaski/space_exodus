@@ -33,6 +33,13 @@ var flagSpawnLife = true;
 var flagSpawnShield = true;
 var flagSpawnTresoure = true;
 
+// boosts
+var flagBoost = false;
+var flagDrawSpeedUp = false;
+var flagDrawShield = false;
+var flagBlink=true;
+var countBlinks = 0;
+
 
 function init(ctx, nivel) {
 
@@ -361,6 +368,27 @@ function render(ctx, spArray, bulletsArray, reqID, nivel)
 
 		drawBullets(ctx, bulletsArray);
 	}
+
+	if (ship.shield == true) {
+		// dar shield
+		ship.objShield.draw(ctx);
+		ship.objShield.followCoor(ship.x, ship.y);
+	}
+
+	if (flagDrawSpeedUp == true) {
+		ctx.fillStyle = "white";
+		ctx.textAlign = "left";
+		ctx.font = "20px retro"
+		ctx.fillText("SPEED UP", ctx.canvas.width/2-40, 40);
+	} else if (flagDrawShield == true) {
+		ctx.fillStyle = "white";
+		ctx.textAlign = "left";
+		ctx.font = "20px retro"
+		ctx.fillText("SHIELD", ctx.canvas.width/2-40, 40);
+	}
+
+	if (flagDrawShield)
+		updateShieldBar();
 }
 
 function searchSprite(spArray, name) {
@@ -494,7 +522,6 @@ function shoot(ctx, spArray, bulletsArray, ship, type, speed) {
 			var randomBullet = colorBullets[Math.floor(Math.random()*4)];
 			var sp = new Bullet(getShipX+getShipWidth/2, getShipY, randomBullet.naturalWidth, randomBullet.naturalHeight, speed, true, randomBullet);
 			ship.bulletsArray.push(sp);
-			countBullets++;
 		}
 	}
 	else if (type == "missile") {
@@ -503,7 +530,6 @@ function shoot(ctx, spArray, bulletsArray, ship, type, speed) {
 			var nh = imageRepository.missile.naturalHeight;
 			var sp = new Bullet(getShipX+getShipWidth/2, getShipY, nw, nh, speed, true, imageRepository.missile, "missile");
 			ship.bulletsArray.push(sp);
-			countBullets++;
 		}
 	}
 	else if (type == "fireball") {
@@ -511,8 +537,11 @@ function shoot(ctx, spArray, bulletsArray, ship, type, speed) {
 		var fireball = arrayFireballs[Math.floor(Math.random()*3)];
 		var sp = new Bullet(getShipX+getShipWidth/2-24, getShipY+getShipHeigth/(1.5), 3*fireball.naturalWidth, 3*fireball.naturalHeight, speed, true, fireball, "missile");
 		ship.bulletsArray.push(sp);
-		countBullets++;
 	}
+
+	// só se for disparado pela ship
+	if (ship.name == "bom")
+		countBullets++;
 }
 
 function drawBullets(ctx, bulletsArray)
@@ -534,4 +563,97 @@ function save() {
 function load() {
   player = JSON.parse(localStorage.getItem('player'));
   score = JSON.parse(localStorage.getItem('score'));
+}
+
+function verifyColision_Boosts(ctx) {
+	for (let i = 0; i<spArray.length; i++) {
+		if (spArray[i].name == "life") {
+			if (ship.verifyIntersect(spArray[i]) && numLifes < 3) {
+				spArray[i].alive = false;
+				flagBoost = true;
+				// dar vida se nao tiver as 3
+				if (numLifes == 2) {
+					numLifes++;
+					var img = imageRepository.life3;
+					ship.objLife.width = img.naturalWidth;
+					ship.objLife.changeImg(img);
+				}
+				else {
+					numLifes++;
+					var img = imageRepository.life2;
+					ship.objLife.width = img.naturalWidth;
+					ship.objLife.changeImg(img);
+				}
+
+				setTimeout(function() {
+					flagBoost = false;
+				}, 3000);
+			}
+		}
+		else if (spArray[i].name == "shield") {
+			if (ship.verifyIntersect(spArray[i])) {
+				// ativa shield
+				ship.changeShieldState(3000);
+				flagBoost = true;
+				flagDrawShield = true;
+				spArray[i].alive = false;
+
+				let img = imageRepository.shield_duration;
+				let nw = img.naturalWidth;
+				let nh = img.naturalHeight;
+				let boost_bar = new Boost(ctx.canvas.width/2-40, 50, nw+nw*(2/3), nh, true, img, "shield_bar");
+				spArray.push(boost_bar);
+
+				setTimeout(function() {
+					ship.shield = false;
+					flagBoost = false;
+					flagDrawShield = false;
+
+					let delete_boost_bar = searchSprite(spArray, "shield_bar");
+					delete_boost_bar.alive = false;
+
+				}, 3000);
+			}
+		}
+		else if (spArray[i].name == "tresoure") {
+			if (ship.verifyIntersect(spArray[i])) {
+				flagBoost = true;
+				// dar bonus, por exemplo +velocidade
+				flagDrawSpeedUp = true;
+				spArray[i].img = imageRepository.chestOpen;
+				ship.speed += 3;
+				blink();
+
+				setTimeout(function() {
+					ship.speed -= 3;
+					flagBoost = false;
+					flagDrawSpeedUp = false;
+				}, 3000);
+			}
+		}
+	}
+}
+
+function updateShieldBar() {
+	let boost_bar = searchSprite(spArray, "shield_bar");
+	if (boost_bar.width >= 0) {
+		boost_bar.width -= 0.65;
+	}
+}
+
+function blink() {
+	if (countBlinks == 0) {
+		flagDrawSpeedUp = false;
+		countBlinks++;
+	} else {
+		countBlinks=0;
+		flagDrawSpeedUp = true;
+	}
+	if (flagBoost == true && flagBlink == true) {
+		flagBlink = false;
+		setTimeout(function() {
+			flagBlink = true;
+			blink();
+		}, 500);
+	}
 }

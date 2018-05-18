@@ -6,8 +6,10 @@
 }());
 
 var arrayEnemyShips=[];
-var flag = true;
-var numEnemyShips = 8;
+var numEnemyShips = 12;
+var flagShot = true;
+var flagShotSpeed = 5;
+
 var xlimitIni=1000, xLimitEnd=0;
 var goLeft=false;
 var conta=0;
@@ -71,6 +73,8 @@ function spawnWave(ctx, arrayEnemyShips) {
 function draw_NVL_2(ctx, spArray) {
 	var ship = searchSprite(spArray, "bom");
 
+	console.log("balas "+countBullets);
+
 	for (let i=0; i<spArray.length; i++) {
 		if (spArray[i].alive == true) {
 
@@ -80,8 +84,6 @@ function draw_NVL_2(ctx, spArray) {
 			}
 			spArray[i].draw(ctx);
 		}
-
-
 		else if (spArray[i].alive == false) {
 			spArray.splice(i,1);
 		}
@@ -102,20 +104,21 @@ function draw_NVL_2(ctx, spArray) {
 			}
 		}
 
-		if (flag == true) {
+		if (flagShot == true) {
+			flagShot = false;
 			setTimeout(function() {
 				shootFromEnemy(ctx, arrayEnemyShips);
-				flag = true;
+				flagShot = true;
 			}, timeBetweenShotsFromEnemy);
-
-			flag = false;
 		}
 	}
 	else {
 		// spawn outra wave
 		if (flagNextWave == true && numEnemyShips > 4) {
+
 			numEnemyShips-=4;
 			timeBetweenShotsFromEnemy-=500;
+			flagShotSpeed+=5;
 			spawnWave(ctx, arrayEnemyShips);
 			flagNextWave=false;
 		}
@@ -124,6 +127,17 @@ function draw_NVL_2(ctx, spArray) {
 			NVL_WON = true;
 		}
 	}
+
+	// SPAWN DOS BOOTS (ALTERAR)
+	// 2 segundos
+	spawnBoostsTime(5, 750, 200, 550, "shield", 3000, 3000, true);
+
+	// 2 segundos
+	spawnBoostsTime(5, 750, 200, 550, "life", 3000, 3000, true);
+
+	// 2 segundos
+	spawnBoostsTime(5, 750, 200, 550, "tresoure", 3000, 3000, true);
+
 }
 
 function VerifyCollision_NVL_2(ctx, spArray) {
@@ -141,9 +155,11 @@ function VerifyCollision_NVL_2(ctx, spArray) {
 				ship.bulletsArray[k].alive = false;
 				enemyShip.img = imageRepository.explosion;
 
+				arrayEnemyShips[i].alive = false;
+/*
 				setTimeout(function() {
 					arrayEnemyShips[i].alive = false;
-				}, 25);
+				}, 25);*/
 			}
 		}
 
@@ -154,9 +170,12 @@ function VerifyCollision_NVL_2(ctx, spArray) {
 				updateShipLife(spArray);
 			}
 		}
-
 	}
 
+	// so pode ter 1 boost de cada vez
+	if (flagBoost == false) {
+		verifyColision_Boosts(ctx);
+	}
 }
 
 function moveEnemyShips(ctx, ship) {
@@ -219,7 +238,7 @@ function shootFromEnemy(ctx, arrayEnemyShips) {
 	var enemy = searchSprite(arrayEnemyShips, "dispara");
 
 	for (let i=0; i<arrayEnemyShips.length; i++) {
-		shoot(ctx, arrayEnemyShips, bulletsArray, arrayEnemyShips[i], "bullet", 5);
+		shoot(ctx, arrayEnemyShips, bulletsArray, arrayEnemyShips[i], "bullet", flagShotSpeed);
 	}
 }
 
@@ -233,8 +252,6 @@ function moveBulletsEnemy(ctx, bulletsArray) {
 			if (pool[i].alive == false) {
 				// retirar do array
 				pool.splice(i, 1);
-				countBullets--;
-				console.log("retirou...");
 			}
 			else {
 				pool[i].y += pool[i].speed;
@@ -243,7 +260,6 @@ function moveBulletsEnemy(ctx, bulletsArray) {
 		else {
 			// retirar do array
 			pool.splice(i, 1);
-			countBullets--;
 		}
 	}
 }
