@@ -117,12 +117,12 @@ function main()
 
 		sessionStorage.setItem("musicCurrentTime", music.currentTime);
 		console.log(music.currentTime)
-		
+
 		if (option == 0 || option == 1)
 			window.removeEventListener("mousedown", mousedownHandler);
 	}
 
-	window.addEventListener("keypress", keydownHandler);
+	// window.addEventListener("keypress", keydownHandler);
 	window.addEventListener("mousedown", mousedownHandler);
 
 }

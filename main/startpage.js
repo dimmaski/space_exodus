@@ -82,8 +82,7 @@ function main()
 
 			if (option == 0 || option == 1)
 				window.removeEventListener("keypress", keydownHandler);
-
-    }
+     }
 
 
     switch(option) {
