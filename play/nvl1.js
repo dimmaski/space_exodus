@@ -11,6 +11,9 @@ var flagCURRENT_METEROIDS = true;
 var NUM_METEROIDS = 12;
 var CURRENT_METEROIDS = 0;
 var meteroidArray = [];
+var flagBlink=true;
+
+var teste = false;
 
 
 (function()
@@ -23,7 +26,6 @@ function main()
 	var canvas = document.getElementById("canvas");
 	var ctx = canvas.getContext("2d");
 	init(ctx, 1);
-
 }
 
 function draw_NVL_1(ctx, spArray)
@@ -49,7 +51,7 @@ function draw_NVL_1(ctx, spArray)
 	ctx.fillStyle = "white";
 	ctx.textAlign = "left";
 	var str = "Score: " + countMeteroidsPassed;
-	ctx.fillText(str, 0+7, 0+15);
+	ctx.fillText(str, 7, 18);
 
 	if (flagDrawSpeedUp == true) {
 		ctx.font = "20px retro"
@@ -58,18 +60,22 @@ function draw_NVL_1(ctx, spArray)
 		ctx.font = "20px retro"
 		ctx.fillText("SHIELD", ctx.canvas.width/2-40, 40);
 
+
 		//
 	}
 
 	// SPAWN DOS BOOTS (ALTERAR)
 	// 2 segundos
-	spawnBoostsTime(0, 500, 0, 500, "shield", 30000, 3000);
+	spawnBoostsTime(0, 500, 0, 500, "shield", 3000, 3000, true);
 
 	// 2 segundos
-	spawnBoostsTime(0, 500, 0, 500, "life", 60000, 3000);
+	spawnBoostsTime(0, 500, 0, 500, "life", 3000, 3000, true);
 
 	// 2 segundos
-	spawnBoostsTime(0, 500, 0, 500, "tresoure", 15000, 3000);
+	spawnBoostsTime(0, 500, 0, 500, "tresoure", 3000, 3000, true);
+
+	if (flagDrawShield)
+		updateShieldBar();
 
 }
 
@@ -89,7 +95,7 @@ function VerifyCollision_NVL_1(ctx, spArray) {
 		for (let i = 0; i<spArray.length; i++) {
 			if (spArray[i].name == "life") {
 				if (ship.verifyIntersect(spArray[i]) && numLifes < 3) {
-					console.log("vida123123213")
+					spArray[i].alive = false;
 					flagBoost = true;
 					// dar vida se nao tiver as 3
 					if (numLifes == 2) {
@@ -116,12 +122,22 @@ function VerifyCollision_NVL_1(ctx, spArray) {
 					ship.changeShieldState(3000);
 					flagBoost = true;
 					flagDrawShield = true;
-					blink(flagDrawShield);
+					spArray[i].alive = false;
+
+					let img = imageRepository.shield_duration;
+					let nw = img.naturalWidth;
+					let nh = img.naturalHeight;
+					let boost_bar = new Boost(ctx.canvas.width/2-40, 50, nw+nw*(2/3), nh, true, img, "shield_bar");
+					spArray.push(boost_bar);
 
 					setTimeout(function() {
 						ship.shield = false;
 						flagBoost = false;
 						flagDrawShield = false;
+
+						let delete_boost_bar = searchSprite(spArray, "shield_bar");
+						delete_boost_bar.alive = false;
+
 					}, 3000);
 				}
 			}
@@ -132,7 +148,7 @@ function VerifyCollision_NVL_1(ctx, spArray) {
 					flagDrawSpeedUp = true;
 					spArray[i].img = imageRepository.chestOpen;
 					ship.speed += 3;
-					blink(flagDrawSpeedUp);
+					blink();
 
 					setTimeout(function() {
 						ship.speed -= 3;
@@ -145,19 +161,28 @@ function VerifyCollision_NVL_1(ctx, spArray) {
 	}
 }
 
-function blink(flag) {
+function blink() {
 	console.log("blink???")
 	if (countBlinks == 0) {
-		flag = false;
+		flagDrawSpeedUp = false;
 		countBlinks++;
 	} else {
 		countBlinks=0;
-		flag = true;
+		flagDrawSpeedUp = true;
 	}
-	if (flag == true) {
+	if (flagBoost == true && flagBlink == true) {
+		flagBlink = false;
 		setTimeout(function() {
+			flagBlink = true;
 			blink();
 		}, 500);
+	}
+}
+
+function updateShieldBar() {
+	var boost_bar = searchSprite(spArray, "shield_bar");
+	if (boost_bar.width >= 0) {
+		boost_bar.width -= 0.65;
 	}
 }
 

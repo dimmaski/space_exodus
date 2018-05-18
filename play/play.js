@@ -222,9 +222,6 @@ function animLoop(ctx, spArray, bulletsArray, nivel) {
 	}
 }
 
-function render_pause() {
-
-}
 
 function restartGame(ev, ctx, spArray) {
 
@@ -412,7 +409,12 @@ function moveBullets(ctx, bulletsArray) {
 	}
 }
 
-function spawnBoostsTime(xIni, xFim, yIni, yFim, type, time, timeAlive) {
+function spawnBoostsTime(xIni, xFim, yIni, yFim, type, time, timeAlive, random) {
+
+	if (random) {
+		time = Math.floor(Math.random() * time) + 4000;
+	}
+
 	if (type == "life") {
 		if (flagSpawnLife == true) {
 			flagSpawnLife = false;
@@ -466,6 +468,7 @@ function spawnBoosts(xIni, xFim, yIni, yFim, type, timeAlive) {
 		boost.alive = false;
 	}, timeAlive);
 }
+
 
 function pickRandomMeteroid() {
 	return imageRepository.AsteroidsImgArray[Math.floor(Math.random()*7)];
