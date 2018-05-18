@@ -8,6 +8,8 @@
 var spArray = [];
 var nLoad=0;
 
+var musicOn;
+
 var LEFT_PLAYER1 = false;
 var RIGHT_PLAYER1 = false;
 var UP_PLAYER1 = false;
@@ -34,8 +36,10 @@ var countBullets = 0;
 // niveis
 var GAME_OVER = false;
 var NVL_WON = false;
+var PAUSED = false;
 
-
+var pausedOption = 0;
+var selectOption = false;
 
 
 function main()
@@ -49,7 +53,12 @@ function main()
 function init(ctx) {
 	loadSprites(ctx);
 
+	soundRepository.gameSound.play();
+	setTimeout(function() {
+		musicOn = false;
+	}, 257000);
 
+	musicOn = true;
 
 	window.addEventListener("keydown", keydownHandler);
 	window.addEventListener("keyup", keyupHandler);
@@ -58,6 +67,21 @@ function init(ctx) {
 	var ship_player2 = searchSprite(spArray, "player2");
 
 	function keydownHandler(ev) {
+
+		if(ev.keyCode == 27 && !PAUSED) {
+			soundRepository.gameSound.pause();
+			PAUSED = true;
+			musicOn = false;
+		} else if(ev.keyCode == 27 && PAUSED) {
+			PAUSED = false;
+			musicOn = true;
+			soundRepository.gameSound.play();
+		}
+
+		if(ev.keyCode == 13 && PAUSED) {
+			selectOption = true;
+		}
+
 		if (ev.keyCode == 37)
 			LEFT_PLAYER1 = true;
 		else if (ev.keyCode == 39)
@@ -66,6 +90,14 @@ function init(ctx) {
 			UP_PLAYER1 = true;
 		else if (ev.keyCode == 40)
 			DOWN_PLAYER1 = true;
+
+		if(PAUSED && ev.keyCode == 40 || ev.keyCode == 83 && PAUSED){
+
+				DOWN_PLAYER1 = true;
+				pausedOption = ++pausedOption % 2;
+				soundRepository.audio.play();
+
+			}
 		else if (ev.keyCode == 80) {
 			// espaço de tempo entre tiros
 			if (flag_p == true) {
@@ -188,18 +220,43 @@ function animLoop(ctx, spArray, bulletsArray)
 	}
 	var reqID = window.requestAnimationFrame(al);
 
-	if (NVL_WON == true) {
-		// mudar de nivel
-		NVL_WON = false;
-		console.log("ganhou");
+	if (!GAME_OVER) {
+		if(!PAUSED) {
+			render(ctx, spArray, bulletsArray, reqID);
+		} else {
 
-	}
+			ctx.font = "40px retro";
+			ctx.fillStyle = "White";
+			ctx.textAlign = "center";
+			ctx.fillText("PAUSED", ctx.canvas.width/2, ctx.canvas.height/2);
 
-	else if (GAME_OVER == false) {
-		render(ctx, spArray, bulletsArray, reqID);
-	}
-	// game over
-	else if (GAME_OVER == true) {
+
+
+			if(pausedOption == 0) {
+				ctx.font = "20px retro";
+				ctx.fillStyle = "Red";
+				ctx.fillText("RESUME", ctx.canvas.width/2, ctx.canvas.height/2+30);
+				ctx.fillStyle = "White";
+				ctx.fillText("EXIT LVL", ctx.canvas.width/2, ctx.canvas.height/2+60);
+
+			} else if(pausedOption == 1) {
+				ctx.font = "20px retro";
+				ctx.fillStyle = "White";
+				ctx.fillText("RESUME", ctx.canvas.width/2, ctx.canvas.height/2+30);
+				ctx.fillStyle = "Red";
+				ctx.fillText("EXIT LVL", ctx.canvas.width/2, ctx.canvas.height/2+60);
+			}
+
+			if(pausedOption == 0 && selectOption) {
+				PAUSED = false;
+				selectOption = false;
+			} else if(pausedOption == 1 && selectOption) {
+				window.location.href = "../main/startpage.html";
+			}
+
+
+		}
+	}else{
 		ctx.font = "40px Comic Sans MS"
 		ctx.fillStyle = "red";
 		ctx.textAlign = "center";
@@ -221,15 +278,12 @@ function animLoop(ctx, spArray, bulletsArray)
 }
 
 function restartGame(ev, ctx, spArray) {
-	console.log(ev.keyCode);
 	// reinicia jogo
 	if (ev.keyCode == 13) {
 		document.location.reload();
 	}
 	else if (ev.keyCode == 27) {
-		var url = "../main/startpage.html";
-		document.location.href = url;
-		document.location.reload();
+		window.location.href = "../main/startpage.html";
 	}
 }
 
@@ -240,68 +294,70 @@ function moveShip(ctx, spArray) {
 
 	//PLAYER 2
 
-	if (LEFT_PLAYER2) {
-		//sp.x -= sp.speed;
-		if (sp_2.x >= 0) {
-			sp_2.changeImg(imageRepository.player2shipright);
-				sp_2.moveLeft();
+	if(flagExplosion!=2 && flagExplosion!=1){
+		if (LEFT_PLAYER2) {
+			//sp.x -= sp.speed;
+			if (sp_2.x >= 0) {
+				sp_2.changeImg(imageRepository.player2shipright);
+					sp_2.moveLeft();
+			}
 		}
-	}
-	if (RIGHT_PLAYER2) {
-		//sp.x += sp.speed;
-		if (sp_2.x + sp_2.width < ctx.canvas.width) {
-			sp_2.changeImg(imageRepository.player2shipleft);
-			sp_2.moveRight();
+		if (RIGHT_PLAYER2) {
+			//sp.x += sp.speed;
+			if (sp_2.x + sp_2.width < ctx.canvas.width) {
+				sp_2.changeImg(imageRepository.player2shipleft);
+				sp_2.moveRight();
+			}
 		}
-	}
 
-	if (UP_PLAYER2) {
-		//sp.y -= sp.speed;
-		if (sp_2.y >= 0) {
-			sp_2.changeImg(imageRepository.player2ship);
-			sp_2.moveUp();
+		if (UP_PLAYER2) {
+			//sp.y -= sp.speed;
+			if (sp_2.y >= 0) {
+				sp_2.changeImg(imageRepository.player2ship);
+				sp_2.moveUp();
+			}
 		}
-	}
 
-	if (DOWN_PLAYER2) {
-		//sp.y += sp.speed;
-		if (sp_2.y + sp_2.height < ctx.canvas.height && sp_2.y<=200) {
-			sp_2.changeImg(imageRepository.player2shipdown);
-			sp_2.moveDown();
+		if (DOWN_PLAYER2) {
+			//sp.y += sp.speed;
+			if (sp_2.y + sp_2.height < ctx.canvas.height && sp_2.y<=200) {
+				sp_2.changeImg(imageRepository.player2shipdown);
+				sp_2.moveDown();
+			}
 		}
-	}
 
-	//PLAYER 1
+		//PLAYER 1
 
-	if (LEFT_PLAYER1) {
-		//sp.x -= sp.speed;
-		if (sp_1.x >= 0) {
-			sp_1.changeImg(imageRepository.shipLeft);
-	     	sp_1.moveLeft();
+		if (LEFT_PLAYER1) {
+			//sp.x -= sp.speed;
+			if (sp_1.x >= 0) {
+				sp_1.changeImg(imageRepository.shipLeft);
+		     	sp_1.moveLeft();
+			}
 		}
-	}
 
-    if (RIGHT_PLAYER1) {
-    	//sp.x += sp.speed;
-    	if (sp_1.x + sp_1.width < ctx.canvas.width) {
-    		sp_1.changeImg(imageRepository.shipRight);
-	     	sp_1.moveRight();
-    	}
-    }
-    if (UP_PLAYER1) {
-    	//sp.y -= sp.speed;
-    	if (sp_1.y >= 0 && sp_1.y>=400) {
-    		sp_1.changeImg(imageRepository.shipUp);
-	     	sp_1.moveUp();
-    	}
-    }
-    if (DOWN_PLAYER1) {
-    	//sp.y += sp.speed;
-    	if (sp_1.y + sp_1.height < ctx.canvas.height) {
-    		sp_1.changeImg(imageRepository.shipDown);
-	     	sp_1.moveDown();
-    	}
-    }
+	    if (RIGHT_PLAYER1) {
+	    	//sp.x += sp.speed;
+	    	if (sp_1.x + sp_1.width < ctx.canvas.width) {
+	    		sp_1.changeImg(imageRepository.shipRight);
+		     	sp_1.moveRight();
+	    	}
+	    }
+	    if (UP_PLAYER1) {
+	    	//sp.y -= sp.speed;
+	    	if (sp_1.y >= 0 && sp_1.y>=400) {
+	    		sp_1.changeImg(imageRepository.shipUp);
+		     	sp_1.moveUp();
+	    	}
+	    }
+	    if (DOWN_PLAYER1) {
+	    	//sp.y += sp.speed;
+	    	if (sp_1.y + sp_1.height < ctx.canvas.height) {
+	    		sp_1.changeImg(imageRepository.shipDown);
+		     	sp_1.moveDown();
+	    	}
+	    }
+		}
 }
 
 
@@ -321,12 +377,20 @@ function changeColor(ctx, spArray, i) {
 
 
 //resedenho, actualizações, ...
-function render(ctx, spArray, bulletsArray, reqID, dt)
+function render(ctx, spArray, bulletsArray, reqID)
 {
 	var cw = ctx.canvas.width;
 	var ch = ctx.canvas.height;
 
+	if(!musicOn)  {
+		soundRepository.gameSound.play();
+		setTimeout(function() {
+			musicOn = false;
+		}, 257000);
 
+		musicOn = true;
+
+	}
 
 		// move naves
 		moveShip(ctx, spArray);

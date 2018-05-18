@@ -119,6 +119,7 @@ function updateShipLife(spArray,ship) {
 			ship.objLife.changeImg(img);
 			}
 			else if(player_2_lifes==1 && lifesFlag2==true){
+
 				flagExplosion=2;
 		}
 	}
@@ -161,7 +162,7 @@ for(let i=0;i<arraybulletsplayer1.length;i++){
 		flag_tocou_2=true;
 		setTimeout(function() {
 			flag_tocou_2 = false;
-		}, 1000);
+		}, 100);
 		updateShipLife(spArray,player2_ship);
 	}
 }
@@ -171,7 +172,7 @@ for(let i=0;i<arraybulletsplayer2.length;i++){
 		flag_tocou_1=true;
 		setTimeout(function() {
 			flag_tocou_1 = false;
-		}, 1000);
+		}, 100);
 		updateShipLife(spArray,player1_ship);
 	}
 }
