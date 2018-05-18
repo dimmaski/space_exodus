@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Space Exodus</title>
+		<meta charset="utf-8">
+		<script type="text/javascript" src="imageRepositoryScene1.js" defer="true"></script>
+		<script type="text/javascript" src="../SpriteImage.js" defer="true"></script>
+		<script type="text/javascript" src="cutScene3.js" defer="true"></script>
+		<style>
+
+			@font-face {
+					font-family: retro;
+					src: url('../../resources/font/PressStart2P.ttf') format("truetype");
+			}
+
+			#canvasWrap {
+				position:relative
+			}
+
+			#canvasText {
+				font-family: retro;
+				font-size: 10px;
+				color: white;
+				position: relative;
+				padding-top: 5%;
+				padding-left: 5%;
+			}
+
+			#overlay {
+				position: absolute;
+				width: 500px;
+				height: 200px;
+				bottom: 5%;
+				left: 17%;
+				background-image: url("../../resources/scenes/dialogBox.png");
+				background-repeat: no-repeat;
+			}
+
+			#continue {
+				font-family: retro;
+				font-size: 25px;
+				color: white;
+				align: center;
+				position: relative;
+				text-align: center;
+				bottom: 200px;
+
+			}
+
+
+		</style>
+
+	</head>
+	<body>
+
+		<div id="canvasWrap">
+  		<canvas id="canvas" width="800" height="600"></canvas>
+  		<div id="overlay"><p id="canvasText"></p> <p id="continue"></p> </div>
+		</div>
+
+	</body>
+</html>

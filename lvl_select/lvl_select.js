@@ -33,15 +33,15 @@ function main()
 
         case 0:
 						window.removeEventListener("keypress", keydownHandler);
-						window.location.href = "../play/nvl1.html";
+						window.location.href = "../play/cutScenes/cutScene1.html";
             break;
         case 1:
 						window.removeEventListener("keypress", keydownHandler);
-						window.location.href = "../play/nvl2.html";
+						window.location.href = "../play/cutScenes/cutScene2.html";
             break;
         case 2:
 						window.removeEventListener("keypress", keydownHandler);
-						window.location.href = "../play/nvl3.html";
+						window.location.href = "../play/cutScenes/cutScene3.html";
             break;
         case 3:
 						window.removeEventListener("keypress", keydownHandler);

@@ -16,7 +16,7 @@ var swapped = 0;
 
 function main() {
 
-	var script = [" I will take the crystal back with me . . ."," I'll take it back to here it belongs . . .", " To do that i need to cross 500 miles of the Asteroid Barrier  . . ."," I can do this! . . .", " No you won't! It's known that no one escapes mars . . .", " You can't cross the Asteroid Barrier. . ."];
+	var script = [" This is my last challenge . . ."," All I need to do is destroy this Monster . . .", " To do that i need to shoot it and the Mars Fleet Ships that come along  . . ."," I need to have in mind that if a fireball touches me i will instantly die . . .", " THIS IS IT, YOU WON'T ESCAPE! . . ."];
 	var backgroud, hero, villain, box;
 	var canvas = document.getElementById("canvas");
 	var ctx = canvas.getContext("2d");
@@ -137,7 +137,7 @@ function shutDownScene(ctx) {
 
 	var shutDownScene = function(ev)
 	{
-		window.location.href = "../nvl1.html";
+		window.location.href = "../nvl3.html";
 	}
 
 	window.addEventListener("keypress", shutDownScene);

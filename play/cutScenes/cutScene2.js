@@ -16,7 +16,7 @@ var swapped = 0;
 
 function main() {
 
-	var script = [" I will take the crystal back with me . . ."," I'll take it back to here it belongs . . .", " To do that i need to cross 500 miles of the Asteroid Barrier  . . ."," I can do this! . . .", " No you won't! It's known that no one escapes mars . . .", " You can't cross the Asteroid Barrier. . ."];
+	var script = [" Damn, the Mars Fleet found me! . . .", " To escape I need to shoot them all, although I'm short on bullets . . .", " I can do that by catching the random Boosts that are floating around this space area . . .", " FLEET, DESTROY THAT YELLOW SHIP ! ! ! ! !"];
 	var backgroud, hero, villain, box;
 	var canvas = document.getElementById("canvas");
 	var ctx = canvas.getContext("2d");
@@ -37,7 +37,7 @@ function init(ctx, backgroud, hero, villain, box, script) {
 	var keydownHandler = function(ev)
 	{
 
-		if (scriptCounter == 4 && swapped == 0) {
+		if (scriptCounter == 3 && swapped == 0) {
 			swapCharacters(ctx, hero, villain, backgroud);
 			swapped = 1;
 		}
@@ -137,7 +137,7 @@ function shutDownScene(ctx) {
 
 	var shutDownScene = function(ev)
 	{
-		window.location.href = "../nvl1.html";
+		window.location.href = "../nvl2.html";
 	}
 
 	window.addEventListener("keypress", shutDownScene);

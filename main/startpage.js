@@ -9,6 +9,7 @@ function main()
 {
   var option = -1;  // 6 - max
 	var audio = new Audio('../resources/sounds/navigatemenu.wav');
+	
   var keydownHandler = function(ev) {
 
 		audio.play();
@@ -28,41 +29,31 @@ function main()
     else if (ev.keyCode == 40 || ev.keyCode == 83)
       option = ++option % 6;
 
-    else if(ev.keyCode == 13) {
+    else if(ev.keyCode == 13 ) {
+			// ENTER
       switch(option) {
 
-        // falta adicionar links para as páginas
-
         case 0:
-						window.removeEventListener("keypress", keydownHandler);
 						window.location.href = "../lvl_select/level_select.html";
             break;
         case 1:
-						window.removeEventListener("keypress", keydownHandler);
 						window.location.href = "../play_multi/play.html";
             break;
         case 2:
-						window.removeEventListener("keypress", keydownHandler);
 
             break;
         case 3:
-						window.removeEventListener("keypress", keydownHandler);
 
             break;
         case 4:
-						window.removeEventListener("keypress", keydownHandler);
-
             break;
         case 5:
-						window.removeEventListener("keypress", keydownHandler);
 
             break;
 
       }
 
-
-
-
+			window.removeEventListener("keypress", keydownHandler);
 
     }
 

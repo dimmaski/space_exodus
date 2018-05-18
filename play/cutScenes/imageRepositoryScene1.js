@@ -6,8 +6,6 @@ var imageRepositoryScene1 = new function() {
 	this.villainImg = new Image();
 	this.backgroundImg = new Image();
 
-
-
 	// -- SRC --
 	this.heroImg.src = "../../resources/scenes/hero.png";
 	this.villainImg.src = "../../resources/scenes/villain.png";
