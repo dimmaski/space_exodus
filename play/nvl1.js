@@ -66,13 +66,13 @@ function draw_NVL_1(ctx, spArray)
 
 	// SPAWN DOS BOOTS (ALTERAR)
 	// 2 segundos
-	spawnBoostsTime(0, 500, 0, 500, "shield", 3000, 3000, true);
+	spawnBoostsTime(0, 800, 80, 600, "shield", 3000, 3000, true);
 
 	// 2 segundos
-	spawnBoostsTime(0, 500, 0, 500, "life", 3000, 3000, true);
+	spawnBoostsTime(0, 800, 80, 600, "life", 3000, 3000, true);
 
 	// 2 segundos
-	spawnBoostsTime(0, 500, 0, 500, "tresoure", 3000, 3000, true);
+	spawnBoostsTime(0, 800, 80, 600, "tresoure", 3000, 3000, true);
 
 	if (flagDrawShield)
 		updateShieldBar();
@@ -162,7 +162,6 @@ function VerifyCollision_NVL_1(ctx, spArray) {
 }
 
 function blink() {
-	console.log("blink???")
 	if (countBlinks == 0) {
 		flagDrawSpeedUp = false;
 		countBlinks++;
