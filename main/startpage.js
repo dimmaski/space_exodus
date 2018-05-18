@@ -9,7 +9,20 @@ function main()
 {
   var option = -1;  // 6 - max
 	var audio = new Audio('../resources/sounds/navigatemenu.wav');
-	
+	var music = new Audio('../resources/sounds/menu_music.mp3');
+
+	// se vier de outra página para aqui...
+	var musicCurrentTime = sessionStorage.getItem("musicCurrentTime");
+	if (musicCurrentTime != null) {
+		music.currentTime = musicCurrentTime;
+		console.log(musicCurrentTime);
+		music.loop = true;
+		music.play();
+	}
+
+	music.loop = true;
+	music.play();
+
   var keydownHandler = function(ev) {
 
 		audio.play();
@@ -31,7 +44,10 @@ function main()
 
     else if(ev.keyCode == 13 ) {
 			// ENTER
-      switch(option) {
+			sessionStorage.setItem("musicCurrentTime", music.currentTime);
+			music.pause();
+
+			switch(option) {
 
         case 0:
 						window.location.href = "../lvl_select/level_select.html";
