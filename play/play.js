@@ -565,13 +565,11 @@ function drawBullets(ctx, bulletsArray)
 }
 
 function save() {
-  localStorage.setItem('player', JSON.stringify(player));
-  localStorage.setItem('score', JSON.stringify(score));
+  localStorage.setItem('time', JSON.stringify(time));
 }
 
 function load() {
-  player = JSON.parse(localStorage.getItem('player'));
-  score = JSON.parse(localStorage.getItem('score'));
+  time = JSON.parse(localStorage.getItem('time'));
 }
 
 function verifyColision_Boosts(ctx) {

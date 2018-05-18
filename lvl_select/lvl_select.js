@@ -9,6 +9,13 @@ function main()
 {
   var option = -1;  // 5
 	var audio = new Audio('../resources/sounds/navigatemenu.wav');
+	var music = new Audio('../resources/sounds/menu_music.mp3');
+
+	var musicCurrentTime = sessionStorage.getItem("musicCurrentTime");
+	music.currentTime = musicCurrentTime;
+	music.loop = true;
+	music.play();
+	console.log(musicCurrentTime)
 
   var keydownHandler = function(ev) {
 
@@ -29,6 +36,9 @@ function main()
       option = ++option % 5;
 
     else if(ev.keyCode == 13) {
+			sessionStorage.setItem("musicCurrentTime", music.currentTime);
+			music.pause();
+
       switch(option) {
 
         case 0:
